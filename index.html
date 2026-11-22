@@ -969,8 +969,10 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 }
 @media (max-width: 900px) and (max-height: 500px) { .menu { font-size: 24px; } .menu li { min-height: 44px; } }
 @media (max-width: 900px) and (prefers-reduced-motion: reduce) { .menu, .top.open .menu, .menu a, .top.open .menu a, .menu .menu-foot, .menu-toggle .mt span { transition: none; } }
-/* a picture of a role comes up a little slower than its panel and settles as it arrives */
-.ph.rsp .rs-ph { transform: translate3d(0, calc((1 - var(--c, 1)) * -14%), 0) scale(calc(1.12 - var(--c, 1) * .12)); transform-origin: 72% 42%; will-change: transform; }
+/* v28: on a phone a role comes up by itself when the scroll has filled the line under its number. It waits far enough under the stage for its shadow to stay out of it. */
+.ph.rsp .rs-p + .rs-p { transform: translate3d(0, 115%, 0); box-shadow: 0 -24px 48px rgb(0 0 0 / .5); transition: transform .62s cubic-bezier(.2, .82, .2, 1); }
+.ph.rsp .rs-p.up { transform: none; }
+.ph.rsp .rs-p::after { transition: opacity .5s; }
 /* a touch screen has no hover, and a tapped button would keep the look */
 @media (hover: none) {
   .def-nav button:hover { background: none; color: #fff; }
@@ -2186,14 +2188,15 @@ void main() {
     html.style.setProperty('--toph', top.getBoundingClientRect().height.toFixed(2) + 'px');
     const ph = phone();
     html.classList.toggle('rsp', pinned() && (ph ? phS >= 600 : innerHeight >= 600 && innerWidth >= 1000));
-    rsPs.forEach((p) => { p.style.transform = ''; p.style.removeProperty('--dim'); });
+    rsPs.forEach((p) => { p.style.transform = ''; p.style.removeProperty('--dim'); p.classList.remove('up'); });
     rsTabs.forEach((b) => b.style.removeProperty('--f'));
     rs.style.removeProperty('--run');
     if (html.classList.contains('rsp')) {
       const h = rsPs[0].offsetHeight;
       if (rsPs.some((p) => ph ? $('.rs-txt', p).offsetHeight > h * 0.72 : $('.rs-col', p).offsetHeight > h - 44)) html.classList.remove('rsp');   // the words must fit the picture; on a phone they stand under it and must leave it room
       else {
-        rsRest = Math.round(VH() * 0.72); rsOver = Math.round(VH() * 0.34);   // a role rests for 72% of a window of scroll; the next one takes 34% to come
+        if (ph) { rsRest = Math.round(VH() * 0.62); rsOver = 0; }   // on a phone a role has 62% of a screen of scroll, and the next one comes by itself
+        else { rsRest = Math.round(VH() * 0.72); rsOver = Math.round(VH() * 0.34); }   // a role rests for 72% of a window of scroll; the next one takes 34% to come
         rs.style.setProperty('--run', NR * rsRest + (NR - 1) * rsOver + 'px');
         rsT0 = parseFloat(getComputedStyle(rs.firstElementChild).top) || 0;
       }
@@ -2206,13 +2209,20 @@ void main() {
     const at = Math.round(clamp(rsT0 - rs.getBoundingClientRect().top, 0, NR * rsRest + (NR - 1) * rsOver));
     if (at === rsAt) return;
     rsAt = at;
-    const come = rsPs.map((p, k) => { if (!k) return 1; const t = clamp((at - (k * rsRest + (k - 1) * rsOver)) / rsOver); return t * t * (3 - 2 * t); });   // how far each picture has come up
     let cur = 0;
-    rsPs.forEach((p, k) => {
-      if (k) { p.style.transform = `translate3d(0, ${((1 - come[k]) * 100).toFixed(2)}%, 0)`; if (come[k] > 0.5) cur = k; }
-      p.style.setProperty('--dim', k < NR - 1 ? come[k + 1].toFixed(3) : '0');
-      p.style.setProperty('--c', come[k].toFixed(3));
-    });
+    if (phone()) {
+      // On a phone the scroll fills the line under the number of the role, and when the line is full the next role comes
+      // up by itself. A card that followed the finger at another speed than the finger felt wrong there.
+      cur = clamp(Math.floor(at / rsRest), 0, NR - 1);
+      if (cur === rsCur - 1 && at > rsCur * rsRest - 16) cur = rsCur;   // slack, so that a finger resting on the line does not flip the cards
+      rsPs.forEach((p, k) => { if (k) p.classList.toggle('up', k <= cur); p.style.setProperty('--dim', k < cur ? '1' : '0'); });
+    } else {
+      const come = rsPs.map((p, k) => { if (!k) return 1; const t = clamp((at - (k * rsRest + (k - 1) * rsOver)) / rsOver); return t * t * (3 - 2 * t); });   // how far each picture has come up
+      rsPs.forEach((p, k) => {
+        if (k) { p.style.transform = `translate3d(0, ${((1 - come[k]) * 100).toFixed(2)}%, 0)`; if (come[k] > 0.5) cur = k; }
+        p.style.setProperty('--dim', k < NR - 1 ? come[k + 1].toFixed(3) : '0');
+      });
+    }
     const rested = clamp((at - cur * (rsRest + rsOver)) / rsRest).toFixed(3);
     rsTabs.forEach((b, i) => b.style.setProperty('--f', i === cur ? rested : '0'));
     if (cur !== rsCur) {
