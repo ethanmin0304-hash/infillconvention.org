@@ -1025,6 +1025,11 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 .rsp .rs-p + .rs-p { transform: translate3d(0, 115%, 0); box-shadow: 0 -30px 60px rgb(0 0 0 / .55); transition: transform .8s cubic-bezier(.22, .8, .2, 1); }
 .rsp .rs-p.up { transform: none; }
 .rsp .rs-p::after { transition: opacity .6s; }
+/* v33: the part of the two new role pictures that a stage shows */
+.rs-p:nth-child(1) .rs-ph { object-position: 100% 19%; }
+.rs-p:nth-child(2) .rs-ph { object-position: 100% 14%; }
+.ph.rsp .rs-p:nth-child(1) .rs-ph { object-position: 100% 82%; }
+.ph.rsp .rs-p:nth-child(2) .rs-ph { object-position: 100% 49%; }
 </style>
 </head>
 <body>
@@ -1281,7 +1286,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
       <div class="rs-tabs" role="group" aria-label="The four roles"><div><span>Four roles</span><button type="button"><b>1</b>Research talk</button><button type="button"><b>2</b>Panel</button><button type="button"><b>3</b>Judge</button><button type="button"><b>4</b>Academic committee</button></div></div>
       <div class="rs-stage">
       <article class="rs-p">
-        <img class="rs-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
+        <img class="rs-ph" src="assets/img/roles/talk.jpg" alt="A lectern seen from where the speaker stands. A laptop on it shows a slide that reads Research talk, Stronger with less plastic. A microphone stands in front, a timer reads 20:00, and the audience sits in a dark hall under two spotlights." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
           <div class="rs-col">
             <p class="rs-n"><i class="rc-tag live">Live, on Convention Day</i></p>
@@ -1292,7 +1297,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         </div>
       </article>
       <article class="rs-p">
-        <img class="rs-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
+        <img class="rs-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel of three. Each place has a microphone and a folded card that reads Panel, Fabricating Accessible Cities. Red armchairs stand behind the table and lamps are out of focus in the dark." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
           <div class="rs-col">
             <p class="rs-n"><i class="rc-tag live">Live, on Convention Day</i></p>
