@@ -326,7 +326,7 @@ html.lg .h-left .logo .box::before { animation: lhead 1.15s linear both; }
 .film h2 { margin-top: 10px; font-size: var(--f-d); line-height: .94; letter-spacing: var(--tb); text-wrap: balance; }
 .film-body { max-width: 23em; margin-top: var(--s2); font-size: var(--f-lead); line-height: 1.42; font-weight: 300; letter-spacing: var(--tl); color: #e6e6e9; text-wrap: pretty; }
 .film-note { margin-top: 14px; font-size: var(--f-cap); color: #8f8f94; }
-.pin .film { height: calc(100vh + 205vh); }
+.pin .film { height: calc(100vh + 239vh); }
 .pin .film-pin { position: sticky; top: 0; height: 100vh; }
 .pin .film-stage { position: absolute; inset: 68px 0 0 0; aspect-ratio: auto; margin: 0; }
 .pin .film-copy { padding-top: calc(68px + clamp(22px, 5.5vh, 64px)); }
@@ -1030,6 +1030,23 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 .rs-p:nth-child(2) .rs-ph { object-position: 100% 14%; }
 .ph.rsp .rs-p:nth-child(1) .rs-ph { object-position: 100% 82%; }
 .ph.rsp .rs-p:nth-child(2) .rs-ph { object-position: 100% 49%; }
+/* v34: three photographs of Debate Get-Together under the organizer's record, in the same band as the supporter's */
+.dgt-band { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: var(--gap); height: clamp(380px, 31vw, 480px); margin-top: var(--s5); }
+.dgt-band figure { grid-column: span 4; display: flex; flex-direction: column; min-height: 0; margin: 0; }
+.dgt-band .big { grid-column: span 8; grid-row: span 2; }
+.dgt-band .pr { flex: 1; min-height: 0; background: var(--soft); }
+.dgt-band img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.dgt-band figcaption { margin-top: 11px; font-size: var(--f-small); line-height: 1.5; color: var(--ink-3); }
+.dgt-band figcaption b { margin-right: 6px; font-size: var(--f-body); color: var(--ink); }
+.dgt-src { margin-top: var(--s2); font-size: var(--f-small); color: var(--ink-3); }
+@media (max-width: 900px) {
+  .dgt-band { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; height: auto; gap: var(--s2) 12px; }
+  .dgt-band figure { grid-column: span 1; }
+  .dgt-band .big { grid-column: 1 / -1; grid-row: auto; }
+  .dgt-band .pr { flex: none; aspect-ratio: 3 / 2; }
+  .dgt-band .big .pr { aspect-ratio: 2 / 1; }
+  .dgt-band figcaption b { display: block; margin: 0 0 2px; }
+}
 </style>
 </head>
 <body>
@@ -1375,6 +1392,14 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
           <figure class="rec-ph"><div class="pr" data-on><img src="assets/img/photos/dgt-trophies.jpg" alt="Trophies and medals laid out on a table at a Debate Get-Together tournament" width="1484" height="775" loading="lazy"></div><figcaption>Awards table at Autumn Debate Get-Together 2025. Photo from Debate Get-Together.</figcaption></figure>
         </div>
       </div>
+    </div>
+    <div class="wrap">
+      <div class="dgt-band">
+        <figure class="big"><div class="pr" data-on><img src="assets/img/photos/dgt-closing.jpg" alt="Several dozen students stand on a stage with their certificates under a large screen that reads thank you for joining autumn debate get-together 2025, 2025.09.28. The audience is in silhouette in front." width="1800" height="857" loading="lazy"></div><figcaption><b>Closing</b> Participants on stage at the end of Autumn Debate Get-Together 2025, Sunday 28 September 2025.</figcaption></figure>
+        <figure><div class="pr" data-on><img src="assets/img/photos/dgt-announcements.jpg" alt="Two organizers seen from behind face a hall of red seats where students sit" width="1200" height="500" loading="lazy"></div><figcaption><b>Announcements</b> Organizers speak to the hall.</figcaption></figure>
+        <figure><div class="pr" data-on><img src="assets/img/photos/dgt-audience.jpg" alt="Students with name badges sit in rows of red seats and watch" width="1200" height="500" loading="lazy"></div><figcaption><b>Audience</b> Students in the hall.</figcaption></figure>
+      </div>
+      <p class="dgt-src">Photographs from Debate Get-Together.</p>
     </div>
   </section>
 
@@ -2152,9 +2177,9 @@ void main() {
     if (h.bottom < -240 || h.top > vh + 240) { pgSm = -1; pgSize = 1; return null; }
     if (!pgName.classList.contains('on')) { pgSize = 0; pgSm = 0; return null; }   // the heading has not come up yet
     pgSize = clamp(pgSize + dt / 0.34);
-    let u = pgSm < 0 ? 0 : pgSm;
-    if (!(stackAt > 0)) {   // once the card folds back the drop stays where it is
-      const p1 = clamp((vh * 0.8 - h.top) / (vh * (phone() ? 0.34 : 0.58))), p2 = html.classList.contains('stack') ? clamp((vh * 1.62 - pgs[1].getBoundingClientRect().top) / (vh * 0.56)) : phone() ? clamp((vh * 0.4 - h.top) / (vh * 0.3)) : 0;
+    let u = 1.999;   // once the card folds back the drop rests at the end of the name
+    if (!(stackAt > 0)) {
+      const p1 = clamp((vh * 0.8 - h.top) / (vh * (phone() ? 0.34 : 0.58))), p2 = html.classList.contains('stack') ? clamp((vh * 1.62 - pgs[1].getBoundingClientRect().top) / (vh * 0.56)) : phone() ? clamp((vh * 0.4 - h.top) / (vh * 0.3)) : clamp((vh * 0.2 - h.top) / (vh * 0.35));
       u = p2 > 0 ? ACROSS + p2 * (1.999 - ACROSS) : p1 * ACROSS * 0.999;
     }
     pgSm = pgSm < 0 ? (u > ACROSS ? u : 0) : pgSm + (u - pgSm) * (1 - Math.exp(-dt * 3.4));
@@ -2347,7 +2372,7 @@ void main() {
       clearTimeout(filmWait);
       filmWait = setTimeout(() => { filmRest = true; ask(); }, 170);
     }
-    const OPEN = 105 / 205, HOLD = 111 / 205, END = 191 / 205, last = FO + FD - 1;
+    const OPEN = 105 / 239, HOLD = 111 / 239, END = 225 / 239, last = FO + FD - 1;
     const target = !pin ? p * (FO - 1) : p <= OPEN ? p / OPEN * (FO - 1) : FO - 1 + clamp((p - HOLD) / (END - HOLD)) * FD;
     const now = performance.now(), dt = Math.min(0.05, Math.max(0.001, (now - filmT) / 1000));
     filmT = now;
