@@ -946,6 +946,37 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 .ph.rsp .rs-h { margin-top: 8px; font-size: 21px; }
 .ph.rsp .rs-what { margin-top: 12px; font-size: 17px; line-height: 1.38; }
 .ph.rsp .rs-when { margin-top: 14px; padding-top: 10px; font-size: 15px; }
+/* ---- v27: small screens. The menu is a sheet of ink that comes down from the rule under the header. ---- */
+.menu-foot { display: none; }
+@media (max-width: 900px) {
+  html.menu-open { overflow: hidden; }
+  .menu-toggle { justify-content: center; min-width: 80px; transition: background-color .3s, color .3s; }
+  .menu-toggle .mt { display: block; height: 1.25em; line-height: 1.25; overflow: hidden; text-align: center; }
+  .menu-toggle .mt span { display: block; transition: transform .5s var(--ease); }
+  .top.open .menu-toggle { background: var(--ink); color: #fff; }
+  .top.open .menu-toggle .mt span { transform: translate3d(0, -100%, 0); }
+  .menu { position: fixed; left: 0; right: 0; top: var(--toph, 61.5px); display: flex; flex-direction: column; gap: 0; height: calc(var(--dvh, 100vh) - var(--toph, 61.5px)); margin: 0; padding: 0 var(--pad) calc(16px + env(safe-area-inset-bottom, 0px)); border: 0; background: var(--ink); color: #fff; font-size: clamp(27px, 8.8vw, 42px); line-height: 1; letter-spacing: var(--tb); overflow-y: auto; overscroll-behavior: contain; visibility: hidden; clip-path: inset(0 0 100% 0); transition: clip-path .4s cubic-bezier(.55, 0, .35, 1), visibility 0s .4s; }
+  .top.open .menu { display: flex; visibility: visible; clip-path: inset(0 0 0 0); transition: clip-path .6s cubic-bezier(.2, .85, .2, 1); }
+  .menu li { display: flex; flex: 1 1 0; min-height: 50px; max-height: 84px; border-bottom: 1px solid rgb(255 255 255 / .2); overflow: hidden; }
+  .menu a { display: flex; flex: 1; align-items: center; padding: 0; border: 0; background: none; transform: translate3d(0, 105%, 0); transition: transform .3s cubic-bezier(.55, 0, .35, 1), color .2s; }
+  .top.open .menu a { transform: none; transition: transform .75s cubic-bezier(.2, .85, .2, 1) calc(80ms + var(--i, 0) * 42ms), color .2s; }
+  .menu a[aria-current="true"] { color: var(--red); }
+  .menu .menu-foot { flex: none; gap: 10px; min-height: 0; max-height: none; margin-top: auto; padding-top: 16px; border: 0; overflow: visible; font-size: 17px; letter-spacing: 0; opacity: 0; transition: opacity .2s; }
+  .top.open .menu .menu-foot { opacity: 1; transition: opacity .5s .44s; }
+  .menu .mf { display: inline-flex; flex: 1; align-items: center; justify-content: center; min-height: 50px; padding: 0 16px; border: var(--wall) solid #fff; background: none; font: inherit; font-weight: 700; color: #fff; text-decoration: none; transform: none; cursor: pointer; }
+  .menu .mf.fill { background: #fff; color: var(--ink); }
+  .menu .mf[hidden] { display: none; }
+}
+@media (max-width: 900px) and (max-height: 500px) { .menu { font-size: 24px; } .menu li { min-height: 44px; } }
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) { .menu, .top.open .menu, .menu a, .top.open .menu a, .menu .menu-foot, .menu-toggle .mt span { transition: none; } }
+/* a picture of a role comes up a little slower than its panel and settles as it arrives */
+.ph.rsp .rs-ph { transform: translate3d(0, calc((1 - var(--c, 1)) * -14%), 0) scale(calc(1.12 - var(--c, 1) * .12)); transform-origin: 72% 42%; will-change: transform; }
+/* a touch screen has no hover, and a tapped button would keep the look */
+@media (hover: none) {
+  .def-nav button:hover { background: none; color: #fff; }
+  .rs-tabs button:hover { background: none; color: #a9a9ae; }
+  .rs-tabs button.on:hover { color: #fff; }
+}
 </style>
 </head>
 <body>
@@ -957,7 +988,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
       <span class="lockup-name" aria-hidden="true">International Convention<br>on Digital Fabrication</span>
     </a>
     <nav class="nav" aria-label="Main">
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu"><span class="mt"><span>Menu</span><span aria-hidden="true">Close</span></span></button>
       <ul class="menu" id="menu">
         <li><a href="#what">About</a></li>
         <li><a href="#programs">Programs</a></li>
@@ -966,6 +997,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         <li><a href="#organizer">Organizer</a></li>
         <li><a href="#partners">Partners</a></li>
         <li><a href="#questions">FAQs</a></li>
+        <li class="menu-foot"><a class="mf fill" href="mailto:ethan@infillconvention.org">Get in touch</a><button class="mf" type="button" id="share" hidden>Share</button></li>
       </ul>
     </nav>
     <a class="btn btn-sm" href="mailto:ethan@infillconvention.org">Get in touch</a>
@@ -1405,6 +1437,18 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
   const $ = (s, r = D) => r.querySelector(s);
   const $$ = (s, r = D) => [...r.querySelectorAll(s)];
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  // A tick under the finger on a phone. Android has the vibration call. Safari on iOS has none, but it ticks when a
+  // switch is toggled, so a switch that is never shown is toggled once. Anywhere else nothing happens.
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  const tick = () => {
+    if (!coarse) return;
+    try {
+      if (navigator.vibrate) { navigator.vibrate(8); return; }
+      const l = D.createElement('label'), c = D.createElement('input');
+      c.type = 'checkbox'; c.setAttribute('switch', ''); l.style.display = 'none'; l.append(c);
+      D.head.append(l); l.click(); l.remove();
+    } catch (e) {}
+  };
   // On a phone the browser's bars come and go while the page scrolls, and the height of the window changes with them.
   // The scenes there are sized by the large viewport, and what has to stay readable is kept inside the small one.
   const probe = (unit) => { const el = D.createElement('div'); el.style.cssText = `position:fixed;left:0;top:0;width:0;height:100vh;height:100${unit};visibility:hidden;pointer-events:none`; D.body.append(el); return el; };
@@ -1437,11 +1481,16 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 
   // menu on small screens, and the menu shows where you are
   const top = $('#top'), toggle = $('.menu-toggle', top);
-  const closeMenu = () => { top.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); };
-  toggle.addEventListener('click', () => toggle.setAttribute('aria-expanded', String(top.classList.toggle('open'))));
-  $$('.menu a', top).forEach((a) => a.addEventListener('click', closeMenu));
+  const closeMenu = () => { top.classList.remove('open'); html.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', 'false'); };
+  toggle.addEventListener('click', () => {
+    const on = top.classList.toggle('open');
+    html.classList.toggle('menu-open', on);   // the page behind the open sheet stays where it is
+    if (on) html.style.setProperty('--toph', top.getBoundingClientRect().height.toFixed(2) + 'px');
+    toggle.setAttribute('aria-expanded', String(on));
+  });
+  $$('.menu a[href^="#"]', top).forEach((a) => a.addEventListener('click', closeMenu));
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && top.classList.contains('open')) { closeMenu(); toggle.focus(); } });
-  const links = $$('.menu a', top), targets = links.map((a) => $(a.getAttribute('href')));
+  const links = $$('.menu a[href^="#"]', top), targets = links.map((a) => $(a.getAttribute('href')));
   let spyCur = -2;
   const spy = (vh) => {
     let cur = -1;
@@ -1679,7 +1728,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
   // A link to another part of the page. Eight bands cover the page from the bottom up, the way a printer lays layers, the
   // page moves to the new place behind them, and the bands leave. A short move only scrolls.
   const veil = $('#veil'), veilBars = $$('i', veil), veilName = $('p', veil), placeNames = {};
-  $$('.menu a', top).forEach((a) => { placeNames[a.getAttribute('href')] = a.textContent; });
+  $$('.menu a[href^="#"]', top).forEach((a) => { placeNames[a.getAttribute('href')] = a.textContent; });
   let veiled = false;
   const landY = (el) => Math.max(0, pageTop(el) - (parseFloat(getComputedStyle(html).scrollPaddingTop) || 84) - (parseFloat(getComputedStyle(el).scrollMarginTop) || 0));
   const travel = (hash, el) => {
@@ -2162,6 +2211,7 @@ void main() {
     rsPs.forEach((p, k) => {
       if (k) { p.style.transform = `translate3d(0, ${((1 - come[k]) * 100).toFixed(2)}%, 0)`; if (come[k] > 0.5) cur = k; }
       p.style.setProperty('--dim', k < NR - 1 ? come[k + 1].toFixed(3) : '0');
+      p.style.setProperty('--c', come[k].toFixed(3));
     });
     const rested = clamp((at - cur * (rsRest + rsOver)) / rsRest).toFixed(3);
     rsTabs.forEach((b, i) => b.style.setProperty('--f', i === cur ? rested : '0'));
@@ -2495,6 +2545,27 @@ void main() {
     } catch (e) {}
   })();
   addEventListener('beforeprint', () => $$('[data-in], [data-lines], [data-on], .frame').forEach((el) => el.classList.add('on', 'in')));
+  // small screens: the names in the sheet rise one after another; taps that change what is shown give a tick; the phone's
+  // own share sheet; sideways swipes on the picture card of About and on the stage of the four roles
+  links.forEach((a, i) => a.style.setProperty('--i', i));
+  [toggle, ...links, ...terms, $('#def-prev'), $('#def-next'), ...rsTabs, ...walkTicks].forEach((el) => el.addEventListener('click', tick));
+  const shareBtn = $('#share');
+  if (shareBtn && navigator.share) {
+    shareBtn.hidden = false;
+    shareBtn.addEventListener('click', () => { tick(); navigator.share({ title: D.title, url: ($('link[rel="canonical"]') || {}).href || location.href }).catch(() => {}); });
+  }
+  const swipe = (el, go) => {
+    let from = null;
+    el.addEventListener('touchstart', (e) => { from = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: performance.now() } : null; }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      if (!from || !phone()) return;
+      const t = e.changedTouches[0], dx = t.clientX - from.x, dy = t.clientY - from.y, quick = performance.now() - from.t < 700;
+      from = null;
+      if (quick && Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.6) go(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  };
+  swipe($('#def'), (d) => { const k = clamp(cur + d, 0, N - 1); if (k !== cur) { tick(); goTerm(k); } });
+  swipe($('.rs-stage', rs), (d) => { if (!html.classList.contains('rsp')) return; const k = clamp(rsCur + d, 0, NR - 1); if (k !== rsCur) { tick(); jump(rsTop(k)); } });
   measure();
 
   // the drawing: a marker sketch made by the sketch-to-3d engine, live in the page, with labels that follow it
