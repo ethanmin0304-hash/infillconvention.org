@@ -1030,22 +1030,20 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 .rs-p:nth-child(2) .rs-ph { object-position: 100% 14%; }
 .ph.rsp .rs-p:nth-child(1) .rs-ph { object-position: 100% 82%; }
 .ph.rsp .rs-p:nth-child(2) .rs-ph { object-position: 100% 49%; }
-/* v34: three photographs of Debate Get-Together under the organizer's record, in the same band as the supporter's */
-.dgt-band { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: var(--gap); height: clamp(380px, 31vw, 480px); margin-top: var(--s5); }
-.dgt-band figure { grid-column: span 4; display: flex; flex-direction: column; min-height: 0; margin: 0; }
-.dgt-band .big { grid-column: span 8; grid-row: span 2; }
-.dgt-band .pr { flex: 1; min-height: 0; background: var(--soft); }
-.dgt-band img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.dgt-band figcaption { margin-top: 11px; font-size: var(--f-small); line-height: 1.5; color: var(--ink-3); }
-.dgt-band figcaption b { margin-right: 6px; font-size: var(--f-body); color: var(--ink); }
-.dgt-src { margin-top: var(--s2); font-size: var(--f-small); color: var(--ink-3); }
-@media (max-width: 900px) {
-  .dgt-band { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; height: auto; gap: var(--s2) 12px; }
-  .dgt-band figure { grid-column: span 1; }
-  .dgt-band .big { grid-column: 1 / -1; grid-row: auto; }
-  .dgt-band .pr { flex: none; aspect-ratio: 3 / 2; }
-  .dgt-band .big .pr { aspect-ratio: 2 / 1; }
-  .dgt-band figcaption b { display: block; margin: 0 0 2px; }
+/* v35: the photographs of Debate Get-Together are one strip under the organizer's record: the closing photograph
+   two columns wide, three square ones beside it at the same height, and one caption. On a phone the closing photograph
+   takes the width and the three sit in a row under it. */
+.rec-ph { margin-top: var(--s3); }
+.ph-set { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.rec-ph .ph-set .pr { width: 100%; aspect-ratio: 1; background: var(--soft); }   /* a grid item with a ratio of its own does not stretch, so the width is said */
+.rec-ph .ph-set .ph-lead { grid-column: span 2; aspect-ratio: auto; align-self: stretch; }
+.rec-ph .ph-set .ph-lead img { position: absolute; inset: 0; }
+.rec-ph .ph-set .pr:nth-child(2) img { object-position: 15% 50%; }
+.rec-ph figcaption { margin-top: 12px; }
+@media (max-width: 600px) {
+  .ph-set { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .rec-ph .ph-set .pr { aspect-ratio: 3 / 2; }
+  .rec-ph .ph-set .ph-lead { grid-column: 1 / -1; aspect-ratio: 1200 / 571; }
 }
 </style>
 </head>
@@ -1389,17 +1387,17 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
           <div class="rec"><div class="mark"><img src="assets/img/logo-dgt.png" alt="Debate Get-Together" width="560" height="296" loading="lazy"></div><div><p class="cap">Founder and director</p><strong>Debate Get-Together</strong><p>13 in-person events since 2023, with over 1,000 participants in total.</p></div></div>
           <div class="rec"><div class="mark"><b>FAN</b></div><div><p class="cap">Korea Representative, executive committee</p><strong>Fab Asian Network</strong><p>The network of fab labs across Asia.</p></div></div>
           <div class="rec"><div class="mark"><img src="assets/img/partner-fab-city-seoul.png" alt="Fab City Seoul" width="281" height="320" loading="lazy"></div><div><p class="cap">Executive board member</p><strong>Fab City Seoul Cooperative</strong><p>The Seoul member of the Fab City network of cities.</p></div></div>
-          <figure class="rec-ph"><div class="pr" data-on><img src="assets/img/photos/dgt-trophies.jpg" alt="Trophies and medals laid out on a table at a Debate Get-Together tournament" width="1484" height="775" loading="lazy"></div><figcaption>Awards table at Autumn Debate Get-Together 2025. Photo from Debate Get-Together.</figcaption></figure>
+          <figure class="rec-ph">
+            <div class="ph-set">
+              <div class="pr ph-lead" data-on><img src="assets/img/photos/dgt-closing.jpg" alt="Several dozen students stand on a stage with their certificates under a large screen that reads thank you for joining autumn debate get-together 2025, 2025.09.28. The audience is in silhouette in front." width="1200" height="571" loading="lazy"></div>
+              <div class="pr" data-on><img src="assets/img/photos/dgt-announcements.jpg" alt="Two organizers seen from behind face a hall of red seats where students sit" width="750" height="500" loading="lazy"></div>
+              <div class="pr" data-on><img src="assets/img/photos/dgt-audience.jpg" alt="Students with name badges sit in rows of red seats and watch" width="750" height="500" loading="lazy"></div>
+              <div class="pr" data-on><img src="assets/img/photos/dgt-trophies.jpg" alt="Trophies and medals laid out on a table at a Debate Get-Together tournament" width="1484" height="775" loading="lazy"></div>
+            </div>
+            <figcaption>Autumn Debate Get-Together 2025, Sunday 28 September 2025. Photographs from Debate Get-Together.</figcaption>
+          </figure>
         </div>
       </div>
-    </div>
-    <div class="wrap">
-      <div class="dgt-band">
-        <figure class="big"><div class="pr" data-on><img src="assets/img/photos/dgt-closing.jpg" alt="Several dozen students stand on a stage with their certificates under a large screen that reads thank you for joining autumn debate get-together 2025, 2025.09.28. The audience is in silhouette in front." width="1800" height="857" loading="lazy"></div><figcaption><b>Closing</b> Participants on stage at the end of Autumn Debate Get-Together 2025, Sunday 28 September 2025.</figcaption></figure>
-        <figure><div class="pr" data-on><img src="assets/img/photos/dgt-announcements.jpg" alt="Two organizers seen from behind face a hall of red seats where students sit" width="1200" height="500" loading="lazy"></div><figcaption><b>Announcements</b> Organizers speak to the hall.</figcaption></figure>
-        <figure><div class="pr" data-on><img src="assets/img/photos/dgt-audience.jpg" alt="Students with name badges sit in rows of red seats and watch" width="1200" height="500" loading="lazy"></div><figcaption><b>Audience</b> Students in the hall.</figcaption></figure>
-      </div>
-      <p class="dgt-src">Photographs from Debate Get-Together.</p>
     </div>
   </section>
 
@@ -2063,8 +2061,8 @@ void main() {
     }
     return flight((t) => hop(c, n, t, R), (f - across) / (1 - across), R);
   };
-  // In the sentence nothing lies on the logo. The drop appears on "online" when the first term gives way to it, and from
-  // there the scroll takes it across each term. From one term to the next it goes by itself, as one drop with a short tail.
+  // In the sentence the drop appears on the logo once the logo has come up into the window, and from there the scroll
+  // takes it across each term. From one term to the next it goes by itself, as one drop with a short tail.
   let sayR = 0, sayPath = [], sayAt = [], sayLen = [], sayGap = [], saySm = -1;
   // How red each letter is. Every term before the one the drop lies on is red and every term after it is ink. On that
   // term the red has come as far along the word as the drop has, so a letter turns while the glass is over it.
@@ -2089,10 +2087,10 @@ void main() {
   const sayPathBuild = () => {
     const R = sayR, b = sayCol.getBoundingClientRect(), inset = R * 0.6;
     sayPath = terms.map((t) => {
-      const r = t.getBoundingClientRect(), cx = r.left - b.left + r.width / 2, w = Math.max(0, r.width - 2 * inset);
+      const pic = t.firstElementChild && t.firstElementChild.tagName === 'IMG' ? t.firstElementChild : null;   // the logo is measured by its picture
+      const r = (pic || t).getBoundingClientRect(), cx = r.left - b.left + r.width / 2, w = Math.max(0, r.width - 2 * inset);
       return { x0: cx - w / 2, x1: cx + w / 2, y: r.top - b.top + r.height / 2, hl: Math.min(R * 0.95, w * 0.45) };
     });
-    if (sayPath.length > 1) sayPath[0] = { x0: sayPath[1].x0, x1: sayPath[1].x0, y: sayPath[1].y, hl: 0 };
     sayAt = []; sayLen = []; sayGap = [];
     glyphs.forEach((row, n) => {   // where each letter begins and ends, as a share of the width of its term
       const r = terms[n].getBoundingClientRect();
@@ -2131,10 +2129,10 @@ void main() {
     if (b.bottom < -160 || b.top > vh + 160) { saySm = -1; if (b.bottom < 0) sayInk(N - 1, 1); else sayInk(0, 0); return null; }   /* passed: every term is red. Not reached yet: none is */
     const w = what.getBoundingClientRect(), total = Math.max(1, w.height - vh), u = Math.min(N - 0.001, sayU(clamp(-w.top, 0, total), total));
     const si = Math.floor(u), f = u - si, over = f > ACROSS && si < N - 1, want = over ? si + 1 : si, fa = over ? 0 : Math.min(1, f / (si < N - 1 ? ACROSS : 1));
-    const J = sayJ, there = want >= 1;
-    if (saySm < 0) { saySm = 0; J.at = Math.max(1, want); J.e = 1; J.fa = there ? fa : 0; J.size = there ? 1 : 0; }   // just come into view, or after a jump of the page
+    const J = sayJ, there = want >= 1 || b.top + sayPath[0].y < vh * 0.8;   // the logo has come up into the window
+    if (saySm < 0) { saySm = 0; J.at = want; J.e = 1; J.fa = there ? fa : 0; J.size = there ? 1 : 0; }   // just come into view, or after a jump of the page
     J.size = clamp(J.size + (there ? dt / 0.36 : -dt / 0.16));
-    if (J.size <= 0) { J.at = 1; J.fa = 0; J.e = 1; sayInk(0, 0); return null; }
+    if (J.size <= 0) { J.at = 0; J.fa = 0; J.e = 1; sayInk(0, 0); return null; }
     if (there && J.e >= 1 && want !== J.at) {
       const x = lying(sayPath[J.at], J.fa, sayR).x, c = sayPath[want], x1 = want > J.at ? c.x0 : c.x1, far = Math.hypot(x1 - x, c.y - sayPath[J.at].y);
       if (far > sayR * 0.5) { J.to = want; J.e = 0; J.x0 = x; J.y0 = sayPath[J.at].y; J.x1 = x1; J.y1 = c.y; J.dur = clamp(0.19 + far / 4600, 0.22, 0.4); }
