@@ -33,7 +33,9 @@
     if (w === c.measureText('mmmiii').width) h.classList.add('fb');
   } catch (e) {}
   // wide screens with motion allowed get the pinned scenes; everything else gets plain scrolling
-  if (window.innerWidth > 900 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) h.classList.add('pin');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (window.innerWidth > 900 && !still) h.classList.add('pin');
+  else if (!still && window.innerHeight >= 560) { h.classList.add('pin'); h.classList.add('ph'); }   // a phone held upright: the same scenes, laid out for a narrow screen
 })();
 </script>
 <style>
@@ -899,6 +901,51 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 /* For researchers and Organizer are both on white now, so Organizer begins with the black line every section heading has */
 #researchers { padding-bottom: var(--s6); }
 #organizer .two::before { content: ""; grid-column: 1 / -1; height: var(--wall); margin-bottom: var(--s2); background: var(--ink); }
+/* ---- v26: the scenes on a phone held upright (html.ph, which always comes with html.pin) ---- */
+html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
+@supports (height: 100dvh) { html { --lvh: 100lvh; --svh: 100svh; --dvh: 100dvh; } }
+.ph { --cut: calc(var(--lvh) - var(--dvh)); -webkit-tap-highlight-color: transparent; }   /* --cut: what the browser's bars cover at the foot of the screen at this moment */
+/* the film: the words at the top, the laptop under them */
+.ph .film-stage { inset: 60px 0 0 0; }
+.ph .film-copy { padding-top: calc(60px + clamp(20px, 4.5vh, 40px)); }
+.ph .film-body { max-width: 21em; }
+/* About: the label, the sentence, then the picture card on what is left of the screen */
+.ph .what-pin { align-items: flex-start; padding-top: 60px; overflow-x: clip; }
+.ph .what-pin .wrap { grid-template-rows: auto auto minmax(0, 1fr); height: calc(var(--dvh) - 60px - 14px); }
+.ph .what-pin .sh { margin-bottom: 10px; padding-top: 10px; }
+.ph .def { min-height: 0; margin: 14px 0 0; }
+.ph .def-text { padding: 0 14px 12px; }
+.ph .def-term { font-size: 21px; }
+.ph .def-body { margin-top: 8px; }
+/* the walk: the deck at the top, the words under it, the marks at the foot */
+.ph .walk { --dw: min(calc(100vw - 2 * var(--pad) - 7vw), calc((var(--svh) - 60px - 356px) * 1.7778)); --wl: var(--pad); }
+.ph .walk-top { top: calc(60px + 14px); }
+.ph .walk-track { inset: 60px 0 0 0; }
+.ph .frame { right: auto; left: var(--pad); top: 96px; margin-top: 0; }
+.ph .stop-text { left: var(--pad); right: var(--pad); top: calc(96px + var(--dw) * .5625 + 26px); width: auto; }
+.ph .stop h3 { font-size: clamp(28px, 8.2vw, 36px); }
+.ph .stop-text p { max-width: 24em; }
+.ph .walk-ticks { left: var(--pad); bottom: calc(var(--cut) + 20px); }
+.ph .walk-ticks button { width: 34px; }
+/* For researchers: four numbers in the row, and on the stage the picture above the words */
+.ph.rsp .rs { --bar: 46px; }
+.ph.rsp .rs-tabs span { padding-right: 14px; font-size: var(--f-small); }
+.ph.rsp .rs-tabs button { justify-content: center; gap: 0; padding: 0; font-size: 0; }   /* the names are in the pictures; the row keeps the numbers */
+.ph.rsp .rs-tabs button b { font-size: 17px; }
+.ph.rsp .rs-p { display: flex; flex-direction: column; }
+.ph.rsp .rs-ph { position: relative; z-index: 0; flex: 1 1 0; width: 140%; max-width: none; min-height: 0; height: auto; margin-left: -40%; aspect-ratio: auto; object-position: 100% 54%; }   /* the renders keep their subject on the right, so the phone shows their right part, larger */
+.ph.rsp .rs-p:nth-child(2) .rs-ph, .ph.rsp .rs-p:nth-child(3) .rs-ph { object-position: 100% 91%; }
+.ph.rsp .rs-p:nth-child(4) .rs-ph { object-position: 100% 45%; }
+.ph.rsp .rs-p::before { display: none; }
+.ph.rsp .rs-p + .rs-p { box-shadow: 0 -22px 30px -30px rgb(0 0 0 / .9); }   /* a short shadow: the words of the role before stand at the foot of the stage */
+.ph.rsp .rs-txt { position: relative; z-index: 2; display: block; flex: none; max-width: none; height: auto; margin: 0; padding: 0 var(--pad) calc(var(--cut) + 18px); background: #0a0a0c; }
+.ph.rsp .rs-txt::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 110px; background: linear-gradient(rgb(10 10 12 / 0), #0a0a0c); pointer-events: none; }
+.ph.rsp .rs-col { position: relative; width: auto; margin-top: -40px; }
+.ph.rsp .rs-n { font-size: 17px; }
+.ph.rsp .rs-p h3 { margin-top: 12px; font-size: clamp(32px, 9.6vw, 42px); }
+.ph.rsp .rs-h { margin-top: 8px; font-size: 21px; }
+.ph.rsp .rs-what { margin-top: 12px; font-size: 17px; line-height: 1.38; }
+.ph.rsp .rs-when { margin-top: 14px; padding-top: 10px; font-size: 15px; }
 </style>
 </head>
 <body>
@@ -1358,6 +1405,25 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   const $ = (s, r = D) => r.querySelector(s);
   const $$ = (s, r = D) => [...r.querySelectorAll(s)];
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  // On a phone the browser's bars come and go while the page scrolls, and the height of the window changes with them.
+  // The scenes there are sized by the large viewport, and what has to stay readable is kept inside the small one.
+  const probe = (unit) => { const el = D.createElement('div'); el.style.cssText = `position:fixed;left:0;top:0;width:0;height:100vh;height:100${unit};visibility:hidden;pointer-events:none`; D.body.append(el); return el; };
+  const lvProbe = probe('lvh'), svProbe = probe('svh');
+  let phL = 0, phS = 0, lastW = 0;
+  const phone = () => html.classList.contains('ph');
+  const VH = () => (phone() && phL) || innerHeight;   // the height the scenes are built on
+  // On a phone the pictures of a scene that stays on the screen are asked for before the scene arrives. Left to the
+  // browser, a picture in such a scene can come a moment after its frame.
+  let early = null;
+  const phEarly = (vh) => {
+    if (!phone()) return;
+    if (!early) early = [what, walk, rs].map((el) => ({ el, done: false }));
+    early.forEach((s) => {
+      if (s.done) return;
+      const r = s.el.getBoundingClientRect();
+      if (r.top < vh * 3.5 && r.bottom > -vh) { s.done = true; $$('img[loading="lazy"]', s.el).forEach((im) => { im.loading = 'eager'; }); }
+    });
+  };
   const pinned = () => html.classList.contains('pin');
   const pageTop = (el) => el.getBoundingClientRect().top + scrollY;
   const jump = (top) => scrollTo({ top, behavior: reduce || Math.abs(top - scrollY) > innerHeight * 1.2 ? 'auto' : 'smooth' });
@@ -1434,7 +1500,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   };
   const goTerm = (i) => {
     i = (i + N) % N;
-    if (pinned()) jump(pageTop(what) + (sayAt.length ? sayAt[i] + (i ? sayLen[i] - 2 : sayLen[i] * 0.5) : ((i + 0.5) / N) * (what.offsetHeight - innerHeight)));   // to the end of the word, where all of it is red
+    if (pinned()) jump(pageTop(what) + (sayAt.length ? sayAt[i] + (i ? sayLen[i] - 2 : sayLen[i] * 0.5) : ((i + 0.5) / N) * (what.offsetHeight - VH())));   // to the end of the word, where all of it is red
     else show(i);
   };
   terms.forEach((t, i) => t.addEventListener('click', () => goTerm(i)));
@@ -1467,13 +1533,15 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     say.style.fontSize = '';
     defFit();
     if (!pinned()) return;
-    const room = innerHeight - 68 - Math.max(44, innerHeight * 0.075) - sayLabel.offsetHeight - parseFloat(getComputedStyle(sayLabel).marginBottom);
+    const ph = phone(), CARD = Math.round(clamp(phS * 0.44, 236, 300));   // on a phone the picture card stands under the sentence and needs this much of the screen
+    const room = ph ? phS - $('#top').offsetHeight - sayLabel.offsetHeight - parseFloat(getComputedStyle(sayLabel).marginBottom) - CARD - 28
+      : innerHeight - 68 - Math.max(44, innerHeight * 0.075) - sayLabel.offsetHeight - parseFloat(getComputedStyle(sayLabel).marginBottom);
     const fits = (f) => { say.style.fontSize = f + 'px'; return sayCol.offsetHeight <= room && say.scrollWidth <= say.clientWidth + 1; };
-    let lo = 28, hi = 110;
+    let lo = ph ? 17 : 28, hi = 110;
     for (let i = 0; i < 8; i++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; }
     const top = Math.floor(lo);
     let best = top, score = 1e9;
-    for (let f = top; f >= Math.max(28, top * 0.86); f--) {
+    for (let f = top; f >= Math.max(ph ? 17 : 28, top * 0.86); f--) {
       if (!fits(f)) continue;
       const sc = ragged() + (1 - f / top) * 0.16;
       if (sc < score - 1e-4) { score = sc; best = f; }
@@ -1484,8 +1552,8 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     cx.font = `${cs.fontWeight} ${best}px ${cs.fontFamily}`;
     const m = cx.measureText('Hx'), up = m.fontBoundingBoxAscent || best * 0.93, down = m.fontBoundingBoxDescent || best * 0.24, half = (parseFloat(cs.lineHeight) - up - down) / 2;
     const wrap = sayCol.parentElement, logo = terms[0].firstElementChild.getBoundingClientRect().top - say.getBoundingClientRect().top;
-    wrap.style.setProperty('--dt', Math.round(Math.min(half + up - (m.actualBoundingBoxAscent || best * 0.72), logo + best * 0.04)) + 'px');
-    wrap.style.setProperty('--db', Math.round(half + down) + 'px');
+    wrap.style.setProperty('--dt', ph ? '0px' : Math.round(Math.min(half + up - (m.actualBoundingBoxAscent || best * 0.72), logo + best * 0.04)) + 'px');
+    wrap.style.setProperty('--db', ph ? '0px' : Math.round(half + down) + 'px');
   };
   const whatStep = (vh) => {
     if (!pinned()) return;
@@ -1500,7 +1568,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   const walk = $('#walk'), track = $('#track'), stops = $$('.stop', track), walkTicks = $$('#walk-ticks button'), NW = stops.length;
   const deck = { f: 0, to: 0, raf: 0, t: 0, drag: null, hold: -1, rx: 0, ry: 0, trx: 0, try_: 0, gx: 50, gy: 50, ga: 0, tga: 0, on: false };
   let walkAt = -1;
-  const walkTop = (k) => pageTop(walk) + (k / (NW - 1)) * (walk.offsetHeight - innerHeight) + 1;
+  const walkTop = (k) => pageTop(walk) + (k / (NW - 1)) * (walk.offsetHeight - VH()) + 1;
   const walkGo = (k) => {
     k = clamp(k, 0, NW - 1);
     if (pinned()) jump(walkTop(k)); else stops[k].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
@@ -1531,7 +1599,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
       fm.style.setProperty('--bl', (clamp(d, 0, 3) * 2.4).toFixed(2) + 'px');
       const o = clamp(1 - Math.abs(d) * 2.6);
       tx.style.opacity = o.toFixed(3);
-      tx.style.transform = `translateY(calc(-50% + ${(-d * 30).toFixed(1)}px))`;
+      tx.style.transform = phone() ? `translateY(${(-d * 30).toFixed(1)}px)` : `translateY(calc(-50% + ${(-d * 30).toFixed(1)}px))`;   // on a phone the words hang under the picture
       tx.style.pointerEvents = o > 0.5 ? 'auto' : 'none';
     });
     const now = Math.round(f);
@@ -1910,7 +1978,7 @@ void main() {
     sayInkOff();
     if (!pinned()) { what.style.height = ''; return; }
     // the scroll each station gets: its width at one speed for all, then a short stretch in which the drop crosses over
-    const vh = innerHeight, SPEED = 1.3, JUMP = vh * 0.07;
+    const vh = VH(), SPEED = 1.3, JUMP = vh * 0.07;
     let at = 0;
     sayPath.forEach((c, i) => {
       const len = Math.max(vh * (i ? 0.42 : 0.7), (c.x1 - c.x0) / SPEED), gap = i < N - 1 ? JUMP : vh * 0.14;
@@ -1936,7 +2004,7 @@ void main() {
   const sayJ = { at: 1, to: 1, e: 1, fa: 0, x0: 0, y0: 0, x1: 0, y1: 0, dur: 0.3, size: 0 };
   const sayFeed = (dt) => {
     if (!pinned() || sayPath.length < 2) return null;
-    const vh = innerHeight, b = sayCol.getBoundingClientRect();
+    const vh = VH(), b = sayCol.getBoundingClientRect();
     if (b.bottom < -160 || b.top > vh + 160) { saySm = -1; if (b.bottom < 0) sayInk(N - 1, 1); else sayInk(0, 0); return null; }   /* passed: every term is red. Not reached yet: none is */
     const w = what.getBoundingClientRect(), total = Math.max(1, w.height - vh), u = Math.min(N - 0.001, sayU(clamp(-w.top, 0, total), total));
     const si = Math.floor(u), f = u - si, over = f > ACROSS && si < N - 1, want = over ? si + 1 : si, fa = over ? 0 : Math.min(1, f / (si < N - 1 ? ACROSS : 1));
@@ -1982,13 +2050,13 @@ void main() {
   };
   const pgFeed = (dt) => {
     if (!pgReady || !pinned()) return null;
-    const vh = innerHeight, h = pgHead.getBoundingClientRect();
+    const vh = VH(), h = pgHead.getBoundingClientRect();
     if (h.bottom < -240 || h.top > vh + 240) { pgSm = -1; pgSize = 1; return null; }
     if (!pgName.classList.contains('on')) { pgSize = 0; pgSm = 0; return null; }   // the heading has not come up yet
     pgSize = clamp(pgSize + dt / 0.34);
     let u = pgSm < 0 ? 0 : pgSm;
     if (!(stackAt > 0)) {   // once the card folds back the drop stays where it is
-      const p1 = clamp((vh * 0.8 - h.top) / (vh * 0.58)), p2 = html.classList.contains('stack') ? clamp((vh * 1.62 - pgs[1].getBoundingClientRect().top) / (vh * 0.56)) : 0;
+      const p1 = clamp((vh * 0.8 - h.top) / (vh * (phone() ? 0.34 : 0.58))), p2 = html.classList.contains('stack') ? clamp((vh * 1.62 - pgs[1].getBoundingClientRect().top) / (vh * 0.56)) : phone() ? clamp((vh * 0.4 - h.top) / (vh * 0.3)) : 0;
       u = p2 > 0 ? ACROSS + p2 * (1.999 - ACROSS) : p1 * ACROSS * 0.999;
     }
     pgSm = pgSm < 0 ? (u > ACROSS ? u : 0) : pgSm + (u - pgSm) * (1 - Math.exp(-dt * 3.4));
@@ -2040,8 +2108,8 @@ void main() {
   const pgs = $$('.pg');
   let stackAt = -1;
   const stackFit = () => {
-    html.classList.toggle('stack', pinned());
-    if (!pinned()) return;
+    html.classList.toggle('stack', pinned() && !phone());
+    if (!pinned() || phone()) return;
     const room = innerHeight - 84 - 28 - 16;
     if (pgs.some((c) => [...c.children].reduce((h, el) => h + el.offsetHeight, 0) + 120 > room)) html.classList.remove('stack');
     stackAt = -1;
@@ -2067,15 +2135,16 @@ void main() {
   let rsCur = -1, rsRest = 0, rsOver = 0, rsT0 = 0, rsAt = -1;
   const rsFit = () => {
     html.style.setProperty('--toph', top.getBoundingClientRect().height.toFixed(2) + 'px');
-    html.classList.toggle('rsp', pinned() && innerHeight >= 600 && innerWidth >= 1000);
+    const ph = phone();
+    html.classList.toggle('rsp', pinned() && (ph ? phS >= 600 : innerHeight >= 600 && innerWidth >= 1000));
     rsPs.forEach((p) => { p.style.transform = ''; p.style.removeProperty('--dim'); });
     rsTabs.forEach((b) => b.style.removeProperty('--f'));
     rs.style.removeProperty('--run');
     if (html.classList.contains('rsp')) {
       const h = rsPs[0].offsetHeight;
-      if (rsPs.some((p) => $('.rs-col', p).offsetHeight > h - 44)) html.classList.remove('rsp');   // the words must fit the picture
+      if (rsPs.some((p) => ph ? $('.rs-txt', p).offsetHeight > h * 0.72 : $('.rs-col', p).offsetHeight > h - 44)) html.classList.remove('rsp');   // the words must fit the picture; on a phone they stand under it and must leave it room
       else {
-        rsRest = Math.round(innerHeight * 0.72); rsOver = Math.round(innerHeight * 0.34);   // a role rests for 72% of a window of scroll; the next one takes 34% to come
+        rsRest = Math.round(VH() * 0.72); rsOver = Math.round(VH() * 0.34);   // a role rests for 72% of a window of scroll; the next one takes 34% to come
         rs.style.setProperty('--run', NR * rsRest + (NR - 1) * rsOver + 'px');
         rsT0 = parseFloat(getComputedStyle(rs.firstElementChild).top) || 0;
       }
@@ -2138,6 +2207,20 @@ void main() {
     const sc = wide ? Math.min(Math.max(W / 1600, H / 900), pinned() ? H / 900 * 1.1 : 9) : W / 1600;
     let w = 1600 * sc, h = 900 * sc;
     let x = wide ? Math.min(Math.max((pinned() ? 0.64 : 0.5) * W - 0.625 * w, Math.min(0, W - w)), Math.max(0, W - w)) : 0, y = wide ? (H - h) * 0.45 : H - h;
+    const ph = phone();
+    if (ph) {   // upright: the laptop alone is as wide as the screen and stands in the lower part of it, under the words
+      const q = W / Math.max(1, filmStage.clientWidth), under = (filmCopy.lastElementChild.getBoundingClientRect().bottom - filmStage.getBoundingClientRect().top + 12) * q;   // where the words end
+      const cut = Math.max(0, phL - phS) * q, zone = Math.max(H * 0.3, H - under - cut), k = Math.min(W / 900, zone / 800);   // the laptop keeps clear of the browser's lower bar
+      w = 1600 * k; h = 900 * k; x = W * 0.5 - 0.594 * w; y = H - cut - zone / 2 - 0.508 * h;
+      if (e > 0) { const s2 = k + (Math.max(W / 1600, H / 900) * 1.02 - k) * e, x2 = (W - 1600 * s2) / 2, y2 = (H - 900 * s2) / 2; x += (x2 - x) * e; y += (y2 - y) * e; w = 1600 * s2; h = 900 * s2; }
+      filmCtx.globalAlpha = alpha;
+      filmCtx.drawImage(im, x, y, w, h);
+      if (e < 1 && y > 0) {   // the picture is darker at its rim than the stage is, so its upper and lower edge are faded out
+        const fade = (y0, y1) => { const g = filmCtx.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, '#111'); g.addColorStop(1, 'rgba(17,17,17,0)'); filmCtx.globalAlpha = 1 - e; filmCtx.fillStyle = g; filmCtx.fillRect(0, Math.min(y0, y1), W, Math.abs(y1 - y0)); };
+        fade(y - 1, y + h * 0.12); fade(y + h + 1, y + h * 0.88);
+      }
+      return;
+    }
     if (e > 0) {   // on the way into the display the picture grows until it covers the stage, and comes to the middle
       const s2 = sc + (Math.max(W / 1600, H / 900) * 1.02 - sc) * e;
       x += ((W - 1600 * s2) / 2 - x) * e; y += ((H - 900 * s2) / 2 - y) * e; w = 1600 * s2; h = 900 * s2;
@@ -2325,7 +2408,8 @@ void main() {
   let leap = false, lastY = scrollY, leapT = 0;
   const frame = () => {
     ticking = false;
-    const vh = innerHeight;
+    const vh = VH();
+    phEarly(vh);
     // after a jump of about a screen or more nothing glides in from where it was
     leap = Math.abs(scrollY - lastY) > vh * 0.9; lastY = scrollY;
     if (leap) { html.classList.add('leap'); clearTimeout(leapT); leapT = setTimeout(() => html.classList.remove('leap'), 120); }
@@ -2358,7 +2442,10 @@ void main() {
   let ticking = false;
   const ask = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
   const measure = () => {
-    html.classList.toggle('pin', innerWidth > 900 && !reduce);
+    phL = lvProbe.offsetHeight || innerHeight; phS = svProbe.offsetHeight || innerHeight; lastW = innerWidth;
+    const upright = innerWidth <= 900 && !reduce && phS >= 560;
+    html.classList.toggle('ph', upright);
+    html.classList.toggle('pin', (innerWidth > 900 && !reduce) || upright);
     fitSay();
     stackFit();
     rsFit();
@@ -2374,7 +2461,10 @@ void main() {
   };
   addEventListener('scroll', ask, { passive: true });
   let rz = 0;
-  addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(measure, 120); });
+  addEventListener('resize', () => {
+    if (phone() && innerWidth === lastW && lvProbe.offsetHeight === phL && svProbe.offsetHeight === phS) return;   // only the browser's bars moved: nothing on the page has a new size
+    clearTimeout(rz); rz = setTimeout(measure, 120);
+  });
   addEventListener('load', measure);
   if (D.fonts && D.fonts.ready) D.fonts.ready.then(measure);
   // Helvetica Neue is used where its faces load; if they do not, the embedded faces are, with their own tracking
