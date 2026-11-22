@@ -1005,6 +1005,25 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
   .rs-tabs button:hover { background: none; color: #a9a9ae; }
   .rs-tabs button.on:hover { color: #fff; }
 }
+/* ---- v31: For researchers. The words of a role: one label, the name, what you do, two rows of facts in one style. ---- */
+.rs-n { gap: 0; font-size: var(--f-small); line-height: 1; }
+.rs-p h3 { margin-top: 18px; }
+.rs-what { max-width: 27em; margin-top: 22px; }
+.rs-when { margin-top: 34px; padding-top: 0; border-top: 0; }
+.rs-when > div { grid-template-columns: 5.2em minmax(0, 1fr); gap: 18px; padding: 13px 0 14px; border-top: 1px solid rgb(255 255 255 / .3); }
+.rs-when > div:last-child { padding-bottom: 0; }
+.rc-s { margin-top: 4px; }
+.rc-any { margin-top: 4px; }
+.ph.rsp .rs-n { font-size: 15px; }
+.ph.rsp .rs-p h3 { margin-top: 12px; }
+.ph.rsp .rs-what { margin-top: 12px; }
+.ph.rsp .rs-when { margin-top: 16px; padding-top: 0; }
+.ph.rsp .rs-when > div { grid-template-columns: 4.6em minmax(0, 1fr); gap: 12px; padding: 9px 0 10px; }
+.ph.rsp .rs-when > div:last-child { grid-template-columns: minmax(0, 1fr); gap: 2px; padding-bottom: 0; }   /* the dates need the whole width */
+/* a pinned stage of any width: the next role waits under the stage and comes up by itself */
+.rsp .rs-p + .rs-p { transform: translate3d(0, 115%, 0); box-shadow: 0 -30px 60px rgb(0 0 0 / .55); transition: transform .8s cubic-bezier(.22, .8, .2, 1); }
+.rsp .rs-p.up { transform: none; }
+.rsp .rs-p::after { transition: opacity .6s; }
 </style>
 </head>
 <body>
@@ -1264,11 +1283,10 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         <img class="rs-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
           <div class="rs-col">
-            <p class="rs-n"><b>1</b>of 4 roles<i class="rc-tag live">Live, on Convention Day</i></p>
+            <p class="rs-n"><i class="rc-tag live">Live, on Convention Day</i></p>
             <h3>Research talk</h3>
-            <p class="rs-h">2 to 4 hours in total</p>
             <p class="rs-what">You give a 20-minute talk on one project, then take students' questions for 20 minutes. Before the day there is a technical check and a backup recording.</p>
-            <dl class="rs-when"><div><dt>When</dt><dd><p>A 40-minute slot in Session A or Session B.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li><li><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div></dl>
+            <dl class="rs-when"><div><dt>Time</dt><dd>2 to 4 hours in total</dd></div><div><dt>When</dt><dd><p>A 40-minute slot in Session A or Session B.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li><li><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div></dl>
           </div>
         </div>
       </article>
@@ -1276,11 +1294,10 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         <img class="rs-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
           <div class="rs-col">
-            <p class="rs-n"><b>2</b>of 4 roles<i class="rc-tag live">Live, on Convention Day</i></p>
+            <p class="rs-n"><i class="rc-tag live">Live, on Convention Day</i></p>
             <h3>Panel</h3>
-            <p class="rs-h">2 hours in total</p>
             <p class="rs-what">You join a 35-minute panel on accessible cities with two other researchers. Before the day there is a technical check.</p>
-            <dl class="rs-when"><div><dt>When</dt><dd><p>The panel is in Session A.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div></dl>
+            <dl class="rs-when"><div><dt>Time</dt><dd>2 hours in total</dd></div><div><dt>When</dt><dd><p>The panel is in Session A.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div></dl>
           </div>
         </div>
       </article>
@@ -1288,11 +1305,10 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         <img class="rs-ph" src="assets/img/roles/judge.jpg" alt="A desk under a lamp. A clipboard holds a rubric with a red pen across it, beside a red 3D-printed model of a curb ramp and a pile of entry booklets." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
           <div class="rs-col">
-            <p class="rs-n"><b>3</b>of 4 roles<i class="rc-tag">In your own time, before the day</i></p>
+            <p class="rs-n"><i class="rc-tag">In your own time, before the day</i></p>
             <h3>Judge</h3>
-            <p class="rs-h">5 to 7 hours in total</p>
             <p class="rs-what">You read about eight shortlisted entries, then every finalist's entry and recording.</p>
-            <dl class="rs-when"><div><dt>When</dt><dd><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div></dl>
+            <dl class="rs-when"><div><dt>Time</dt><dd>5 to 7 hours in total</dd></div><div><dt>When</dt><dd><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div></dl>
           </div>
         </div>
       </article>
@@ -1300,11 +1316,10 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         <img class="rs-ph" src="assets/img/roles/committee.jpg" alt="Four printed documents fanned across a dark table in daylight. Their covers read Brief, Rubric, Sample entries and Judging rules." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
           <div class="rs-col">
-            <p class="rs-n"><b>4</b>of 4 roles<i class="rc-tag">In your own time, before the day</i></p>
+            <p class="rs-n"><i class="rc-tag">In your own time, before the day</i></p>
             <h3>Academic committee</h3>
-            <p class="rs-h">2 to 3 hours in total</p>
             <p class="rs-what">You review the brief, the rubric, the sample entries and the judging rules before they open to students.</p>
-            <dl class="rs-when"><div><dt>When</dt><dd><p>January 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div></dl>
+            <dl class="rs-when"><div><dt>Time</dt><dd>2 to 3 hours in total</dd></div><div><dt>When</dt><dd><p>January 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div></dl>
           </div>
         </div>
       </article>
@@ -2221,8 +2236,7 @@ void main() {
       const h = rsPs[0].offsetHeight;
       if (rsPs.some((p) => ph ? $('.rs-txt', p).offsetHeight > h * 0.72 : $('.rs-col', p).offsetHeight > h - 44)) html.classList.remove('rsp');   // the words must fit the picture; on a phone they stand under it and must leave it room
       else {
-        if (ph) { rsRest = Math.round(VH() * 0.62); rsOver = 0; }   // on a phone a role has 62% of a screen of scroll, and the next one comes by itself
-        else { rsRest = Math.round(VH() * 0.72); rsOver = Math.round(VH() * 0.34); }   // a role rests for 72% of a window of scroll; the next one takes 34% to come
+        rsRest = Math.round(VH() * (ph ? 0.62 : 0.8)); rsOver = 0;   // a role has 62% of a phone's screen of scroll, 80% of a wide window; the next one comes by itself
         rs.style.setProperty('--run', NR * rsRest + (NR - 1) * rsOver + 'px');
         rsT0 = parseFloat(getComputedStyle(rs.firstElementChild).top) || 0;
       }
@@ -2235,20 +2249,11 @@ void main() {
     const at = Math.round(clamp(rsT0 - rs.getBoundingClientRect().top, 0, NR * rsRest + (NR - 1) * rsOver));
     if (at === rsAt) return;
     rsAt = at;
-    let cur = 0;
-    if (phone()) {
-      // On a phone the scroll fills the line under the number of the role, and when the line is full the next role comes
-      // up by itself. A card that followed the finger at another speed than the finger felt wrong there.
-      cur = clamp(Math.floor(at / rsRest), 0, NR - 1);
-      if (cur === rsCur - 1 && at > rsCur * rsRest - 16) cur = rsCur;   // slack, so that a finger resting on the line does not flip the cards
-      rsPs.forEach((p, k) => { if (k) p.classList.toggle('up', k <= cur); p.style.setProperty('--dim', k < cur ? '1' : '0'); });
-    } else {
-      const come = rsPs.map((p, k) => { if (!k) return 1; const t = clamp((at - (k * rsRest + (k - 1) * rsOver)) / rsOver); return t * t * (3 - 2 * t); });   // how far each picture has come up
-      rsPs.forEach((p, k) => {
-        if (k) { p.style.transform = `translate3d(0, ${((1 - come[k]) * 100).toFixed(2)}%, 0)`; if (come[k] > 0.5) cur = k; }
-        p.style.setProperty('--dim', k < NR - 1 ? come[k + 1].toFixed(3) : '0');
-      });
-    }
+    // The scroll fills the line under the role, and when the line is full the next role comes up by itself. A card that
+    // followed the scroll moved at another speed than the finger on a phone and in jumps under a wheel.
+    let cur = clamp(Math.floor(at / rsRest), 0, NR - 1);
+    if (cur === rsCur - 1 && at > rsCur * rsRest - 16) cur = rsCur;   // slack, so that a scroll resting on the line does not flip the cards
+    rsPs.forEach((p, k) => { if (k) p.classList.toggle('up', k <= cur); p.style.setProperty('--dim', k < cur ? '1' : '0'); });
     const rested = clamp((at - cur * (rsRest + rsOver)) / rsRest).toFixed(3);
     rsTabs.forEach((b, i) => b.style.setProperty('--f', i === cur ? rested : '0'));
     if (cur !== rsCur) {
