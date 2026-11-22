@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preload" as="image" href="assets/img/infill-2027-tm.svg" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/infill-2027.svg">
 <title>Infill 2027 · International Convention on Digital Fabrication</title>
 <meta name="description" content="An online convention where students meet researchers in digital fabrication and take on an international design challenge. Planned for 10 April 2027.">
 <link rel="canonical" href="https://infillconvention.org/">
@@ -24,8 +26,17 @@
 (function () {
   var h = document.documentElement;
   h.classList.add('js');
-  // the logo on the first screen is printed once its file has arrived, and after three seconds whatever happens
-  var lg = function () { h.classList.add('lg'); };
+  // The logo on the first screen is printed once its file has arrived and the page has been on the screen for two frames,
+  // and after three seconds whatever happens. A print that begins before the page is shown can be over unseen.
+  var asked = false;
+  var lg = function () {
+    if (asked) return;
+    asked = true;
+    var go = function () { h.classList.add('lg'); };
+    if (window.requestAnimationFrame) requestAnimationFrame(function () { requestAnimationFrame(go); });
+    setTimeout(go, 1500);   // a tab in the background gets no frames
+  };
+  window.addEventListener('load', lg);
   document.addEventListener('load', function (e) { var t = e.target; if (t && t.tagName === 'IMG' && t.closest && t.closest('.h-left .logo')) lg(); }, true);
   document.addEventListener('error', function (e) { var t = e.target; if (t && t.tagName === 'IMG' && t.closest && t.closest('.h-left .logo')) lg(); }, true);
   setTimeout(lg, 3000);
@@ -197,10 +208,13 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 }
 /* The logo is printed from the bottom up in 18 layers. The box rises and the picture in it goes down by as much, so only
    transforms move and the browser can go on with it while the page's scripts start. It begins when the picture has arrived. */
-.js .h-left .logo .box { overflow: hidden; animation: lbox 1.15s linear .15s both paused; }
-.js .h-left .logo .box img { animation: limg 1.15s linear .15s both paused; }
-.js .h-left .logo .box::before { content: ""; position: absolute; left: 0; right: 0; top: 0; z-index: 1; height: 2px; background: var(--red); opacity: 0; animation: lhead 1.15s linear .15s both paused; }   /* the print head: the upper edge of what is printed */
-html.lg .h-left .logo .box, html.lg .h-left .logo .box img, html.lg .h-left .logo .box::before { animation-play-state: running; }
+.js .h-left .logo .box { overflow: hidden; }
+html.js:not(.lg) .h-left .logo .box { transform: translate3d(0, 100%, 0); }   /* not printed yet */
+html.js:not(.lg) .h-left .logo .box img { transform: translate3d(0, -100%, 0); }
+.js .h-left .logo .box::before { content: ""; position: absolute; left: 0; right: 0; top: 0; z-index: 1; height: 2px; background: var(--red); opacity: 0; }   /* the print head: the upper edge of what is printed */
+html.lg .h-left .logo .box { animation: lbox 1.15s linear both; }
+html.lg .h-left .logo .box img { animation: limg 1.15s linear both; }
+html.lg .h-left .logo .box::before { animation: lhead 1.15s linear both; }
 @keyframes lbox { 0.000%, 5.536% { transform: translate3d(0, 100.0000%, 0); } 5.556%, 11.091% { transform: translate3d(0, 94.4444%, 0); } 11.111%, 16.647% { transform: translate3d(0, 88.8889%, 0); } 16.667%, 22.202% { transform: translate3d(0, 83.3333%, 0); } 22.222%, 27.758% { transform: translate3d(0, 77.7778%, 0); } 27.778%, 33.313% { transform: translate3d(0, 72.2222%, 0); } 33.333%, 38.869% { transform: translate3d(0, 66.6667%, 0); } 38.889%, 44.424% { transform: translate3d(0, 61.1111%, 0); } 44.444%, 49.980% { transform: translate3d(0, 55.5556%, 0); } 50.000%, 55.536% { transform: translate3d(0, 50.0000%, 0); } 55.556%, 61.091% { transform: translate3d(0, 44.4444%, 0); } 61.111%, 66.647% { transform: translate3d(0, 38.8889%, 0); } 66.667%, 72.202% { transform: translate3d(0, 33.3333%, 0); } 72.222%, 77.758% { transform: translate3d(0, 27.7778%, 0); } 77.778%, 83.313% { transform: translate3d(0, 22.2222%, 0); } 83.333%, 88.869% { transform: translate3d(0, 16.6667%, 0); } 88.889%, 94.424% { transform: translate3d(0, 11.1111%, 0); } 94.444%, 99.980% { transform: translate3d(0, 5.5556%, 0); } 100% { transform: translate3d(0, 0, 0); } }
 @keyframes limg { 0.000%, 5.536% { transform: translate3d(0, -100.0000%, 0); } 5.556%, 11.091% { transform: translate3d(0, -94.4444%, 0); } 11.111%, 16.647% { transform: translate3d(0, -88.8889%, 0); } 16.667%, 22.202% { transform: translate3d(0, -83.3333%, 0); } 22.222%, 27.758% { transform: translate3d(0, -77.7778%, 0); } 27.778%, 33.313% { transform: translate3d(0, -72.2222%, 0); } 33.333%, 38.869% { transform: translate3d(0, -66.6667%, 0); } 38.889%, 44.424% { transform: translate3d(0, -61.1111%, 0); } 44.444%, 49.980% { transform: translate3d(0, -55.5556%, 0); } 50.000%, 55.536% { transform: translate3d(0, -50.0000%, 0); } 55.556%, 61.091% { transform: translate3d(0, -44.4444%, 0); } 61.111%, 66.647% { transform: translate3d(0, -38.8889%, 0); } 66.667%, 72.202% { transform: translate3d(0, -33.3333%, 0); } 72.222%, 77.758% { transform: translate3d(0, -27.7778%, 0); } 77.778%, 83.313% { transform: translate3d(0, -22.2222%, 0); } 83.333%, 88.869% { transform: translate3d(0, -16.6667%, 0); } 88.889%, 94.424% { transform: translate3d(0, -11.1111%, 0); } 94.444%, 99.980% { transform: translate3d(0, -5.5556%, 0); } 100% { transform: translate3d(0, 0, 0); } }
 @keyframes lhead { 0%, 96% { opacity: 1; } 100% { opacity: 0; } }
@@ -1087,7 +1101,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
         </div>
         <div class="def" id="def">
           <div class="def-pic" id="pics" aria-hidden="true">
-            <img class="on" src="assets/img/walk/infill.jpg" alt="" width="1600" height="900">
+            <img class="on" src="assets/img/walk/infill.jpg" alt="" width="1600" height="900" fetchpriority="low">
             <img src="assets/img/about/online.jpg" alt="" width="960" height="1280" loading="lazy">
             <img src="assets/img/about/students.jpg" alt="" width="960" height="1280" loading="lazy">
             <img src="assets/img/about/researchers.jpg" alt="" width="960" height="1280" loading="lazy">
@@ -2530,15 +2544,25 @@ void main() {
     walkAt = -1;
     spyCur = -2;
     ask();
+    shape0 = shape();
   };
+  // What the measuring depends on: the window, the height of the page, where the letters of the sentence stand, how wide
+  // a program's name and how tall a role's words are. Load, the fonts reporting ready and the font check used to measure
+  // everything again, three more full passes in the first seconds; now they do so only if one of these has changed.
+  let shape0 = '';
+  const shape = () => {
+    const c = $$('.ch', say), z = c[c.length - 1], b = say.getBoundingClientRect(), r = z ? z.getBoundingClientRect() : b, col = $('.rs-col', rs);
+    return [innerWidth, innerHeight, D.documentElement.scrollHeight, Math.round(b.width), Math.round(b.height), Math.round(r.left - b.left), Math.round(r.top - b.top), pgName.offsetWidth, col ? col.offsetHeight : 0, html.className.replace(/ ?(leap|lg|menu-open)/g, '')].join('|');
+  };
+  const remeasure = () => { if (shape() !== shape0) measure(); };
   addEventListener('scroll', ask, { passive: true });
   let rz = 0;
   addEventListener('resize', () => {
     if (phone() && innerWidth === lastW && lvProbe.offsetHeight === phL && svProbe.offsetHeight === phS) return;   // only the browser's bars moved: nothing on the page has a new size
     clearTimeout(rz); rz = setTimeout(measure, 120);
   });
-  addEventListener('load', measure);
-  if (D.fonts && D.fonts.ready) D.fonts.ready.then(measure);
+  addEventListener('load', remeasure);
+  if (D.fonts && D.fonts.ready) D.fonts.ready.then(remeasure);
   // Helvetica Neue is used where its faces load; if they do not, the embedded faces are, with their own tracking
   if (D.fonts && D.fonts.load) {
     const got = (f) => D.fonts.load(f).then((x) => x.length > 0, () => false);
@@ -2546,7 +2570,7 @@ void main() {
       const fb = !neue.every(Boolean);
       html.classList.toggle('fb', fb);
       return fb ? Promise.all([200, 300, 400, 700].map((w) => got(`${w} 40px "Infill Sans"`))) : 0;
-    }).then(measure);
+    }).then(remeasure);
   }
   (() => {   // For researchers: a researcher reads the live times in the zone they are in, not in Korea's
     const outs = $$('[data-sess]'), notes = $$('[data-tz]');
@@ -2631,7 +2655,8 @@ void main() {
       const VIEWS = [[AZ0, EL0, 1], [-62, 26, 0.94], [118, 15, 0.96], [36, 48, 1.08]];   // the side each round is drawn from
       const rig = { az: AZ0, el: EL0, d: 1, t: T0.clone(), to: { az: AZ0, el: EL0, d: 1, t: T0.clone() }, drag: 0, shot: 0 };
       const draw = st.frame.bind(st);
-      st.frame = (t, o = {}) => { rig.drag = o.spin || 0; return draw(t, o); };   // a drag still turns it
+      let seen = true, parked = false;
+      st.frame = (t, o = {}) => { if (!seen) return; rig.drag = o.spin || 0; return draw(t, o); };   // a drag still turns it; off the screen nothing is rendered
       if (!reduce) cam.updateMatrixWorld = function (force) {
         const a = (rig.az + rig.drag) * Math.PI / 180, e = rig.el * Math.PI / 180, r = D0 * rig.d;
         this.position.set(rig.t.x + Math.sin(a) * Math.cos(e) * r, rig.t.y + Math.sin(e) * r, rig.t.z + Math.cos(a) * Math.cos(e) * r);
@@ -2643,7 +2668,9 @@ void main() {
       const place = () => {
         const box = host.getBoundingClientRect(), now = performance.now(), dt = Math.min(0.05, (now - last) / 1000);
         last = now;
-        if (box.bottom > 0 && box.top < innerHeight) {
+        const vis = box.bottom > 0 && box.top < innerHeight;
+        if (vis !== seen) { seen = vis; if (vis) player.seek(player.progress); }   // back on the screen: the picture is rendered again from where it stands
+        if (vis) {
           if (!reduce) {
             if (!held) tq += dt;
             let shot = null, p = 1;
@@ -2708,8 +2735,10 @@ void main() {
           const done = player.progress > 0.8;
           if (done !== shown) { shown = done; stage.classList.toggle('noted', done); }
         }
-        requestAnimationFrame(place);
+        if (vis || !wakes) requestAnimationFrame(place); else parked = true;   // off the screen the loop sleeps
       };
+      const wakes = 'IntersectionObserver' in window;
+      if (wakes) new IntersectionObserver((es) => { if (parked && es.some((e) => e.isIntersecting)) { parked = false; last = performance.now(); requestAnimationFrame(place); } }).observe(host);
       requestAnimationFrame(place);
     } catch (e) {
       console.warn('sketch:', e);
