@@ -245,8 +245,9 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 .term[aria-pressed="true"]::after { transform: none; }
 .t-logo img { display: inline-block; width: auto; height: 1.25em; margin: -.35em 0 0; vertical-align: -.085em; }
 .term { color: var(--red); font-weight: 700; transition: color .45s var(--ease); }
-/* in the pinned scene a term is ink until the scroll reaches it, so the red arrives word by word with the glass */
-.pin .say .term:not(.lit) { color: var(--ink); }
+/* in the pinned scene a term is ink until the glass reaches it, and the red comes one letter at a time: each letter of a
+   term is an element of its own, and the script colors it by where the glass is */
+.pin .say .term .ch { color: var(--ink); }
 .pin.gl .term::after { display: none; }
 .nb { white-space: nowrap; }
 .def { border: var(--wall) solid var(--ink); background: #fff; }
@@ -390,26 +391,27 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
    Session A stands left of the globe and Session B right, each under the color its land is drawn in. */
 html:not(.js) .def-nav, html:not(.js) .cs, html:not(.globe) .sg-globe { display: none; }
 html.globe .zt { display: none; }
-.cs { --slot: clamp(124px, 12.4vw, 176px); display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; margin-top: var(--head); border-top: var(--wall) solid var(--ink); border-bottom: 1px solid var(--rule); }
+.cs { --slot: clamp(124px, 12.4vw, 176px); display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; margin-top: var(--s4); border-bottom: 1px solid var(--rule); }   /* its one line is grey: the black line belongs to the heading of the section */
 .cs-step { display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--ink); cursor: pointer; transition: background-color .2s; }
 .cs-step:hover { background: var(--soft); }
 .cs-step svg { width: 18px; height: 18px; }
-.cs-view { position: relative; height: 68px; overflow: hidden; cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-mask-image: linear-gradient(90deg, #0000, #000 17%, #000 83%, #0000); mask-image: linear-gradient(90deg, #0000, #000 17%, #000 83%, #0000); }
+.cs-view { position: relative; height: 60px; overflow: hidden; cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-mask-image: linear-gradient(90deg, #0000, #000 17%, #000 83%, #0000); mask-image: linear-gradient(90deg, #0000, #000 17%, #000 83%, #0000); }
 .cs-view.drag { cursor: grabbing; }
-.cs-view::before { content: ""; position: absolute; left: 50%; top: 0; z-index: 1; margin-left: -8px; border: 8px solid transparent; border-top: 9px solid var(--red); border-bottom: 0; }
+.cs-view::before { content: ""; position: absolute; left: 50%; bottom: 0; z-index: 1; width: calc(var(--slot) * .56); height: 3px; margin-left: calc(var(--slot) * -.28); background: var(--red); }   /* the chosen city stands over this bar */
 .cs-track { position: absolute; left: 50%; top: 0; display: flex; height: 100%; }
 .cs-track.ease { transition: transform .55s var(--ease); }
-.cs-track button { flex: none; width: var(--slot); padding: 6px 0 0; border: 0; background: none; font: inherit; font-size: var(--f-body); color: var(--ink-3); white-space: nowrap; cursor: inherit; transition: color .25s; }
+.cs-track button { flex: none; width: var(--slot); padding: 0; border: 0; background: none; font: inherit; font-size: var(--f-body); color: var(--ink-3); white-space: nowrap; cursor: inherit; transition: color .25s; }
 .cs-track button:hover { color: var(--ink); }
 .cs-track button[aria-pressed="true"] { font-weight: 700; color: var(--ink); }
 .cs-say { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: var(--s3); font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-align: center; text-wrap: balance; }
 .sg { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s4) var(--gap); align-items: start; margin-top: var(--s4); }
-.ss { grid-column: span 3; padding-top: 14px; border-top: 6px solid var(--ink); }
-.ss.b { border-top-color: var(--red); }
+.ss { grid-column: span 3; }
 html:not(.globe) .ss { grid-column: span 6; }
 .sg-globe { grid-column: span 6; display: grid; justify-items: center; }
-.sg-globe canvas { display: block; width: min(100%, max(280px, calc(100vh - 330px))); aspect-ratio: 1; }
+.sg-globe canvas { display: block; width: min(100%, max(280px, calc(100vh - 318px))); aspect-ratio: 1; }   /* the line of cities, the sentence and the globe fit one window */
 .ss-name { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; font-size: var(--f-t3); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+.ss-name i { display: inline-block; width: 30px; height: 16px; margin-right: 10px; background: var(--ink); vertical-align: -1px; }   /* the color this session has on the globe */
+.ss.b .ss-name i { background: var(--red); }
 .ss.b .ss-name > span { color: var(--red); }
 .ss-name small { font-size: var(--f-small); font-weight: 400; letter-spacing: 0; color: var(--ink-3); }
 .ss-day { margin-top: var(--s2); font-size: var(--f-small); line-height: 1.3; color: var(--ink-2); }
@@ -423,11 +425,9 @@ html:not(.globe) .ss { grid-column: span 6; }
 .ss-run { margin-top: var(--s2); border-top: 1px solid var(--rule); list-style: none; counter-reset: r; }
 .ss-run li { display: grid; grid-template-columns: 1.7em minmax(0, 1fr); padding: 11px 0; border-bottom: 1px solid var(--rule); font-size: var(--f-body); line-height: 1.3; counter-increment: r; text-wrap: pretty; }
 .ss-run li::before { content: counter(r); color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.sg-key { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 26px; margin-top: var(--s2); padding: 0; list-style: none; font-size: var(--f-small); line-height: 1.3; }
-.sg-key li { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; }
-.sg-key i, .cs-say i { flex: none; width: 30px; height: 16px; background: var(--ink); }
-.sg-key i.k-b, .cs-say i.k-b { background: var(--red); }
-.sg-key i.k-ab, .cs-say i.k-ab { background: repeating-linear-gradient(135deg, var(--ink) 0 3px, var(--red) 3px 6px); }
+.cs-say i { flex: none; width: 30px; height: 16px; background: var(--ink); }
+.cs-say i.k-b { background: var(--red); }
+.cs-say i.k-ab { background: repeating-linear-gradient(135deg, var(--ink) 0 3px, var(--red) 3px 6px); }
 .cs-say i.k-no { background: #dcdce0; }
 .sg + .prose { margin-top: var(--s7); }
 @media (max-width: 1040px) {
@@ -738,76 +738,65 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .stop h3 .live { display: table; margin: 0 0 .22em; padding: .04em .22em .1em; background: var(--red); font-weight: 700; color: #fff; }
 .stop h3 .here { background: #fff; color: var(--ink); }
 .pin .frame img { filter: blur(var(--bl, 0px)); }
-/* for researchers: four roles, four pictures. Without the pinned scene they follow each other down the page, each with
-   its words on the dark left of its picture. */
-.rw { margin-top: var(--head); }
-.rw-view { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
-.rw-wall { display: grid; gap: 2px; }
-.rw-tabs, .rr-ov, .rw-mid { display: none; }
-.rr { position: relative; display: flex; min-height: clamp(500px, 43vw, 660px); overflow: hidden; isolation: isolate; background: #0a0a0c; color: #fff; }
-.rr-ph { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }   /* the subject is on the right, so any crop comes off the left */
-.rr::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(8 8 10 / .95), rgb(8 8 10 / .9) 26%, rgb(8 8 10 / .5) 48%, rgb(8 8 10 / 0) 68%); }
-.rr-txt { display: flex; flex-direction: column; justify-content: space-between; gap: var(--s3); width: min(50%, 640px); padding: clamp(22px, 2.6vw, 40px); }
-.rc-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: var(--f-small); line-height: 1.3; }
-.rc-n { color: #c9c9cd; font-variant-numeric: tabular-nums; }
-.rc-tag { padding: .16em .5em .22em; background: #fff; font-weight: 700; color: var(--ink); }
+/* for researchers: four roles, four pictures, one after the other. Each has its words on the dark left of its picture. */
+.rs { max-width: var(--max); margin: var(--head) auto 0; padding: 0 var(--pad); }
+.rs-tabs { display: none; }
+.rs-p { position: relative; display: flex; align-items: center; min-height: clamp(520px, 44vw, 680px); margin-bottom: 2px; overflow: hidden; isolation: isolate; background: #0a0a0c; color: #fff; }
+.rs-ph { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }   /* the subject is on the right, so any crop comes off the left */
+.rs-p::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(8 8 10 / .95), rgb(8 8 10 / .9) 26%, rgb(8 8 10 / .5) 48%, rgb(8 8 10 / 0) 68%); }
+.rs-txt { width: 100%; padding: clamp(22px, 2.6vw, 40px); }
+.rs-col { width: min(56%, 700px); }
+.rs-n { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font-size: var(--f-lead); line-height: 1.2; letter-spacing: var(--tl); color: #d9d9dd; }
+.rs-n b { display: grid; place-items: center; width: 1.75em; height: 1.75em; background: #fff; font-variant-numeric: tabular-nums; letter-spacing: 0; color: var(--ink); }
+.rc-tag { margin-left: 6px; padding: .2em .55em .26em; background: #fff; font-size: var(--f-small); font-style: normal; font-weight: 700; letter-spacing: 0; line-height: 1.3; color: var(--ink); }
 .rc-tag.live { background: var(--red); color: #fff; }
-.rr h3 { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); text-wrap: balance; }
-.rc-what { max-width: 27em; margin-top: 16px; font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
-.rc-facts { margin-top: var(--s3); border-top: 1px solid rgb(255 255 255 / .5); font-size: var(--f-small); line-height: 1.45; }
-.rc-facts > div { display: grid; grid-template-columns: 6.4em minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 11px 0 12px; border-bottom: 1px solid rgb(255 255 255 / .2); }
-.rc-facts dt { color: #a9a9ae; }
-.rc-facts dd { text-wrap: pretty; }
-.rc-h b { margin-right: .2em; font-size: var(--f-t2); font-weight: 300; line-height: 1; letter-spacing: var(--th); font-variant-numeric: tabular-nums; }
+.rs-p h3 { margin-top: var(--s2); font-size: var(--f-d); line-height: .94; letter-spacing: var(--tb); text-wrap: balance; }
+.rs-h { margin-top: 14px; font-size: var(--f-t2); line-height: 1.1; font-weight: 300; letter-spacing: var(--th); font-variant-numeric: tabular-nums; }
+.rs-what { max-width: 26em; margin-top: var(--s2); font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
+.rs-when { margin-top: var(--s3); padding-top: 14px; border-top: 1px solid rgb(255 255 255 / .5); font-size: var(--f-body); line-height: 1.45; }
+.rs-when > div { display: grid; grid-template-columns: 4.4em minmax(0, 1fr); gap: 14px; align-items: baseline; }
+.rs-when dt { font-size: var(--f-small); color: #a9a9ae; }
+.rs-when dd { text-wrap: pretty; }
 .rc-s { margin-top: 6px; list-style: none; }
 .rc-s li { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 10px; }
-.rc-any { margin-top: 6px; color: #a9a9ae; }
+.rc-any { margin-top: 6px; font-size: var(--f-small); color: #a9a9ae; }
 .rd-note { max-width: 46em; margin-top: var(--s3); font-size: var(--f-small); line-height: 1.45; color: #c9c9cd; text-wrap: pretty; }
-/* the pinned scene. The wall is twice the window each way and holds the four pictures two by two. At first the whole wall
-   is in the window, at half size. Then the view goes into the first picture and travels from one to the next. */
-.rwp .rw { height: calc(100vh + 228vh); margin-top: calc(var(--head) - 68px); }
-.rwp .rw-pin { position: sticky; top: 0; height: 100vh; overflow: clip; }
-.rwp .rw-view { --edge: max(var(--pad), calc((100vw - var(--max)) / 2 + var(--pad))); position: absolute; inset: 68px 0 0; max-width: none; padding: 0; overflow: hidden; background: #060608; }   /* --edge: where the page's own left margin is, so that the words in the pictures start on it */
-.rwp .rw-wall { position: absolute; left: 0; top: 0; width: 200%; height: 200%; grid-template: 1fr 1fr / 1fr 1fr; gap: 0; transform-origin: 0 0; }
-.rwp .rw-wall.all .rr { cursor: pointer; }
-.rwp .rr { min-height: 0; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); }
-.rwp .rr-txt { width: min(54%, 720px); padding: calc(52px + clamp(22px, 2.6vw, 40px)) clamp(22px, 2.6vw, 40px) clamp(22px, 2.6vw, 40px) var(--edge); opacity: var(--tx, 1); }
-.rwp .rr-ov { position: absolute; inset: 0 auto 0 0; z-index: 2; display: grid; align-content: center; justify-items: start; gap: 20px; padding: 104px 0 0 calc(2 * var(--edge)); opacity: var(--ov, 0); pointer-events: none; }   /* seen at half size, so everything in it is set at twice the size it is read at */
-.rr-ov b { display: grid; place-items: center; width: 76px; height: 76px; background: #fff; font-size: calc(2 * var(--f-lead)); font-variant-numeric: tabular-nums; color: var(--ink); }
-.rr-ov strong { max-width: 8.2em; font-size: calc(2 * var(--f-t1)); line-height: .96; letter-spacing: var(--th); }
-.rr-ov span { display: grid; justify-items: start; gap: 14px; font-size: calc(2 * var(--f-small)); line-height: 1.3; color: #d9d9dd; }
-.rr-ov .rc-tag { color: var(--ink); }
-.rr-ov .rc-tag.live { color: #fff; }
-.rwp .rw-mid { position: absolute; left: 50%; top: 50%; z-index: 3; display: block; padding: 20px 36px 24px; background: #fff; font-size: calc(2 * var(--f-lead)); font-weight: 700; letter-spacing: var(--tl); line-height: 1.2; white-space: nowrap; color: var(--ink); opacity: var(--ov, 0); transform: translate(-50%, -50%); pointer-events: none; }
-.rwp .rw-tabs { position: absolute; inset: 0 0 auto; z-index: 5; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); height: 52px; border-bottom: 1px solid rgb(255 255 255 / .2); background: rgb(6 6 8 / .78); }
-.rw-tabs button { position: relative; display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 clamp(16px, 2.6vw, 40px); border: 0; border-left: 1px solid rgb(255 255 255 / .16); background: none; font: inherit; font-size: var(--f-small); text-align: left; white-space: nowrap; color: #b5b5ba; cursor: pointer; transition: color .25s, background-color .25s; }
-.rw-tabs button:first-child { padding-left: var(--edge); border-left: 0; }
-.rw-tabs button:hover { background: rgb(255 255 255 / .08); color: #fff; }
-.rw-tabs button b { font-variant-numeric: tabular-nums; }
-.rw-tabs button.on { font-weight: 700; color: #fff; }
-.rw-tabs button::after { content: ""; position: absolute; inset: auto 0 -1px; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: 0 50%; transition: transform .45s var(--ease); }
-.rw-tabs button.on::after { transform: none; }
+/* the stacked scene. Each picture is as tall as the window under the top bar and the row of names, and stays there while
+   the next one comes up over it. All four hang in one box, so each lies on the one before. The scroll is the browser's own. */
+.rsp .rs { --bar: 60px; --hold: 14vh; --t0: calc(var(--toph, 69px) - 1px); max-width: none; padding: 0; }
+.rsp .rs-tabs { position: sticky; top: var(--t0); z-index: 6; display: block; height: var(--bar); border-top: 1px solid rgb(255 255 255 / .22); border-bottom: 1px solid rgb(255 255 255 / .22); background: var(--ink); }
+.rs-tabs > div { display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); height: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+.rs-tabs span { display: flex; align-items: center; padding-right: var(--s3); font-size: var(--f-body); font-weight: 700; white-space: nowrap; }
+.rs-tabs button { position: relative; display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 var(--s2); border: 0; border-left: 1px solid rgb(255 255 255 / .22); background: none; font: inherit; font-size: var(--f-body); text-align: left; white-space: nowrap; color: #a9a9ae; cursor: pointer; transition: color .25s, background-color .25s; }
+.rs-tabs button:hover { background: rgb(255 255 255 / .08); color: #fff; }
+.rs-tabs button b { font-variant-numeric: tabular-nums; }
+.rs-tabs button.on { font-weight: 700; color: #fff; }
+.rs-tabs button::after { content: ""; position: absolute; inset: auto 0 -1px; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: 0 50%; transition: transform .45s var(--ease); }
+.rs-tabs button.on::after { transform: none; }
+.rsp .rs-p { position: sticky; top: calc(var(--t0) + var(--bar)); display: block; height: calc(100vh - var(--t0) - var(--bar)); min-height: 0; margin: 0; box-shadow: 0 -50px 40px -30px rgb(0 0 0 / .85); }   /* a shadow on the picture below, and none past its own sides or foot */
+.rsp .rs-p + .rs-p { margin-top: var(--hold); }
+.rsp .rs::after { content: ""; display: block; height: var(--hold); }   /* the last picture stays as long as the others did */
+.rsp .rs-p::after { content: ""; position: absolute; inset: 0; z-index: 3; background: #000; opacity: calc(var(--dim, 0) * .6); pointer-events: none; }   /* a picture darkens as the next one covers it */
+.rsp .rs-txt { display: grid; align-content: center; max-width: var(--max); height: 100%; margin: 0 auto; padding: var(--s3) var(--pad); }
+.rsp .rs-col { width: min(54%, 720px); }
 #researchers .steps, #researchers .gets ul { border-top-color: #fff; }
 #researchers .steps li, #researchers .gets ul li { border-bottom-color: rgb(255 255 255 / .2); }
 #researchers .btn { border-color: #fff; background: linear-gradient(var(--red), var(--red)) 0 0 / 0% 100% no-repeat #fff; color: var(--ink); }
 #researchers .btn:hover { border-color: var(--red); background-size: 100% 100%; color: #fff; }
 @media (max-width: 900px) {
-  .rw-view { padding: 0; }
-  .rw-wall { gap: 12px; }
-  .rr { display: block; min-height: 0; }
-  .rr-ph { position: relative; z-index: 0; display: block; height: auto; aspect-ratio: 5 / 4; }
-  .rr::before { inset: 0 0 auto; z-index: 1; aspect-ratio: 5 / 4; background: linear-gradient(rgb(10 10 12 / 0) 62%, #0a0a0c); }
-  .rr-txt { position: relative; z-index: 2; width: auto; margin-top: -34px; padding: 0 var(--pad) 26px; }
-  .rr h3 { margin-top: 16px; }
-  .rc-facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .rs { padding: 0; }
+  .rs-p { display: block; min-height: 0; margin-bottom: 12px; }
+  .rs-ph { position: relative; z-index: 0; display: block; height: auto; aspect-ratio: 5 / 4; }
+  .rs-p::before { inset: 0 0 auto; z-index: 1; aspect-ratio: 5 / 4; background: linear-gradient(rgb(10 10 12 / 0) 62%, #0a0a0c); }
+  .rs-txt { position: relative; z-index: 2; margin-top: -34px; padding: 0 var(--pad) 28px; }
+  .rs-col { width: auto; }
+  .rs-when > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
 @media print {
-  .rwp .rw { height: auto; margin-top: var(--head); }
-  .rwp .rw-pin { position: static; height: auto; }
-  .rwp .rw-view { position: static; overflow: visible; }
-  .rwp .rw-wall { position: static; display: grid; width: auto; height: auto; grid-template: none; gap: 2px; transform: none !important; }
-  .rwp .rr { min-height: 500px; }
-  .rw-tabs, .rr-ov, .rw-mid { display: none !important; }
+  .rsp .rs { max-width: var(--max); padding: 0 var(--pad); }
+  .rsp .rs-tabs, .rsp .rs::after, .rsp .rs-p::after { display: none; }
+  .rsp .rs-p { position: relative; top: auto; display: flex; height: auto; min-height: 500px; margin: 0 0 2px; box-shadow: none; }
+  .rsp .rs-txt { display: block; height: auto; }
 }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .steps { margin-top: 16px; border-top: var(--wall) solid var(--ink); counter-reset: n; list-style: none; }
@@ -864,30 +853,48 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .steps, .gets ul { margin-top: var(--s2); }
 .steps li, .gets ul li { font-size: var(--f-body); }
 .figs-wrap { padding-bottom: calc(var(--sec) * 1.15); }
-/* the supporter: its own logo on white, what it makes, and four pictures */
-.sup { padding-top: var(--sec); }
-.sup-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); align-items: start; padding-top: var(--s2); border-top: var(--wall) solid var(--ink); }
+/* The picture of the three blocks is set on the page's margins. In it the first block begins at 5% of its width and the
+   third ends at 95%, so the picture is as wide as the text column divided by 0.9 and starts 5% of itself to the left. */
+#partners { padding-bottom: var(--sec); overflow-x: clip; }
+.pwall { width: calc(100% / .9); max-width: none; margin: var(--s2) 0 0 -5.556%; }
+.pw-all { -webkit-mask-image: linear-gradient(#0000, #000 14%, #000 78%, #0000), linear-gradient(90deg, #0000, #000 4.4%, #000 95.6%, #0000); -webkit-mask-composite: source-in; mask-image: linear-gradient(#0000, #000 14%, #000 78%, #0000), linear-gradient(90deg, #0000, #000 4.4%, #000 95.6%, #0000); mask-composite: intersect; }
+.pw-text { padding-left: 15%; padding-right: 15%; }   /* the words stay under their own block, and the last ones inside the page's right margin */
+@media (max-width: 900px) {
+  .pwall { width: auto; margin: var(--s2) calc(var(--pad) * -1) 0; }
+  .pw-text { padding-left: var(--pad); padding-right: var(--pad); }
+}
+/* the supporter: on the partners' dark ground, with nothing but space between the two. One band of three pictures: the
+   press that carries the company's name is the large one */
+.sup { padding-top: var(--s6); }
+.sup-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); align-items: start; }
 .sup-head > :first-child { grid-column: 1 / span 5; }
 .sup-head > :last-child { grid-column: 7 / span 6; }
-.sup-head .cap { font-size: var(--f-small); }
-.sup-logo { width: min(100%, 420px); margin-top: var(--s2); line-height: 0; }
+.sup-head .cap { font-size: var(--f-small); color: #a9a9ae; }
+.sup-logo { width: min(100%, 400px); margin-top: var(--s2); line-height: 0; }
 .sup-logo img { width: 100%; height: auto; }
-.sup-lead { font-size: var(--f-lead); line-height: 1.42; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
-.sup .facts { border-top-color: var(--ink); }
-.sup .facts div { border-bottom-color: var(--rule); }
-.sup .facts dt { color: var(--ink-3); }
-.sup-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4) var(--gap); margin-top: var(--s5); }
-.sup-grid .pr { position: relative; aspect-ratio: 2 / 1; overflow: hidden; background: var(--soft); }
-.sup-grid img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sup-grid img.p-ins { object-position: 78% 50%; }
-.sup-grid .cut .pr { background: #fff; box-shadow: inset 0 0 0 1px var(--rule); }
-.sup-grid .cut img { object-fit: contain; padding: 3% 6%; }
-.sup-grid figcaption { margin-top: 14px; font-size: var(--f-small); line-height: 1.45; color: var(--ink-2); }
-.sup-grid figcaption b { display: block; margin-bottom: 2px; font-size: var(--f-t3); letter-spacing: -0.03em; line-height: 1.2; color: var(--ink); }
-.sup-src { margin-top: var(--s3); font-size: var(--f-small); color: var(--ink-3); }
+.sup-logo .std { display: none; }
+.sup-lead { font-size: var(--f-lead); line-height: 1.42; font-weight: 300; letter-spacing: var(--tl); color: #f1f1f3; text-wrap: pretty; }
+.sup .facts { margin-top: var(--s3); }
+.sup .facts div { align-items: baseline; padding: 11px 0; font-size: var(--f-body); }
+.sup .facts dt { font-size: var(--f-small); }
+.sup-band { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: var(--gap); height: clamp(400px, 33vw, 500px); margin-top: var(--s5); }
+.sup-band figure { grid-column: span 4; display: flex; flex-direction: column; min-height: 0; }
+.sup-band .big { grid-column: span 8; grid-row: span 2; }
+.sup-band .pr { flex: 1; min-height: 0; background: #1b1b1e; }
+.sup-band img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sup-band figcaption { margin-top: 11px; font-size: var(--f-small); line-height: 1.5; color: #c9c9cd; }
+.sup-band figcaption b { margin-right: 10px; font-size: var(--f-body); color: #fff; }
+.sup-src { margin-top: var(--s2); font-size: var(--f-small); color: #8d8d93; }
 @media (max-width: 900px) {
   .sup-head > :first-child, .sup-head > :last-child { grid-column: 1 / -1; }
-  .sup-grid { grid-template-columns: minmax(0, 1fr); }
+  .sup-band { display: block; height: auto; }
+  .sup-band figure { margin-bottom: var(--s3); }
+  .sup-band .pr { flex: none; aspect-ratio: 2 / 1; }
+}
+@media print {
+  .sup-logo .rev { display: none; }
+  .sup-logo .std { display: block; }
+  .sup-lead, .sup-head .cap, .sup-src { color: #000; }
 }
 </style>
 </head>
@@ -1081,18 +1088,17 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
       <p class="cs-say" aria-live="polite"><i class="k-ab" id="v-key" aria-hidden="true"></i><span id="verdict">Both sessions start between 07:00 and 23:00 in Seoul.</span></p>
       <div class="sg" data-in>
         <article class="ss a" data-block="A">
-          <p class="ss-name"><span role="heading" aria-level="3">Session A</span><small data-out="fit">Within 07:00 to 23:00</small></p>
+          <p class="ss-name"><span role="heading" aria-level="3"><i aria-hidden="true"></i>Session A</span><small data-out="fit">Within 07:00 to 23:00</small></p>
           <p class="ss-day" data-out="day">Saturday 10 April</p>
           <p class="ss-time" data-out="time">08:00 <small>to</small> 11:00</p>
           <p class="ss-zone" data-out="zone">Morning in Seoul, KST.</p>
           <ol class="ss-run"><li>Research talk</li><li>Research talk</li><li>Challenge finals for the Americas and Asia</li><li>Panel on Fabricating Accessible Cities</li></ol>
         </article>
         <div class="sg-globe">
-          <canvas id="globe" role="img" aria-label="A globe. Its land is colored by which live session starts there between 07:00 and 23:00 local time. The times for the chosen city are given as text beside it."></canvas>
-          <ul class="sg-key" aria-label="Which session each place can join live"><li><i></i>Session A</li><li><i class="k-b"></i>Session B</li><li><i class="k-ab"></i>Both</li></ul>
+          <canvas id="globe" role="img" aria-label="A globe. Land is black where Session A starts between 07:00 and 23:00 local time, red where Session B does, and striped where both do. The times for the chosen city are given as text beside it."></canvas>
         </div>
         <article class="ss b" data-block="B">
-          <p class="ss-name"><span role="heading" aria-level="3">Session B</span><small data-out="fit">Within 07:00 to 23:00</small></p>
+          <p class="ss-name"><span role="heading" aria-level="3"><i aria-hidden="true"></i>Session B</span><small data-out="fit">Within 07:00 to 23:00</small></p>
           <p class="ss-day" data-out="day">Saturday 10 April</p>
           <p class="ss-time" data-out="time">21:00 <small>to</small> 23:30</p>
           <p class="ss-zone" data-out="zone">Night in Seoul, KST.</p>
@@ -1141,75 +1147,56 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     <div class="wrap">
       <div class="sh"><h2 id="researchers-h">For researchers</h2><p>If you are a researcher in digital fabrication, you can take part in one of four ways. All four are online, and each takes a few hours.</p></div>
     </div>
-    <div class="rw" id="roles">
-      <div class="rw-pin">
-        <div class="rw-view">
-          <div class="rw-wall">
-            <article class="rr">
-              <img class="rr-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
-              <p class="rr-ov" aria-hidden="true"><b>1</b><strong>Research talk</strong><span><i class="rc-tag live">Live, on Convention Day</i>2 to 4 hours</span></p>
-              <div class="rr-txt">
-                <p class="rc-top"><span class="rc-n">Role 1 of 4</span><b class="rc-tag live">Live, on Convention Day</b></p>
-                <div>
-                  <h3>Research talk</h3>
-                  <p class="rc-what">You give a 20-minute talk on one project, then take students' questions for 20 minutes. Before the day there is a technical check and a backup recording.</p>
-                  <dl class="rc-facts">
-                    <div><dt>Total time</dt><dd class="rc-h"><b>2 to 4</b>hours</dd></div>
-                    <div><dt>When</dt><dd><p>A 40-minute slot in Session A or Session B.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li><li><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div>
-                  </dl>
-                </div>
-              </div>
-            </article>
-            <article class="rr">
-              <img class="rr-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
-              <p class="rr-ov" aria-hidden="true"><b>2</b><strong>Panel</strong><span><i class="rc-tag live">Live, on Convention Day</i>2 hours</span></p>
-              <div class="rr-txt">
-                <p class="rc-top"><span class="rc-n">Role 2 of 4</span><b class="rc-tag live">Live, on Convention Day</b></p>
-                <div>
-                  <h3>Panel</h3>
-                  <p class="rc-what">You join a 35-minute panel on accessible cities with two other researchers. Before the day there is a technical check.</p>
-                  <dl class="rc-facts">
-                    <div><dt>Total time</dt><dd class="rc-h"><b>2</b>hours</dd></div>
-                    <div><dt>When</dt><dd><p>The panel is in Session A.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div>
-                  </dl>
-                </div>
-              </div>
-            </article>
-            <article class="rr">
-              <img class="rr-ph" src="assets/img/roles/judge.jpg" alt="A desk under a lamp. A clipboard holds a rubric with a red pen across it, beside a red 3D-printed model of a curb ramp and a pile of entry booklets." width="2000" height="1333" loading="lazy" decoding="async">
-              <p class="rr-ov" aria-hidden="true"><b>3</b><strong>Judge</strong><span><i class="rc-tag">In your own time, before the day</i>5 to 7 hours</span></p>
-              <div class="rr-txt">
-                <p class="rc-top"><span class="rc-n">Role 3 of 4</span><b class="rc-tag">In your own time, before the day</b></p>
-                <div>
-                  <h3>Judge</h3>
-                  <p class="rc-what">You read about eight shortlisted entries, then every finalist's entry and recording.</p>
-                  <dl class="rc-facts">
-                    <div><dt>Total time</dt><dd class="rc-h"><b>5 to 7</b>hours</dd></div>
-                    <div><dt>When</dt><dd><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div>
-                  </dl>
-                </div>
-              </div>
-            </article>
-            <article class="rr">
-              <img class="rr-ph" src="assets/img/roles/committee.jpg" alt="Four printed documents fanned across a dark table in daylight. Their covers read Brief, Rubric, Sample entries and Judging rules." width="2000" height="1333" loading="lazy" decoding="async">
-              <p class="rr-ov" aria-hidden="true"><b>4</b><strong>Academic committee</strong><span><i class="rc-tag">In your own time, before the day</i>2 to 3 hours</span></p>
-              <div class="rr-txt">
-                <p class="rc-top"><span class="rc-n">Role 4 of 4</span><b class="rc-tag">In your own time, before the day</b></p>
-                <div>
-                  <h3>Academic committee</h3>
-                  <p class="rc-what">You review the brief, the rubric, the sample entries and the judging rules before they open to students.</p>
-                  <dl class="rc-facts">
-                    <div><dt>Total time</dt><dd class="rc-h"><b>2 to 3</b>hours</dd></div>
-                    <div><dt>When</dt><dd><p>January 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div>
-                  </dl>
-                </div>
-              </div>
-            </article>
-            <p class="rw-mid" aria-hidden="true">You take one of these four roles</p>
+    <div class="rs" id="roles">
+      <div class="rs-tabs" role="group" aria-label="The four roles"><div><span>Four roles</span><button type="button"><b>1</b>Research talk</button><button type="button"><b>2</b>Panel</button><button type="button"><b>3</b>Judge</button><button type="button"><b>4</b>Academic committee</button></div></div>
+      <article class="rs-p">
+        <img class="rs-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
+        <div class="rs-txt">
+          <div class="rs-col">
+            <p class="rs-n"><b>1</b>of 4 roles<i class="rc-tag live">Live, on Convention Day</i></p>
+            <h3>Research talk</h3>
+            <p class="rs-h">2 to 4 hours in total</p>
+            <p class="rs-what">You give a 20-minute talk on one project, then take students' questions for 20 minutes. Before the day there is a technical check and a backup recording.</p>
+            <dl class="rs-when"><div><dt>When</dt><dd><p>A 40-minute slot in Session A or Session B.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li><li><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div></dl>
           </div>
-          <div class="rw-tabs" role="group" aria-label="The four roles"><button type="button"><b>1</b>Research talk</button><button type="button"><b>2</b>Panel</button><button type="button"><b>3</b>Judge</button><button type="button"><b>4</b>Academic committee</button></div>
         </div>
-      </div>
+      </article>
+      <article class="rs-p">
+        <img class="rs-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
+        <div class="rs-txt">
+          <div class="rs-col">
+            <p class="rs-n"><b>2</b>of 4 roles<i class="rc-tag live">Live, on Convention Day</i></p>
+            <h3>Panel</h3>
+            <p class="rs-h">2 hours in total</p>
+            <p class="rs-what">You join a 35-minute panel on accessible cities with two other researchers. Before the day there is a technical check.</p>
+            <dl class="rs-when"><div><dt>When</dt><dd><p>The panel is in Session A.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div></dl>
+          </div>
+        </div>
+      </article>
+      <article class="rs-p">
+        <img class="rs-ph" src="assets/img/roles/judge.jpg" alt="A desk under a lamp. A clipboard holds a rubric with a red pen across it, beside a red 3D-printed model of a curb ramp and a pile of entry booklets." width="2000" height="1333" loading="lazy" decoding="async">
+        <div class="rs-txt">
+          <div class="rs-col">
+            <p class="rs-n"><b>3</b>of 4 roles<i class="rc-tag">In your own time, before the day</i></p>
+            <h3>Judge</h3>
+            <p class="rs-h">5 to 7 hours in total</p>
+            <p class="rs-what">You read about eight shortlisted entries, then every finalist's entry and recording.</p>
+            <dl class="rs-when"><div><dt>When</dt><dd><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div></dl>
+          </div>
+        </div>
+      </article>
+      <article class="rs-p">
+        <img class="rs-ph" src="assets/img/roles/committee.jpg" alt="Four printed documents fanned across a dark table in daylight. Their covers read Brief, Rubric, Sample entries and Judging rules." width="2000" height="1333" loading="lazy" decoding="async">
+        <div class="rs-txt">
+          <div class="rs-col">
+            <p class="rs-n"><b>4</b>of 4 roles<i class="rc-tag">In your own time, before the day</i></p>
+            <h3>Academic committee</h3>
+            <p class="rs-h">2 to 3 hours in total</p>
+            <p class="rs-what">You review the brief, the rubric, the sample entries and the judging rules before they open to students.</p>
+            <dl class="rs-when"><div><dt>When</dt><dd><p>January 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div></dl>
+          </div>
+        </div>
+      </article>
     </div>
     <div class="wrap">
       <p class="rd-note">The hours are estimates of everything a role takes. Dates are confirmed in the first email and do not change after that.</p>
@@ -1262,7 +1249,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     <div class="wrap">
       <div class="sh"><h2 id="partners-h">Partners</h2><p>Two partners and one supporter stand behind Infill 2027.</p></div>
     </div>
-    <div class="pwall" data-on data-at="0.7">
+    <div class="wrap"><div class="pwall" data-on data-at="0.7">
       <img class="pw-all" src="assets/img/partner-plaques.jpg" alt="Three blocks of clear acrylic stand in a row on a dark table, each lit from its base, with a red line of light behind them. They carry the logos of Fab City Seoul, the Fab Asian Network and Seohan ENP." width="2400" height="864" loading="lazy">
       <article class="pw" style="--i:0">
         <div class="pw-fig"></div>
@@ -1276,31 +1263,26 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
         <div class="pw-fig"></div>
         <div class="pw-text"><p class="cap">Supported by</p><h3>Seohan ENP</h3><p>A maker of large forged steel parts, based in Gyeongju, Korea.</p></div>
       </article>
-    </div>
-  </section>
-
-  <section class="sec sup" id="supporter" aria-labelledby="supporter-h">
-    <div class="wrap">
+    </div></div>
+    <div class="wrap sup" id="supporter">
       <div class="sup-head">
         <div>
           <p class="cap">Supported by</p>
-          <h2 class="sup-logo" id="supporter-h"><img src="assets/img/partner-seohan-enp.png" alt="Seohan ENP" width="945" height="160" loading="lazy"></h2>
+          <h3 class="sup-logo" id="supporter-h"><img class="rev" src="assets/img/partner-seohan-enp-rev.png" alt="Seohan ENP" width="945" height="160" loading="lazy"><img class="std" src="assets/img/partner-seohan-enp.png" alt="" width="945" height="160" loading="lazy"></h3>
         </div>
         <div>
-          <p class="sup-lead">Seohan ENP forges large steel parts for ships, wind turbines and industrial plants, from the forging press through machining to assembly.</p>
+          <p class="sup-lead">Seohan ENP forges large steel parts for ships, wind turbines and industrial plants. Its research center makes 3D models of the parts and uses computer simulation to work out how each one is forged.</p>
           <dl class="facts">
-            <div><dt>Founded</dt><dd>2008</dd></div>
-            <div><dt>Based in</dt><dd>Gyeongju, Korea</dd></div>
-            <div><dt>Group</dt><dd>Seohan Group</dd></div>
-            <div><dt>Makes</dt><dd>Forged parts for shipbuilding, wind power and industrial plants</dd></div>
+            <div><dt>Founded</dt><dd>2008, in the Seohan Group</dd></div>
+            <div><dt>Capacity</dt><dd>100,000 tons a year</dd></div>
+            <div><dt>Patents</dt><dd>Six, registered from 2013 to 2017</dd></div>
           </dl>
         </div>
       </div>
-      <div class="sup-grid">
-        <figure><div class="pr" data-on><img src="assets/img/photos/seohan-forge.jpg" alt="A glowing block of steel held in a forging press at Seohan ENP" width="1568" height="762" loading="lazy"></div><figcaption><b>Forging</b>Steel is heated and pressed into shape.</figcaption></figure>
-        <figure><div class="pr" data-on><img class="p-ins" src="assets/img/photos/seohan-inspection.jpg" alt="A worker in a Seohan ENP jacket measures a machined steel part with digital calipers" width="2000" height="599" loading="lazy"></div><figcaption><b>Machining and inspection</b>Forged parts are then machined and measured.</figcaption></figure>
-        <figure class="cut"><div class="pr" data-on><img src="assets/img/photos/seohan-ship.png" alt="A large ship engine joined by a long shaft to a propeller" width="665" height="413" loading="lazy"></div><figcaption><b>For ships</b>Propeller shafts, connecting rods and other engine parts.</figcaption></figure>
-        <figure><div class="pr" data-on><img src="assets/img/photos/seohan-wind.jpg" alt="A wind turbine seen from below against the sky" width="1070" height="501" loading="lazy"></div><figcaption><b>For wind turbines</b>Tower flanges and rotor shafts.</figcaption></figure>
+      <div class="sup-band">
+        <figure class="big"><div class="pr" data-on><img src="assets/img/photos/seohan-press.jpg" alt="A blue forging press several floors tall, with Seohan ENP written on it, presses a glowing block of steel in a factory hall" width="1649" height="891" loading="lazy"></div><figcaption><b>Forging</b>Heated steel is pressed into shape on the forging press.</figcaption></figure>
+        <figure><div class="pr" data-on><img src="assets/img/photos/seohan-ring.jpg" alt="A glowing ring of steel lies on a blue ring rolling mill" width="1248" height="583" loading="lazy"></div><figcaption><b>Ring rolling</b>A heated ring is rolled to size.</figcaption></figure>
+        <figure><div class="pr" data-on><img src="assets/img/photos/seohan-inspection.jpg" alt="A worker in a Seohan ENP jacket and white gloves measures a machined steel part with digital calipers" width="1248" height="583" loading="lazy"></div><figcaption><b>Inspection</b>Parts are machined, then measured.</figcaption></figure>
       </div>
       <p class="sup-src">Photographs and company details from Seohan ENP.</p>
     </div>
@@ -1409,6 +1391,19 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     cities: ['Accessible cities', 'The 2027 theme is Fabricating Accessible Cities. It asks how digital fabrication can make a city’s streets and public spaces easier to reach and use.'],
   };
   const what = $('#what'), whatPin = $('.what-pin', what), terms = $$('#say .term'), keys = terms.map((t) => t.dataset.k), N = keys.length;
+  // every letter of a term becomes an element of its own, so that a word can turn red one letter at a time
+  const glyphs = terms.map((t) => {
+    if (t.firstElementChild) return [];   // the logo is a picture
+    const text = t.textContent.trim(), row = [];
+    t.setAttribute('aria-label', text); t.textContent = '';
+    for (const c of text) {
+      if (c === ' ') { t.append(' '); continue; }
+      const el = D.createElement('span');
+      el.className = 'ch'; el.textContent = c; t.append(el);
+      row.push({ el, a: 0, b: 1, q: -1 });
+    }
+    return row;
+  });
   const dTerm = $('#def-term'), dBody = $('#def-body'), dCount = $('#def-count'), pics = $$('#pics img'), ticks = $$('#ticks i');
   let cur = -1;
   const show = (i) => {
@@ -1434,7 +1429,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   };
   const goTerm = (i) => {
     i = (i + N) % N;
-    if (pinned()) jump(pageTop(what) + (sayAt.length ? sayAt[i] + sayLen[i] * 0.5 : ((i + 0.5) / N) * (what.offsetHeight - innerHeight)));
+    if (pinned()) jump(pageTop(what) + (sayAt.length ? sayAt[i] + (i ? sayLen[i] - 2 : sayLen[i] * 0.5) : ((i + 0.5) / N) * (what.offsetHeight - innerHeight)));   // to the end of the word, where all of it is red
     else show(i);
   };
   terms.forEach((t, i) => t.addEventListener('click', () => goTerm(i)));
@@ -1492,6 +1487,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     const r = what.getBoundingClientRect();
     const u = Math.min(N - 0.001, sayU(clamp(-r.top, 0, Math.max(1, r.height - vh)), Math.max(1, r.height - vh))), i = Math.floor(u);
     show(u - i > ACROSS && i < N - 1 ? i + 1 : i);   // the explanation changes at the moment the drop leaves for the next term
+    if (!sayG) sayInk(i, flow(Math.min(1, (u - i) / (i < N - 1 ? ACROSS : 1))));   // no glass to follow: the red follows the scroll itself
   };
 
   // The walk through the day: five photographs as a deck of cards. The scroll deals them, and so does a drag, a click on
@@ -1735,14 +1731,17 @@ void main() {
       const q = st.q, M = st.M;
       tx.setTransform(1, 0, 0, 1, 0, 0); tx.fillStyle = st.bg; tx.fillRect(0, 0, tex.width, tex.height);
       tx.setTransform(q, 0, 0, q, M * q, M * q); tx.textBaseline = 'alphabetic';
-      let last = null, asc = 0, desc = 0;
+      let last = null, font = '', asc = 0, desc = 0;
       for (const it of st.items) {
         if (it.img) { if (!st.noImg && it.img.complete && it.img.naturalWidth) tx.drawImage(it.img, it.x, it.y, it.w, it.h); continue; }
         if (it.el !== last) {
-          const cs = getComputedStyle(it.el), size = parseFloat(cs.fontSize);
-          tx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; tx.fillStyle = cs.color;
-          const m = tx.measureText('Hg');
-          asc = m.fontBoundingBoxAscent || size * 0.93; desc = m.fontBoundingBoxDescent || size * 0.24; last = it.el;
+          const cs = getComputedStyle(it.el), size = parseFloat(cs.fontSize), f = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+          if (f !== font) {
+            tx.font = font = f;
+            const m = tx.measureText('Hg');
+            asc = m.fontBoundingBoxAscent || size * 0.93; desc = m.fontBoundingBoxDescent || size * 0.24;
+          }
+          tx.fillStyle = cs.color; last = it.el;
         }
         tx.fillText(it.ch, it.x, it.y + (it.h - asc - desc) / 2 + asc);
       }
@@ -1871,6 +1870,26 @@ void main() {
   // In the sentence nothing lies on the logo. The drop appears on "online" when the first term gives way to it, and from
   // there the scroll takes it across each term. From one term to the next it goes by itself, as one drop with a short tail.
   let sayR = 0, sayPath = [], sayAt = [], sayLen = [], sayGap = [], saySm = -1;
+  // How red each letter is. Every term before the one the drop lies on is red and every term after it is ink. On that
+  // term the red has come as far along the word as the drop has, so a letter turns while the glass is over it.
+  const INK = [17, 17, 17], RED = [217, 38, 28], STEPS = 12;
+  let inkAt = -1, inkP = -1;
+  const sayInk = (at, p) => {
+    const key = Math.round(p * 500);
+    if (at === inkAt && key === inkP) return;
+    inkAt = at; inkP = key;
+    let changed = false;
+    glyphs.forEach((row, n) => {
+      for (const g of row) {
+        const q = Math.round((n < at ? 1 : n > at ? 0 : clamp((p * 1.03 - g.a) / Math.max(0.001, g.b - g.a))) * STEPS);
+        if (q === g.q) continue;
+        g.q = q; changed = true;
+        g.el.style.color = q ? `rgb(${INK.map((c, k) => Math.round(c + (RED[k] - c) * q / STEPS)).join(', ')})` : '';
+      }
+    });
+    if (changed && sayG) sayG.paint();   // the same letters, enlarged in the glass
+  };
+  const sayInkOff = () => { inkAt = inkP = -1; glyphs.forEach((row) => row.forEach((g) => { g.q = -1; g.el.style.color = ''; })); };
   const sayPathBuild = () => {
     const R = sayR, b = sayCol.getBoundingClientRect(), inset = R * 0.6;
     sayPath = terms.map((t) => {
@@ -1879,6 +1898,11 @@ void main() {
     });
     if (sayPath.length > 1) sayPath[0] = { x0: sayPath[1].x0, x1: sayPath[1].x0, y: sayPath[1].y, hl: 0 };
     sayAt = []; sayLen = []; sayGap = [];
+    glyphs.forEach((row, n) => {   // where each letter begins and ends, as a share of the width of its term
+      const r = terms[n].getBoundingClientRect();
+      for (const g of row) { const c = g.el.getBoundingClientRect(); g.a = (c.left - r.left) / Math.max(1, r.width); g.b = (c.right - r.left) / Math.max(1, r.width); }
+    });
+    sayInkOff();
     if (!pinned()) { what.style.height = ''; return; }
     // the scroll each station gets: its width at one speed for all, then a short stretch in which the drop crosses over
     const vh = innerHeight, SPEED = 1.3, JUMP = vh * 0.07;
@@ -1908,13 +1932,13 @@ void main() {
   const sayFeed = (dt) => {
     if (!pinned() || sayPath.length < 2) return null;
     const vh = innerHeight, b = sayCol.getBoundingClientRect();
-    if (b.bottom < -160 || b.top > vh + 160) { saySm = -1; return null; }
+    if (b.bottom < -160 || b.top > vh + 160) { saySm = -1; if (b.bottom < 0) sayInk(N - 1, 1); else sayInk(0, 0); return null; }   /* passed: every term is red. Not reached yet: none is */
     const w = what.getBoundingClientRect(), total = Math.max(1, w.height - vh), u = Math.min(N - 0.001, sayU(clamp(-w.top, 0, total), total));
     const si = Math.floor(u), f = u - si, over = f > ACROSS && si < N - 1, want = over ? si + 1 : si, fa = over ? 0 : Math.min(1, f / (si < N - 1 ? ACROSS : 1));
     const J = sayJ, there = want >= 1;
     if (saySm < 0) { saySm = 0; J.at = Math.max(1, want); J.e = 1; J.fa = there ? fa : 0; J.size = there ? 1 : 0; }   // just come into view, or after a jump of the page
     J.size = clamp(J.size + (there ? dt / 0.36 : -dt / 0.16));
-    if (J.size <= 0) { J.at = 1; J.fa = 0; J.e = 1; return null; }
+    if (J.size <= 0) { J.at = 1; J.fa = 0; J.e = 1; sayInk(0, 0); return null; }
     if (there && J.e >= 1 && want !== J.at) {
       const x = lying(sayPath[J.at], J.fa, sayR).x, c = sayPath[want], x1 = want > J.at ? c.x0 : c.x1, far = Math.hypot(x1 - x, c.y - sayPath[J.at].y);
       if (far > sayR * 0.5) { J.to = want; J.e = 0; J.x0 = x; J.y0 = sayPath[J.at].y; J.x1 = x1; J.y1 = c.y; J.dur = clamp(0.19 + far / 4600, 0.22, 0.4); }
@@ -1922,10 +1946,11 @@ void main() {
     }
     if (J.e < 1) {
       J.e = Math.min(1, J.e + dt / J.dur);
-      if (J.e < 1) return sized(flight((t) => [J.x0 + (J.x1 - J.x0) * t, J.y0 + (J.y1 - J.y0) * t], J.e, sayR), pop(J.size));
+      if (J.e < 1) { sayInk(Math.min(J.at, J.to), 1); return sized(flight((t) => [J.x0 + (J.x1 - J.x0) * t, J.y0 + (J.y1 - J.y0) * t], J.e, sayR), pop(J.size)); }
       J.fa = J.to > J.at ? 0 : 1; J.at = J.to;
     }
     if (there) J.fa += ((want === J.at ? fa : want > J.at ? 1 : 0) - J.fa) * (1 - Math.exp(-dt * 9));
+    sayInk(J.at, flow(J.fa));
     return sized(lying(sayPath[J.at], J.fa, sayR), pop(J.size));
   };
   const saySize = () => {
@@ -2029,48 +2054,40 @@ void main() {
     pgs[0].style.setProperty('--dim', (q * 0.7).toFixed(3));
   };
 
-  // For researchers: the four roles are four pictures on one wall, two by two. The scroll moves a view over that wall. It
-  // starts far enough back to hold all four, goes into the first, and travels to the second, the third and the fourth.
-  // On the way from one picture to the next it draws back a little, so that the neighbours come into the window.
-  const rw = $('#roles'), rwView = $('.rw-view', rw), rwWall = $('.rw-wall', rw), rrs = $$('.rr', rw), rwTabs = $$('.rw-tabs button', rw);
-  const CAM = [[1, 1, 0.5], [0.5, 0.5, 1], [1.5, 0.5, 1], [0.5, 1.5, 1], [1.5, 1.5, 1]];   // what the view is centred on, in window widths and heights, and how close it is; 0 is the whole wall
-  const SEG = [[0.2, 0, 0], [0.55, 0, 1], [0.3, 1, 1], [0.6, 1, 2], [0.3, 2, 2], [0.72, 2, 3], [0.3, 3, 3], [0.6, 3, 4], [0.38, 4, 4]];   // each stretch of the scroll: its length, where it starts and where it ends
-  const SEG_ALL = SEG.reduce((a, g) => a + g[0], 0);
-  const rwAtRole = (i) => { let a = 0; for (const g of SEG) { if (g[1] === i && g[2] === i) return a + 0.03; a += g[0]; } return 0; };
-  let rwP = -1, rwW = 0, rwH = 0, rwCur = -2;
-  const rwFit = () => {
-    html.classList.toggle('rwp', pinned() && innerHeight >= 600 && innerWidth >= 1000);
-    rwWall.style.transform = ''; rwWall.style.removeProperty('--tx'); rwWall.style.removeProperty('--ov');
-    if (html.classList.contains('rwp')) {
-      rwW = rwView.clientWidth; rwH = rwView.clientHeight;
-      if (rrs.some((r) => r.lastElementChild.scrollHeight > rwH + 1)) html.classList.remove('rwp');   // the words must fit the picture
+  // For researchers: four pictures as tall as the window. Each stays under the row of names while the next comes up over
+  // it with the scroll, so one role is on the screen at a time and the scroll only ever goes down. The browser does the
+  // moving. The script marks the role in the row of names, darkens a picture as it is covered, and takes a click to its role.
+  const rs = $('#roles'), rsPs = $$('.rs-p', rs), rsTabs = $$('.rs-tabs button', rs);
+  let rsCur = -1, rsH = 0, rsStep = 0, rsT0 = 0;
+  const rsFit = () => {
+    html.style.setProperty('--toph', top.getBoundingClientRect().height.toFixed(2) + 'px');
+    html.classList.toggle('rsp', pinned() && innerHeight >= 600 && innerWidth >= 1000);
+    rsPs.forEach((p) => p.style.removeProperty('--dim'));
+    if (html.classList.contains('rsp')) {
+      rsH = rsPs[0].offsetHeight;
+      if (rsPs.some((p) => $('.rs-col', p).offsetHeight > rsH - 44)) html.classList.remove('rsp');   // the words must fit the picture
+      else { rsStep = rsH + (parseFloat(getComputedStyle(rsPs[1]).marginTop) || 0); rsT0 = parseFloat(getComputedStyle(rs.firstElementChild).top) || 0; }
     }
-    rwP = -1; rwCur = -2;
+    rsCur = -1;
   };
-  const rwTop = (i) => pageTop(rw) + (rwAtRole(i) / SEG_ALL) * (rw.offsetHeight - innerHeight) + 2;
-  const rwMove = (vh) => {
-    if (!html.classList.contains('rwp')) return;
-    const p = Math.round(clamp(-rw.getBoundingClientRect().top / Math.max(1, rw.offsetHeight - vh)) * SEG_ALL * 500) / 500;
-    if (p === rwP) return;
-    rwP = p;
-    let a = 0, g = SEG[SEG.length - 1];
-    for (const q of SEG) { if (p < a + q[0]) { g = q; break; } a += q[0]; }
-    const t = clamp((p - a) / g[0]), e = g[1] === g[2] ? 0 : t * t * (3 - 2 * t), A = CAM[g[1]], B = CAM[g[2]];
-    let k = A[2] + (B[2] - A[2]) * e;
-    if (g[1] && g[1] !== g[2]) k -= (A[1] !== B[1] ? 0.27 : 0.13) * Math.sin(Math.PI * e);
-    const cx = clamp(A[0] + (B[0] - A[0]) * e, 0.5 / k, 2 - 0.5 / k), cy = clamp(A[1] + (B[1] - A[1]) * e, 0.5 / k, 2 - 0.5 / k);   // the view never leaves the wall
-    rwWall.style.transform = `translate(${(rwW * (0.5 - cx * k)).toFixed(2)}px, ${(rwH * (0.5 - cy * k)).toFixed(2)}px) scale(${k.toFixed(4)})`;
-    rwWall.style.setProperty('--tx', clamp((k - 0.78) / 0.08).toFixed(3));   // the full text of a role, read at full size
-    rwWall.style.setProperty('--ov', clamp((0.72 - k) / 0.16).toFixed(3));   // the short labels, read when the wall is far away; never both at once
-    const cur = g[1] === g[2] ? g[1] : e > 0.5 ? g[2] : g[1];
-    if (cur !== rwCur) {
-      rwCur = cur;
-      rwWall.classList.toggle('all', !cur);
-      rwTabs.forEach((b, i) => { b.classList.toggle('on', i === cur - 1); if (i === cur - 1) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+  const rsTop = (i) => pageTop(rs) - rsT0 + i * rsStep + 1;   // where the scroll stands when picture i has just come to rest
+  const rsMove = (vh) => {
+    if (!html.classList.contains('rsp')) return;
+    const r = rs.getBoundingClientRect();
+    if (r.bottom < -vh * 0.5 || r.top > vh * 1.5) return;
+    const rest = vh - rsH, tops = rsPs.map((p) => p.getBoundingClientRect().top);
+    let cur = 0;
+    rsPs.forEach((p, i) => {
+      if (i && tops[i] < rest + rsH * 0.5) cur = i;
+      const dim = i < rsPs.length - 1 ? clamp(1 - (tops[i + 1] - rest) / rsH).toFixed(3) : '0';
+      if (p.dataset.dim !== dim) { p.dataset.dim = dim; p.style.setProperty('--dim', dim); }
+    });
+    if (cur !== rsCur) {
+      rsCur = cur;
+      rsTabs.forEach((b, i) => { b.classList.toggle('on', i === cur); if (i === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     }
   };
-  rwTabs.forEach((b, i) => b.addEventListener('click', () => jump(rwTop(i + 1))));
-  rrs.forEach((r, i) => r.addEventListener('click', () => { if (html.classList.contains('rwp') && !rwCur) jump(rwTop(i + 1)); }));
+  rsTabs.forEach((b, i) => b.addEventListener('click', () => jump(rsTop(i))));
 
   // The film: frames are drawn to a canvas and the scroll position chooses the frame. The lid opens first. In the pinned scene
   // the open laptop then holds for a moment and the camera goes into its display, until the picture covers the stage and
@@ -2305,7 +2322,7 @@ void main() {
       $$('[data-count]', el).forEach(count);
       return false;
     });
-    spy(vh); whatRise(vh); whatStep(vh); walkMove(vh); glassWake(); fabPrint(vh); stackMove(vh); rwMove(vh); filmDraw(vh);
+    spy(vh); whatRise(vh); whatStep(vh); walkMove(vh); glassWake(); fabPrint(vh); stackMove(vh); rsMove(vh); filmDraw(vh);
     bar.style.setProperty('--sp', clamp(scrollY / Math.max(1, html.scrollHeight - vh)).toFixed(4));
     const tr = theme.getBoundingClientRect();
     theme.style.setProperty('--g', reduce ? 1 : clamp((vh - tr.top) / (vh * 0.7)).toFixed(3));
@@ -2330,7 +2347,7 @@ void main() {
     html.classList.toggle('pin', innerWidth > 900 && !reduce);
     fitSay();
     stackFit();
-    rwFit();
+    rsFit();
     fabMetrics();
     filmSize();
     fitMail();
