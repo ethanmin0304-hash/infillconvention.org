@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preload" as="image" href="assets/img/infill-2027-tm.svg" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/infill-2027.svg">
+<link rel="preload" as="script" href="assets/js/sketches.js" fetchpriority="high">
 <title>Infill 2027 · International Convention on Digital Fabrication</title>
 <meta name="description" content="An online convention where students meet researchers in digital fabrication and take on an international design challenge. Planned for 10 April 2027.">
 <link rel="canonical" href="https://infillconvention.org/">
@@ -1470,7 +1471,7 @@ html { --lvh: 100vh; --svh: 100vh; --dvh: 100vh; }
 </footer>
 <div class="veil" id="veil" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><p></p></div>
 
-<script src="assets/js/sketches.js" defer></script>
+<script src="assets/js/sketches.js" defer fetchpriority="high"></script>
 <script src="assets/js/globe.js" defer></script>
 <script>
 (() => {
@@ -2270,6 +2271,15 @@ void main() {
   const FO = 51, FD = 40, frames = [], sstep = (t) => { t = clamp(t); return t * t * (3 - 2 * t); };
   let filmAt = -1, filmAsked = '', filmW = 0, filmH = 0, filmP = -1, filmRest = false, filmWait = 0, filmShown = -1, filmT = 0;
   const filmSrc = (k) => `assets/film/${k < FO ? 'f' : 'd'}${String(k < FO ? k : k - FO).padStart(2, '0')}.jpg`;
+  // The drawing on the first screen cannot begin before its script has arrived. Until then the film's frames are not
+  // asked for, so that they do not share the line with it; the film coming near the screen or four seconds end the wait.
+  let heroIn = !!window.InfillSketch;
+  const heroDone = () => { if (!heroIn) { heroIn = true; ask(); } };
+  if (!heroIn) {
+    const sk = $('script[src*="sketches.js"]');
+    if (sk) ['load', 'error'].forEach((k) => sk.addEventListener(k, heroDone)); else heroIn = true;
+    setTimeout(heroDone, 4000);
+  }
   const filmLoad = () => {
     // the pinned scene plays every frame; the plain page plays every other frame of the opening and leaves the rest unloaded
     const want = pinned() ? 'all' : 'some';
@@ -2322,7 +2332,7 @@ void main() {
   const filmDraw = (vh) => {
     const r = filmSec.getBoundingClientRect();
     if (r.bottom < -vh || r.top > vh * 2) return;
-    filmLoad();
+    if (heroIn || r.top < vh * 0.85) filmLoad();
     if (r.bottom < 0 || r.top > vh || !filmW) return;
     const st = filmStage.getBoundingClientRect(), pin = pinned(), step = pin ? 1 : 2;
     const p = reduce ? 1 : pin ? clamp(-r.top / Math.max(1, r.height - vh)) : clamp((vh * 0.92 - st.top) / (vh * 0.8));
@@ -2620,7 +2630,10 @@ void main() {
   measure();
 
   // the drawing: a marker sketch made by the sketch-to-3d engine, live in the page, with labels that follow it
-  D.addEventListener('DOMContentLoaded', async () => {
+  let sketchOn = false;
+  const sketchGo = async () => {
+    if (sketchOn) return;
+    sketchOn = true;
     const stage = $('#stage'), host = $('#sketch'), svg = $('#leaders'), notes = $$('.note', stage);
     const poster = () => { if ($('img', host)) return; const img = new Image(); img.className = 'poster'; img.src = 'assets/img/sketch-poster.jpg'; img.alt = ''; host.append(img); };
     try {
@@ -2750,7 +2763,13 @@ void main() {
       poster();
       stage.classList.add('ready');
     }
-  });
+  };
+  if (window.InfillSketch) sketchGo();
+  else {
+    const sk = $('script[src*="sketches.js"]');
+    if (sk) sk.addEventListener('load', sketchGo);
+    D.addEventListener('DOMContentLoaded', sketchGo);
+  }
 })();
 </script>
 </body>
