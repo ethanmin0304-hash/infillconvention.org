@@ -137,10 +137,9 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 @keyframes print { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes head { from { top: 100%; opacity: 1; } 96% { opacity: 1; } to { top: 0%; opacity: 0; } }
 .pr { position: relative; overflow: hidden; }
-.js .pr > img { clip-path: inset(100% 0 0 0); }
-.js .pr.on > img { animation: print 1s steps(14) both; }
-.js .pr::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 2px; background: var(--red); opacity: 0; }
-.js .pr.on::after { animation: head 1s steps(14) both; }
+@keyframes settle { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: none; } }
+.js .pr > img { opacity: 0; }
+.js .pr.on > img { animation: settle 1.3s var(--ease) both; }
 
 /* top bar and header */
 .top { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: var(--wall) solid var(--ink); }
@@ -156,7 +155,7 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 .progress { position: absolute; left: 0; bottom: -3px; height: 3px; width: 100%; background: var(--red); transform-origin: 0 50%; transform: scaleX(var(--sp, 0)); }
 
 /* opening */
-.hero { display: flex; flex-direction: column; min-height: calc(100svh - 68px); padding: clamp(24px, 4.6vh, 60px) 0 0; }
+.hero { display: flex; flex-direction: column; min-height: calc(100svh - 68px); padding: clamp(30px, 6vh, 72px) 0 0; }
 .hero > .wrap { flex: 1; display: flex; flex-direction: column; width: 100%; }
 .kf { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: 16px; padding: 14px 0 var(--s3); border-top: var(--wall) solid var(--ink); }
 .hero .kf { margin-top: clamp(20px, 3.4vh, 44px); }
@@ -179,6 +178,16 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 .hero .grid { flex: 1; align-items: center; align-content: center; }
 .h-left { grid-column: 1 / span 5; display: flex; flex-direction: column; align-items: flex-start; }
 .h-left .logo { width: min(100%, clamp(380px, 59.2vh, 480px)); }
+@media (min-width: 901px) and (max-height: 790px) {
+  .hero { padding-top: clamp(22px, 4.4vh, 34px); }
+  .stage { --bt: min(10%, clamp(22px, 4.4vh, 34px)); }
+  .h-left .logo { width: min(100%, clamp(300px, 47vh, 380px)); }
+  .h-right { justify-self: end; width: min(100%, calc((100svh - 336px) * 7 / 4.15)); }
+  .hero h1 { margin-top: 12px; }
+  .h-purpose { margin-top: 10px; }
+  .h-cta { margin-top: 16px; }
+  .marks-row { padding-bottom: clamp(20px, 3.6vh, 30px); }
+}
 .js .h-left .logo .box { animation: print 1.15s steps(18) .15s both; }
 .js .h-left .logo::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 2px; background: var(--red); opacity: 0; animation: head 1.15s steps(18) .15s both; }
 .hero h1 { margin-top: var(--s2); font-size: var(--f-t1); line-height: .98; letter-spacing: var(--th); }
@@ -223,7 +232,7 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 .what { position: relative; }
 .what-pin { padding-top: var(--sec); }
 .what-pin .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(270px, 29%); column-gap: var(--gap); align-items: start; width: 100%; }
-.pin .what { height: calc(100vh + 7 * 26vh); margin-top: -100vh; }
+.pin .what { height: calc(100vh + 7 * 56vh); margin-top: -100vh; }
 .pin .what-pin { position: sticky; top: 0; display: flex; align-items: center; height: 100vh; padding-top: 68px; background: #fff; }
 .what-pin .sh { grid-column: 1 / -1; align-items: baseline; margin-bottom: var(--s3); padding-top: 12px; }
 .what-pin .sh h2 { font-size: var(--f-small); font-weight: 400; line-height: 1.4; letter-spacing: 0; }
@@ -483,9 +492,6 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .hscale { display: flex; justify-content: space-between; width: 200px; margin: 10px 0 0 auto; font-size: var(--f-micro); color: var(--ink-3); }
 .gets { margin-top: var(--head); }
 .gets h3 { font-size: var(--f-t3); }
-.gets ol { margin-top: 16px; border-top: var(--wall) solid var(--ink); counter-reset: n; }
-.gets li { position: relative; padding: 13px 0 13px 36px; border-bottom: 1px solid var(--rule); counter-increment: n; text-wrap: pretty; }
-.gets li::before { content: counter(n); position: absolute; left: 0; top: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* organizer */
 .signed { margin-top: 16px; font-size: var(--f-body); color: var(--ink-2); }
@@ -505,15 +511,37 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .rec-ph figcaption { margin-top: 8px; font-size: var(--f-cap); color: var(--ink-3); }
 
 /* partners */
-.backers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: var(--wall) solid var(--ink); background: #fff; }
-.backer { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 22px; align-items: center; padding: 26px 28px; }
-.backer + .backer { border-left: var(--wall) solid var(--ink); }
-.backer .mark { display: grid; place-items: center; height: 120px; }
-.backer .mark img { width: auto; max-height: 120px; }
-.backer .fan-mark b { font-size: 52px; }
-.backer strong { display: block; margin-top: 3px; font-size: var(--f-t3); line-height: 1.15; letter-spacing: -0.03em; }
-.backer p:last-child { margin-top: 7px; font-size: var(--f-small); color: var(--ink-2); }
-.sponsor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s5); background: var(--ink); color: #fff; }
+.pwall { --pw: calc(min(100vw, 2000px) / 3 * .7788); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 2000px; margin: var(--head) auto 0; }
+.pw-all { grid-column: 1 / -1; grid-row: 1; display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); }
+.pw { grid-column: calc(var(--i) + 1); grid-row: 1 / span 2; display: grid; grid-template-rows: subgrid; min-width: 0; }
+.pw-fig { position: relative; grid-row: 1; }
+.pw-logo { position: absolute; left: 11.06%; top: 22.22%; width: 77.88%; height: 50%; display: grid; grid-template: 100% / 100%; place-items: center; mix-blend-mode: multiply; color: var(--ink); }
+.pw-logo img.sq { width: 38.6%; height: auto; }
+.pw-logo img.wd { width: 74%; height: auto; }
+.pw-logo .fan-mark { text-align: left; }
+.pw-logo .fan-mark b { font-size: calc(var(--pw) * .25); }
+.pw-logo .fan-mark span { margin-top: calc(var(--pw) * .02); font-size: calc(var(--pw) * .064); }
+.pw-text { grid-row: 2; padding: 20px var(--s3) 0 11.06%; }
+.pw-text .cap { font-size: var(--f-small); color: #a9a9ae; }
+.pw-text h3 { margin-top: 4px; font-size: var(--f-t3); line-height: 1.15; letter-spacing: -0.03em; }
+.pw-text h3 + p { max-width: 24em; margin-top: 7px; font-size: var(--f-small); line-height: 1.45; color: #c9c9cd; text-wrap: pretty; }
+.pw-note { grid-column: 1 / -1; grid-row: 3; padding: var(--s3) 3.69% 0; font-size: var(--f-cap); color: #8d8d93; }
+.js .pwall::before, .js .pw-fig::after { content: ""; z-index: 2; background: var(--ink); pointer-events: none; transition: opacity 1.8s var(--ease) .15s; }   /* the hall is dark until it is on the screen, then its lights come up */
+.js .pwall::before { grid-column: 1 / -1; grid-row: 1; }
+.js .pw-fig::after { display: none; position: absolute; inset: 0; }
+.js .pwall.on::before, .js .pwall.on .pw-fig::after { opacity: 0; }
+@media (max-width: 760px) {
+  .pwall { --pw: calc(100vw * .7788); grid-template-columns: minmax(0, 1fr); }
+  .pw-all { display: none; }
+  .pw { grid-column: 1; grid-row: auto; display: block; }
+  .pw-fig { aspect-ratio: 800 / 831; }
+  .pw-fig::before { content: ""; position: absolute; inset: 0; background: url(assets/img/partner-wall.jpg) calc(var(--i) * 50%) 0 / 300% 100% no-repeat; -webkit-mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); }
+  .js .pwall::before { display: none; }
+  .js .pw-fig::after { display: block; }
+  .pw-text { padding: 14px var(--pad) 36px; }
+  .pw-note { grid-row: auto; padding: 0 var(--pad); }
+}
+.sponsor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s6); background: var(--ink); color: #fff; }
 .sponsor .pr { min-height: clamp(360px, 36vw, 540px); }
 .sponsor .pr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; }
 .sponsor-text { display: flex; flex-direction: column; align-items: flex-start; padding: var(--s4); }
@@ -643,7 +671,8 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: .01s !important; transition-delay: 0s !important; }
   .js [data-in], .js [data-lines] .ln > span, .js .frame:not(.in) .pc { opacity: 1; transform: none; }
-  .js .pr > img { clip-path: none; }
+  .js .pr > img { opacity: 1; }
+  .js .pwall::before, .js .pw-fig::after { display: none; }
   .theme { clip-path: none; }
   .theme-ph { transform: none; }
 }
@@ -652,13 +681,14 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   .pin .what-pin { opacity: 1 !important; }
   .ubar, .top, .skip, .stage-bar, .def-nav, .tz, .walk-top, .lens { display: none; }
   .js [data-in], .js [data-lines] .ln > span, .js .frame:not(.in) .pc { opacity: 1 !important; transform: none !important; }
-  .js .pr > img { clip-path: none !important; }
+  .js .pr > img { opacity: 1 !important; }
+  .js .pwall::before, .js .pw-fig::after { display: none !important; }
   .dark, .contact, .sponsor { background: #fff; color: #000; }
   .theme { clip-path: none; min-height: 0; }
 }
 /* ---- v18 ---- */
 /* the drawing on the first screen runs past its frame on three sides and fades out, so that no edge cuts it */
-.stage { --bx0: 5%; --bx1: 16%; --by: 10%; --bt: min(10%, clamp(24px, 4.6vh, 60px)); }
+.stage { --bx0: 5%; --bx1: 16%; --by: 10%; --bt: min(10%, clamp(30px, 6vh, 72px)); }
 .stage .host, .leaders { inset: calc(var(--bt) * -1) calc(var(--bx1) * -1) calc(var(--by) * -1) calc(var(--bx0) * -1); }
 .stage .host { -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 13%, #000 87%, transparent); -webkit-mask-composite: source-in;
   mask-image: linear-gradient(to right, transparent, #000 10%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 13%, #000 87%, transparent); mask-composite: intersect; }
@@ -705,49 +735,75 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .stop h3 .here { background: #fff; color: var(--ink); }
 .pin .frame img { filter: blur(var(--bl, 0px)); }
 /* for researchers: four roles side by side, each with its hours, what it asks, when and where */
-.rolegrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); margin-top: var(--head); }
-.rc { display: flex; flex-direction: column; padding: 16px 20px 20px; background: #fff; border-top: 6px solid var(--ink); }
-.rc h3 { font-size: var(--f-t3); letter-spacing: -0.03em; line-height: 1.15; }
-.rc-h { margin-top: 18px; font-size: var(--f-small); color: var(--ink-2); }
-.rc-h b { display: block; margin-bottom: 4px; font-size: var(--f-d); font-weight: 200; letter-spacing: var(--tt); line-height: .92; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.rc dl { flex: 1; margin: 18px 0 0; border-top: 1px solid var(--rule); }
-.rc dl div { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: var(--f-small); line-height: 1.42; }
-.rc dt { color: var(--ink-3); }
-.rc dd { margin: 0; color: var(--ink); text-wrap: pretty; }
-.rc-cal { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 16px; }
-.rc-cal i { padding: 6px 0 7px; background: #ececef; font-size: var(--f-micro); font-style: normal; line-height: 1; text-align: center; color: var(--ink-3); }
-.rc-cal i.on { background: var(--red); color: #fff; font-weight: 700; }
+.roles { margin-top: var(--head); padding: 0 var(--s3) var(--s2); background: #fff; border-top: 6px solid var(--ink); }
+.rt { width: 100%; border-collapse: collapse; table-layout: fixed; text-align: left; }
+.rt caption { caption-side: top; padding: 14px 0 12px; font-size: var(--f-small); line-height: 1.4; text-align: left; color: var(--ink-2); }
+.rt .c-role { width: 17%; } .rt .c-what { width: 33%; } .rt .c-time { width: 13%; } .rt .c-when { width: 26%; } .rt .c-mail { width: 11%; }
+.rt thead th { padding: 9px 0; border-top: 1px solid var(--rule); font-size: var(--f-small); font-weight: 400; line-height: 1.3; color: var(--ink-3); }
+.rt-g th { padding: 26px 0 9px; border-bottom: var(--wall) solid var(--ink); font-size: var(--f-small); font-weight: 700; line-height: 1.3; }
+.rt thead + tbody .rt-g:first-child th { padding-top: 14px; }
+.rt tbody tr:not(.rt-g) > * { padding: 20px 28px 22px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.rt tbody tr:not(.rt-g):last-child > * { border-bottom: 0; }
+.rt tbody th[scope="row"] { font-size: var(--f-t3); line-height: 1.15; letter-spacing: -0.03em; }
+.rt td { font-size: var(--f-small); line-height: 1.45; text-wrap: pretty; }
+.rt-h { color: var(--ink-2); }
+.rt-h b { display: block; margin: -4px 0 3px; font-size: var(--f-t2); font-weight: 300; line-height: 1; letter-spacing: var(--th); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rt-s { margin-top: 8px; list-style: none; }
+.rt-s li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 9px; align-items: start; }
+.rt-s li + li { margin-top: 8px; }
+.rt-s i { height: 12px; margin-top: 5px; background: var(--ink); }
+.rt-s i.k-b { background: var(--red); }
+.rt-s b { display: block; }
+.rt-any { margin-top: 6px; color: var(--ink-2); }
+.rt .rt-m { padding-right: 0; text-align: right; }
+.rt-note { padding-top: 14px; border-top: 1px solid var(--rule); font-size: var(--f-small); line-height: 1.45; color: var(--ink-2); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.steps { margin-top: 16px; border-top: var(--wall) solid var(--ink); counter-reset: n; list-style: none; }
+.steps li { position: relative; padding: 13px 0 13px 36px; border-bottom: 1px solid var(--rule); counter-increment: n; overflow-wrap: anywhere; text-wrap: pretty; }
+.steps li::before { content: counter(n); position: absolute; left: 0; top: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.gets ul { margin-top: 16px; border-top: var(--wall) solid var(--ink); list-style: none; }
+.gets ul li { padding: 13px 0; border-bottom: 1px solid var(--rule); text-wrap: pretty; }
+@media (max-width: 1000px) {
+  .roles { padding: 0 18px 16px; }
+  .rt, .rt tbody, .rt tr, .rt th, .rt td, .rt caption { display: block; width: auto; }
+  .rt colgroup, .rt thead { display: none; }
+  .rt tbody tr:not(.rt-g) { padding: 18px 0 20px; border-bottom: 1px solid var(--rule); }
+  .rt tbody tr:not(.rt-g):last-child { border-bottom: 0; }
+  .rt tbody tr:not(.rt-g) > * { padding: 0; border: 0; }
+  .rt tbody tr:not(.rt-g) > td { margin-top: 12px; }
+  .rt td[data-l]::before { content: attr(data-l); display: block; margin-bottom: 2px; font-size: var(--f-cap); color: var(--ink-3); }
+  .rt-h b { display: inline; margin: 0; font-size: inherit; font-weight: 700; letter-spacing: 0; }
+  .rt .rt-m { text-align: left; }
+}
 .r-foot { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); margin-top: var(--s5); }
 .r-cta { grid-column: 1 / span 4; }
 .r-cta h3 { font-size: var(--f-t3); }
 .r-cta .side-note { max-width: 26em; margin-top: 16px; font-size: var(--f-small); color: var(--ink-2); }
 .r-cta .btn { margin-top: 20px; }
 .r-foot .gets { grid-column: 5 / span 8; margin-top: 0; }
-@media (max-width: 1100px) { .rolegrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 900px) {
   .stage { --bx0: 0%; --bx1: 0%; --by: 0%; --bt: 0%; }
   .stage .host { -webkit-mask-image: none; mask-image: none; }
   .r-cta, .r-foot .gets { grid-column: 1 / -1; }
 }
-@media (max-width: 560px) { .rolegrid { grid-template-columns: minmax(0, 1fr); } }
 /* ---- v19 ---- */
 @keyframes cardin { from { opacity: 0; transform: scale(1.03); } }
 .def-pic img { object-position: 50% 14%; }
 .def-pic img:first-of-type { object-position: 50% 50%; }
 /* the first screen: one row of facts, then one row of logos, on the same three columns. Nothing but the fade of the drawing
    stands between the drawing and the facts. The type has three sizes: text and labels, the facts, the title. */
-.marks-row { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px var(--gap); padding: 14px 0 var(--s2); border-top: 1px solid var(--rule); list-style: none; }
+.marks-row { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px var(--gap); padding: 12px 0 clamp(26px, 5vh, 60px); border-top: 1px solid var(--rule); list-style: none; }
 .marks-row li { grid-column: span 4; }
 .marks-row .cap, .kf dt, .kf dd small { font-size: var(--f-small); line-height: 1.3; }
 .marks-row .cap { color: var(--ink-3); }
-.marks-row .marks { display: flex; align-items: center; gap: var(--s3); height: 52px; margin-top: 12px; }
+.marks-row .marks { display: flex; align-items: center; gap: var(--s3); height: 46px; margin-top: 10px; }
 .marks-row img { width: auto; max-width: 100%; }
-.marks-row img.sq { height: 52px; }
-.marks-row img.md { height: 42px; }
-.marks-row img.wd { height: 40px; }
+.marks-row img.sq { height: 46px; }
+.marks-row img.md { height: 37px; }
+.marks-row img.wd { height: 35px; }
 .marks-row .fan-mark b { font-size: var(--f-t1); line-height: .8; }
 .marks-row .fan-mark span { margin-top: 4px; font-size: var(--f-small); }
-.hero .kf { margin-top: clamp(14px, 2.6vh, 36px); padding: 0 0 20px; border-top: 0; }
+.hero .kf { margin-top: clamp(12px, 2.5vh, 32px); padding: 0 0 14px; border-top: 0; }
 /* the schedule: the key stands over the globe as its heading */
 .sched-h { font-size: var(--f-t3); letter-spacing: -0.03em; line-height: 1.15; }
 .sched-key { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 14px 0 18px; padding: 0; list-style: none; font-size: var(--f-small); line-height: 1.3; }
@@ -938,9 +994,9 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
             <h3 id="walk-h">Walk through Convention Day</h3>
           </div>
         </div>
-        <div class="walk-ticks" id="walk-ticks"><button type="button" aria-label="Entrance"></button><button type="button" aria-label="Auditorium"></button><button type="button" aria-label="Gallery"></button><button type="button" aria-label="Panel stage"></button><button type="button" aria-label="Workbench"></button></div>
+        <div class="walk-ticks" id="walk-ticks"><button type="button" aria-label="Registration"></button><button type="button" aria-label="Auditorium"></button><button type="button" aria-label="Gallery"></button><button type="button" aria-label="Panel stage"></button><button type="button" aria-label="Workbench"></button></div>
         <div class="walk-track" id="track">
-          <article class="stop"><div class="frame"><img src="assets/img/walk/entrance.jpg" alt="The entrance of a convention hall after sunset. A lit Infill 2027 sign hangs over glass doors, people walk in, and a red ramp with handrails leads up from the wet pavement." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Entrance</h3><p>Everything happens online. A student with a laptop can watch every talk, ask questions and enter the challenge without owning a machine.</p></div></article>
+          <article class="stop"><div class="frame"><img src="assets/img/walk/entrance.jpg" alt="The entrance of a convention hall after sunset. A lit Infill 2027 sign hangs over glass doors, people walk in, and a red ramp with handrails leads up from the wet pavement." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Registration</h3><p>Students register online and take part from a laptop. They can watch every talk, ask questions and enter the challenge without owning a machine.</p></div></article>
           <article class="stop"><div class="frame"><img src="assets/img/walk/talk.jpg" alt="A lecture hall seen from behind the back row. The audience is dark against a large screen that shows the Infill 2027 logo and the words Research talks, and a speaker stands at a lectern in a spotlight." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Research talks</h3><p>Three researchers each give a 20-minute talk on one project, including what did not work, followed by 20 minutes of students' questions.</p></div></article>
           <article class="stop"><div class="frame"><img src="assets/img/walk/gallery.jpg" alt="A red 3D-printed model of a kerb ramp on a white stand under a spotlight, with a small card that names it. Posters and other stands are out of focus behind it." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Challenge finals</h3><p>Researchers judge the entries, and the finalists present on Convention Day.</p></div></article>
           <article class="stop"><div class="frame"><img src="assets/img/walk/panel.jpg" alt="A stage with three red armchairs under the lit words Fabricating Accessible Cities, seen from the audience. Someone in the audience has a hand up." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Panel</h3><p>Three more researchers sit on a 35-minute panel on the 2027 theme, Fabricating Accessible Cities.</p></div></article>
@@ -1026,64 +1082,65 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 
   <section class="sec soft" id="researchers" aria-labelledby="researchers-h">
     <div class="wrap">
-      <div class="sh"><h2 id="researchers-h">For researchers</h2><p>Infill asks each researcher for one of four roles. The dates are fixed from the first email, and the hours are estimates.</p></div>
-      <div class="rolegrid" data-stagger>
-        <article class="rc" data-in>
-          <h3>Research talk</h3>
-          <p class="rc-h"><b>2 to 4</b> hours in all</p>
-          <dl>
-            <div><dt>What</dt><dd>A 20-minute talk on one project, then 20 minutes of students' questions. Before it, a technical check and a backup recording.</dd></div>
-            <div><dt>When</dt><dd>Friday 9 April 2027, evening in North America, or Saturday 10 April 2027, afternoon in Europe.</dd></div>
-            <div><dt>Where</dt><dd>Online, live.</dd></div>
-          </dl>
-          <p class="rc-cal" aria-hidden="true"><i>Jan</i><i>Feb</i><i>Mar</i><i class="on">Apr</i></p>
-        </article>
-        <article class="rc" data-in>
-          <h3>Panel</h3>
-          <p class="rc-h"><b>2</b> hours in all</p>
-          <dl>
-            <div><dt>What</dt><dd>A 35-minute panel on accessible cities with two other researchers. Before it, a technical check.</dd></div>
-            <div><dt>When</dt><dd>Friday 9 April 2027, evening in North America.</dd></div>
-            <div><dt>Where</dt><dd>Online, live.</dd></div>
-          </dl>
-          <p class="rc-cal" aria-hidden="true"><i>Jan</i><i>Feb</i><i>Mar</i><i class="on">Apr</i></p>
-        </article>
-        <article class="rc" data-in>
-          <h3>Judge</h3>
-          <p class="rc-h"><b>5 to 7</b> hours in all</p>
-          <dl>
-            <div><dt>What</dt><dd>About eight shortlisted entries to read, then every finalist's entry and recording.</dd></div>
-            <div><dt>When</dt><dd>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</dd></div>
-            <div><dt>Where</dt><dd>From home, at any hour.</dd></div>
-          </dl>
-          <p class="rc-cal" aria-hidden="true"><i>Jan</i><i>Feb</i><i class="on">Mar</i><i class="on">Apr</i></p>
-        </article>
-        <article class="rc" data-in>
-          <h3>Academic committee</h3>
-          <p class="rc-h"><b>2 to 3</b> hours in all</p>
-          <dl>
-            <div><dt>What</dt><dd>A review of the brief, the rubric, the sample entries and the judging rules.</dd></div>
-            <div><dt>When</dt><dd>January 2027.</dd></div>
-            <div><dt>Where</dt><dd>From home, at any hour.</dd></div>
-          </dl>
-          <p class="rc-cal" aria-hidden="true"><i class="on">Jan</i><i>Feb</i><i>Mar</i><i>Apr</i></p>
-        </article>
+      <div class="sh"><h2 id="researchers-h">For researchers</h2><p>If you are a researcher in digital fabrication, you can take part in one of four ways. All four are online, and each takes a few hours.</p></div>
+      <div class="roles" data-in>
+        <table class="rt">
+          <caption id="r-tz">Live times are shown in Korea time.</caption>
+          <colgroup><col class="c-role"><col class="c-what"><col class="c-time"><col class="c-when"><col class="c-mail"></colgroup>
+          <thead><tr><th scope="col">Role</th><th scope="col">What you do</th><th scope="col">Total time</th><th scope="col">When</th><th scope="col"><span class="sr">Contact</span></th></tr></thead>
+          <tbody>
+            <tr class="rt-g"><th colspan="5" scope="rowgroup">Live, on Convention Day</th></tr>
+            <tr>
+              <th scope="row">Research talk</th>
+              <td data-l="What you do">You give a 20-minute talk on one project, then take students' questions for 20 minutes. Before the day there is a technical check and a backup recording.</td>
+              <td data-l="Total time" class="rt-h"><b>2 to 4</b> hours</td>
+              <td data-l="When"><p>A 40-minute slot in Session A or Session B.</p><ul class="rt-s"><li><i></i><span><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></span></li><li><i class="k-b"></i><span><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></span></li></ul></td>
+              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20research%20talk" aria-label="Email Ethan about a research talk">Email Ethan</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Panel</th>
+              <td data-l="What you do">You join a 35-minute panel on accessible cities with two other researchers. Before the day there is a technical check.</td>
+              <td data-l="Total time" class="rt-h"><b>2</b> hours</td>
+              <td data-l="When"><p>The panel is in Session A.</p><ul class="rt-s"><li><i></i><span><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></span></li></ul></td>
+              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20panel" aria-label="Email Ethan about the panel">Email Ethan</a></td>
+            </tr>
+            <tr class="rt-g"><th colspan="5" scope="rowgroup">In your own time, before the day</th></tr>
+            <tr>
+              <th scope="row">Judge</th>
+              <td data-l="What you do">You read about eight shortlisted entries, then every finalist's entry and recording.</td>
+              <td data-l="Total time" class="rt-h"><b>5 to 7</b> hours</td>
+              <td data-l="When"><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rt-any">At any hour, from where you are.</p></td>
+              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20judge" aria-label="Email Ethan about judging">Email Ethan</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Academic committee</th>
+              <td data-l="What you do">You review the brief, the rubric, the sample entries and the judging rules before they open to students.</td>
+              <td data-l="Total time" class="rt-h"><b>2 to 3</b> hours</td>
+              <td data-l="When"><p>January 2027.</p><p class="rt-any">At any hour, from where you are.</p></td>
+              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20academic%20committee" aria-label="Email Ethan about the academic committee">Email Ethan</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="rt-note">The hours are estimates of everything a role takes. Dates are confirmed in the first email and do not change after that.</p>
       </div>
       <div class="r-foot">
         <div class="r-cta">
-          <h3>Take a role</h3>
-          <p class="side-note">Write to Ethan Kim at ethan@infillconvention.org and name the role. The reply gives the dates and what to prepare.</p>
+          <h3>How to take part</h3>
+          <ol class="steps">
+            <li>Write to Ethan Kim at ethan@infillconvention.org and name the role.</li>
+            <li>The reply gives the dates and what to prepare.</li>
+          </ol>
           <a class="btn" href="mailto:ethan@infillconvention.org">Get in touch</a>
         </div>
         <div class="gets">
-          <h3>What researchers get</h3>
-          <ol>
-            <li>Students who have read a one-page summary of their work before they ask questions.</li>
+          <h3>What you get</h3>
+          <ul>
+            <li>Students who have read a one-page summary of your work before they ask questions.</li>
             <li>A program shared with researchers from other fields.</li>
-            <li>A one-page account of who came, what students asked and how the challenge went, for grant reports.</li>
-            <li>A captioned public recording of their talk, with permission. A talk on unpublished work can stay unrecorded.</li>
+            <li>A one-page account of who came, what students asked and how the challenge went, for your grant reports.</li>
+            <li>A captioned public recording of your talk, with your permission. A talk on unpublished work can stay unrecorded.</li>
             <li>For judges, credit on the results page.</li>
-          </ol>
+          </ul>
         </div>
       </div>
     </div>
@@ -1111,15 +1168,25 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     </div>
   </section>
 
-  <section class="sec soft" id="partners" aria-labelledby="partners-h">
-    <div class="wrap two">
-      <div class="side"><h2 class="big" id="partners-h">Partners</h2><p class="lead">Two partners and one supporter stand behind Infill 2027.</p></div>
-      <div class="main">
-        <div class="backers">
-          <article class="backer"><div class="mark"><img src="assets/img/partner-fab-city-seoul.png" alt="Fab City Seoul" width="281" height="320" loading="lazy"></div><div><p class="cap">Partner</p><strong>Fab City Seoul Cooperative</strong><p>The Seoul member of the Fab City network of cities.</p></div></article>
-          <article class="backer"><div class="mark fan-mark"><p><b>FAN</b><span>Fab Asian Network</span></p></div><div><p class="cap">Partner</p><strong>Fab Asian Network (FAN)</strong><p>The network of fab labs across Asia.</p></div></article>
-        </div>
-      </div>
+  <section class="sec dark" id="partners" aria-labelledby="partners-h">
+    <div class="wrap">
+      <div class="sh"><h2 id="partners-h">Partners</h2><p>Two partners and one supporter stand behind Infill 2027.</p></div>
+    </div>
+    <div class="pwall" data-on data-at="0.62">
+      <img class="pw-all" src="assets/img/partner-wall.jpg" alt="" width="2400" height="831" loading="lazy">
+      <article class="pw" style="--i:0">
+        <div class="pw-fig"><div class="pw-logo"><img class="sq" src="assets/img/partner-fab-city-seoul.png" alt="Fab City Seoul" width="281" height="320" loading="lazy"></div></div>
+        <div class="pw-text"><p class="cap">Partner</p><h3>Fab City Seoul Cooperative</h3><p>The Seoul member of the Fab City network of cities.</p></div>
+      </article>
+      <article class="pw" style="--i:1">
+        <div class="pw-fig"><div class="pw-logo"><p class="fan-mark"><b>FAN</b><span>Fab Asian Network</span></p></div></div>
+        <div class="pw-text"><p class="cap">Partner</p><h3>Fab Asian Network (FAN)</h3><p>The network of fab labs across Asia.</p></div>
+      </article>
+      <article class="pw" style="--i:2">
+        <div class="pw-fig"><div class="pw-logo"><img class="wd" src="assets/img/partner-seohan-enp.png" alt="Seohan ENP" width="945" height="160" loading="lazy"></div></div>
+        <div class="pw-text"><p class="cap">Supported by</p><h3>Seohan ENP</h3><p>A maker of large forged steel parts, based in Gyeongju, Korea.</p></div>
+      </article>
+      <p class="pw-note">Rendered image. The logos are the partners' own files.</p>
     </div>
     <div class="wrap">
       <article class="sponsor" data-in>
@@ -1715,10 +1782,10 @@ void main() {
     sayAt = []; sayLen = []; sayGap = [];
     if (!pinned()) { what.style.height = ''; return; }
     // the scroll each station gets: its width at one speed for all, then a short stretch in which the drop crosses over
-    const vh = innerHeight, SPEED = 1.7, JUMP = vh * 0.07;
+    const vh = innerHeight, SPEED = 1.3, JUMP = vh * 0.07;
     let at = 0;
     sayPath.forEach((c, i) => {
-      const len = Math.max(vh * (i ? 0.11 : 0.17), (c.x1 - c.x0) / SPEED), gap = i < N - 1 ? JUMP : vh * 0.14;
+      const len = Math.max(vh * (i ? 0.42 : 0.7), (c.x1 - c.x0) / SPEED), gap = i < N - 1 ? JUMP : vh * 0.14;
       sayAt.push(at); sayLen.push(len); sayGap.push(gap);
       at += len + gap;
     });
@@ -2053,7 +2120,7 @@ void main() {
     if (leap) { html.classList.add('leap'); clearTimeout(leapT); leapT = setTimeout(() => html.classList.remove('leap'), 120); }
     if (pend.length) pend = pend.filter((el) => {
       const box = el.parentElement.hasAttribute('data-stagger') ? el.parentElement : el;
-      if (box.getBoundingClientRect().top > vh * 0.92) return true;
+      if (box.getBoundingClientRect().top > vh * (+el.dataset.at || 0.92)) return true;
       el.classList.add('on');
       $$('[data-count]', el).forEach(count);
       return false;
@@ -2107,6 +2174,24 @@ void main() {
       return fb ? Promise.all([200, 300, 400, 700].map((w) => got(`${w} 40px "Infill Sans"`))) : 0;
     }).then(measure);
   }
+  (() => {   // For researchers: a researcher reads the live times in the zone they are in, not in Korea's
+    const outs = $$('[data-sess]'), cap = $('#r-tz');
+    let zone = '';
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    if (!outs.length || !zone) return;
+    const S = { A: ['2027-04-09T23:00:00Z', '2027-04-10T02:00:00Z'], B: ['2027-04-10T12:00:00Z', '2027-04-10T14:30:00Z'] };
+    try {
+      const dayF = new Intl.DateTimeFormat('en-GB', { timeZone: zone, weekday: 'long', day: 'numeric', month: 'long' }), hmF = new Intl.DateTimeFormat('en-GB', { timeZone: zone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+      const day = (d) => { const p = {}; dayF.formatToParts(d).forEach((x) => { p[x.type] = x.value; }); return `${p.weekday} ${p.day} ${p.month} 2027`; };
+      const hm = (d) => hmF.format(d).replace(/^24/, '00');
+      outs.forEach((el) => {
+        const [a, b] = S[el.dataset.sess].map((t) => new Date(t));
+        el.textContent = day(a) === day(b) ? `${day(a)}, ${hm(a)} to ${hm(b)}` : `${day(a)}, ${hm(a)} to ${day(b)}, ${hm(b)}`;
+      });
+      const city = zone.split('/').pop().replace(/_/g, ' ');
+      cap.textContent = zone === 'Asia/Seoul' ? 'Live times are shown in Korea time.' : `Live times are shown in your time zone, ${city}. In Korea the day is Saturday 10 April 2027.`;
+    } catch (e) {}
+  })();
   addEventListener('beforeprint', () => $$('[data-in], [data-lines], [data-on], .frame').forEach((el) => el.classList.add('on', 'in')));
   measure();
 
