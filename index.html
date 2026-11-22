@@ -739,7 +739,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .stop h3 .here { background: #fff; color: var(--ink); }
 .pin .frame img { filter: blur(var(--bl, 0px)); }
 /* for researchers: four roles, four pictures, one after the other. Each has its words on the dark left of its picture. */
-.rs { max-width: var(--max); margin: var(--head) auto 0; padding: 0 var(--pad); }
+.rs { max-width: var(--max); margin: var(--s5) auto 0; padding: 0 var(--pad); }
 .rs-tabs { display: none; }
 .rs-p { position: relative; display: flex; align-items: center; min-height: clamp(520px, 44vw, 680px); margin-bottom: 2px; overflow: hidden; isolation: isolate; background: #0a0a0c; color: #fff; }
 .rs-ph { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }   /* the subject is on the right, so any crop comes off the left */
@@ -748,7 +748,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .rs-col { width: min(56%, 700px); }
 .rs-n { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font-size: var(--f-lead); line-height: 1.2; letter-spacing: var(--tl); color: #d9d9dd; }
 .rs-n b { display: grid; place-items: center; width: 1.75em; height: 1.75em; background: #fff; font-variant-numeric: tabular-nums; letter-spacing: 0; color: var(--ink); }
-.rc-tag { margin-left: 6px; padding: .2em .55em .26em; background: #fff; font-size: var(--f-small); font-style: normal; font-weight: 700; letter-spacing: 0; line-height: 1.3; color: var(--ink); }
+.rc-tag { padding: .2em .55em .26em; background: #fff; font-size: var(--f-small); font-style: normal; font-weight: 700; letter-spacing: 0; line-height: 1.3; color: var(--ink); }
 .rc-tag.live { background: var(--red); color: #fff; }
 .rs-p h3 { margin-top: var(--s2); font-size: var(--f-d); line-height: .94; letter-spacing: var(--tb); text-wrap: balance; }
 .rs-h { margin-top: 14px; font-size: var(--f-t2); line-height: 1.1; font-weight: 300; letter-spacing: var(--th); font-variant-numeric: tabular-nums; }
@@ -760,29 +760,28 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .rc-s { margin-top: 6px; list-style: none; }
 .rc-s li { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 10px; }
 .rc-any { margin-top: 6px; font-size: var(--f-small); color: #a9a9ae; }
-.rd-note { max-width: 46em; margin-top: var(--s3); font-size: var(--f-small); line-height: 1.45; color: #c9c9cd; text-wrap: pretty; }
-/* the stacked scene. Each picture is as tall as the window under the top bar and the row of names, and stays there while
-   the next one comes up over it. All four hang in one box, so each lies on the one before. The scroll is the browser's own. */
-.rsp .rs { --bar: 60px; --hold: 14vh; --t0: calc(var(--toph, 69px) - 1px); max-width: none; padding: 0; }
-.rsp .rs-tabs { position: sticky; top: var(--t0); z-index: 6; display: block; height: var(--bar); border-top: 1px solid rgb(255 255 255 / .22); border-bottom: 1px solid rgb(255 255 255 / .22); background: var(--ink); }
+.rd-note { max-width: 46em; margin-top: var(--s4); font-size: var(--f-small); line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
+/* the pinned scene. The row of names and a stage as tall as the rest of the window stay in place while the page scrolls
+   under them. One picture is on the stage. It rests there for most of the scroll of its role, then the next one comes
+   up over it in a short stretch. The script sets how far the scroll runs (--run) and moves the pictures. */
+.rsp .rs { --bar: 60px; --t0: calc(var(--toph, 69px) - 1px); --ph: calc(100vh - var(--t0) - var(--bar)); max-width: none; height: calc(var(--bar) + var(--ph) + var(--run, 380vh)); padding: 0; }
+.rsp .rs-tabs { position: sticky; top: var(--t0); z-index: 6; display: block; height: var(--bar); border-bottom: 1px solid rgb(255 255 255 / .22); background: var(--ink); color: #fff; }
 .rs-tabs > div { display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); height: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
 .rs-tabs span { display: flex; align-items: center; padding-right: var(--s3); font-size: var(--f-body); font-weight: 700; white-space: nowrap; }
 .rs-tabs button { position: relative; display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 var(--s2); border: 0; border-left: 1px solid rgb(255 255 255 / .22); background: none; font: inherit; font-size: var(--f-body); text-align: left; white-space: nowrap; color: #a9a9ae; cursor: pointer; transition: color .25s, background-color .25s; }
 .rs-tabs button:hover { background: rgb(255 255 255 / .08); color: #fff; }
 .rs-tabs button b { font-variant-numeric: tabular-nums; }
 .rs-tabs button.on { font-weight: 700; color: #fff; }
-.rs-tabs button::after { content: ""; position: absolute; inset: auto 0 -1px; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: 0 50%; transition: transform .45s var(--ease); }
-.rs-tabs button.on::after { transform: none; }
-.rsp .rs-p { position: sticky; top: calc(var(--t0) + var(--bar)); display: block; height: calc(100vh - var(--t0) - var(--bar)); min-height: 0; margin: 0; box-shadow: 0 -50px 40px -30px rgb(0 0 0 / .85); }   /* a shadow on the picture below, and none past its own sides or foot */
-.rsp .rs-p + .rs-p { margin-top: var(--hold); }
-.rsp .rs::after { content: ""; display: block; height: var(--hold); }   /* the last picture stays as long as the others did */
+.rs-tabs button::before, .rs-tabs button::after { content: ""; position: absolute; inset: auto 0 -1px; height: 3px; }
+.rs-tabs button::before { background: rgb(255 255 255 / .3); opacity: 0; transition: opacity .25s; }   /* the line the red one fills */
+.rs-tabs button.on::before { opacity: 1; }
+.rs-tabs button::after { background: var(--red); transform: scaleX(var(--f, 0)); transform-origin: 0 50%; }   /* how much of this role's rest has gone by */
+.rsp .rs-stage { position: sticky; top: calc(var(--t0) + var(--bar)); height: var(--ph); overflow: hidden; background: #0a0a0c; }
+.rsp .rs-p { position: absolute; inset: 0; display: block; min-height: 0; margin: 0; will-change: transform; }
+.rsp .rs-p + .rs-p { transform: translate3d(0, 100%, 0); box-shadow: 0 -50px 40px -30px rgb(0 0 0 / .85); }   /* waits under the stage; a shadow on the picture it comes over */
 .rsp .rs-p::after { content: ""; position: absolute; inset: 0; z-index: 3; background: #000; opacity: calc(var(--dim, 0) * .6); pointer-events: none; }   /* a picture darkens as the next one covers it */
 .rsp .rs-txt { display: grid; align-content: center; max-width: var(--max); height: 100%; margin: 0 auto; padding: var(--s3) var(--pad); }
 .rsp .rs-col { width: min(54%, 720px); }
-#researchers .steps, #researchers .gets ul { border-top-color: #fff; }
-#researchers .steps li, #researchers .gets ul li { border-bottom-color: rgb(255 255 255 / .2); }
-#researchers .btn { border-color: #fff; background: linear-gradient(var(--red), var(--red)) 0 0 / 0% 100% no-repeat #fff; color: var(--ink); }
-#researchers .btn:hover { border-color: var(--red); background-size: 100% 100%; color: #fff; }
 @media (max-width: 900px) {
   .rs { padding: 0; }
   .rs-p { display: block; min-height: 0; margin-bottom: 12px; }
@@ -793,9 +792,10 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   .rs-when > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
 @media print {
-  .rsp .rs { max-width: var(--max); padding: 0 var(--pad); }
-  .rsp .rs-tabs, .rsp .rs::after, .rsp .rs-p::after { display: none; }
-  .rsp .rs-p { position: relative; top: auto; display: flex; height: auto; min-height: 500px; margin: 0 0 2px; box-shadow: none; }
+  .rsp .rs { max-width: var(--max); height: auto; padding: 0 var(--pad); }
+  .rsp .rs-tabs, .rsp .rs-p::after { display: none; }
+  .rsp .rs-stage { position: static; height: auto; overflow: visible; background: none; }
+  .rsp .rs-p { position: relative; inset: auto; display: flex; min-height: 500px; margin: 0 0 2px; box-shadow: none; transform: none !important; }
   .rsp .rs-txt { display: block; height: auto; }
 }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -896,6 +896,9 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   .sup-logo .std { display: block; }
   .sup-lead, .sup-head .cap, .sup-src { color: #000; }
 }
+/* For researchers and Organizer are both on white now, so Organizer begins with the black line every section heading has */
+#researchers { padding-bottom: var(--s6); }
+#organizer .two::before { content: ""; grid-column: 1 / -1; height: var(--wall); margin-bottom: var(--s2); background: var(--ink); }
 </style>
 </head>
 <body>
@@ -1143,12 +1146,13 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     </div>
   </section>
 
-  <section class="sec dark" id="researchers" aria-labelledby="researchers-h">
+  <section class="sec" id="researchers" aria-labelledby="researchers-h">
     <div class="wrap">
       <div class="sh"><h2 id="researchers-h">For researchers</h2><p>If you are a researcher in digital fabrication, you can take part in one of four ways. All four are online, and each takes a few hours.</p></div>
     </div>
     <div class="rs" id="roles">
       <div class="rs-tabs" role="group" aria-label="The four roles"><div><span>Four roles</span><button type="button"><b>1</b>Research talk</button><button type="button"><b>2</b>Panel</button><button type="button"><b>3</b>Judge</button><button type="button"><b>4</b>Academic committee</button></div></div>
+      <div class="rs-stage">
       <article class="rs-p">
         <img class="rs-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
         <div class="rs-txt">
@@ -1197,6 +1201,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
           </div>
         </div>
       </article>
+      </div>
     </div>
     <div class="wrap">
       <p class="rd-note">The hours are estimates of everything a role takes. Dates are confirmed in the first email and do not change after that.</p>
@@ -2054,34 +2059,43 @@ void main() {
     pgs[0].style.setProperty('--dim', (q * 0.7).toFixed(3));
   };
 
-  // For researchers: four pictures as tall as the window. Each stays under the row of names while the next comes up over
-  // it with the scroll, so one role is on the screen at a time and the scroll only ever goes down. The browser does the
-  // moving. The script marks the role in the row of names, darkens a picture as it is covered, and takes a click to its role.
-  const rs = $('#roles'), rsPs = $$('.rs-p', rs), rsTabs = $$('.rs-tabs button', rs);
-  let rsCur = -1, rsH = 0, rsStep = 0, rsT0 = 0;
+  // For researchers: a stage as tall as the window under the row of names, with one picture on it. The scroll of the
+  // scene is cut into a rest for each role and, between two rests, a short stretch in which the next picture comes up
+  // over the one before. The rest is the longer part, so there is time to read. The red line under the name of the
+  // role on the stage grows through its rest, and the next picture comes when the line is full.
+  const rs = $('#roles'), rsPs = $$('.rs-p', rs), rsTabs = $$('.rs-tabs button', rs), NR = rsPs.length;
+  let rsCur = -1, rsRest = 0, rsOver = 0, rsT0 = 0, rsAt = -1;
   const rsFit = () => {
     html.style.setProperty('--toph', top.getBoundingClientRect().height.toFixed(2) + 'px');
     html.classList.toggle('rsp', pinned() && innerHeight >= 600 && innerWidth >= 1000);
-    rsPs.forEach((p) => p.style.removeProperty('--dim'));
+    rsPs.forEach((p) => { p.style.transform = ''; p.style.removeProperty('--dim'); });
+    rsTabs.forEach((b) => b.style.removeProperty('--f'));
+    rs.style.removeProperty('--run');
     if (html.classList.contains('rsp')) {
-      rsH = rsPs[0].offsetHeight;
-      if (rsPs.some((p) => $('.rs-col', p).offsetHeight > rsH - 44)) html.classList.remove('rsp');   // the words must fit the picture
-      else { rsStep = rsH + (parseFloat(getComputedStyle(rsPs[1]).marginTop) || 0); rsT0 = parseFloat(getComputedStyle(rs.firstElementChild).top) || 0; }
+      const h = rsPs[0].offsetHeight;
+      if (rsPs.some((p) => $('.rs-col', p).offsetHeight > h - 44)) html.classList.remove('rsp');   // the words must fit the picture
+      else {
+        rsRest = Math.round(innerHeight * 0.72); rsOver = Math.round(innerHeight * 0.34);   // a role rests for 72% of a window of scroll; the next one takes 34% to come
+        rs.style.setProperty('--run', NR * rsRest + (NR - 1) * rsOver + 'px');
+        rsT0 = parseFloat(getComputedStyle(rs.firstElementChild).top) || 0;
+      }
     }
-    rsCur = -1;
+    rsCur = -1; rsAt = -1;
   };
-  const rsTop = (i) => pageTop(rs) - rsT0 + i * rsStep + 1;   // where the scroll stands when picture i has just come to rest
+  const rsTop = (i) => pageTop(rs) - rsT0 + i * (rsRest + rsOver) + 2;   // where the scroll stands when role i has just come to rest
   const rsMove = (vh) => {
     if (!html.classList.contains('rsp')) return;
-    const r = rs.getBoundingClientRect();
-    if (r.bottom < -vh * 0.5 || r.top > vh * 1.5) return;
-    const rest = vh - rsH, tops = rsPs.map((p) => p.getBoundingClientRect().top);
+    const at = Math.round(clamp(rsT0 - rs.getBoundingClientRect().top, 0, NR * rsRest + (NR - 1) * rsOver));
+    if (at === rsAt) return;
+    rsAt = at;
+    const come = rsPs.map((p, k) => { if (!k) return 1; const t = clamp((at - (k * rsRest + (k - 1) * rsOver)) / rsOver); return t * t * (3 - 2 * t); });   // how far each picture has come up
     let cur = 0;
-    rsPs.forEach((p, i) => {
-      if (i && tops[i] < rest + rsH * 0.5) cur = i;
-      const dim = i < rsPs.length - 1 ? clamp(1 - (tops[i + 1] - rest) / rsH).toFixed(3) : '0';
-      if (p.dataset.dim !== dim) { p.dataset.dim = dim; p.style.setProperty('--dim', dim); }
+    rsPs.forEach((p, k) => {
+      if (k) { p.style.transform = `translate3d(0, ${((1 - come[k]) * 100).toFixed(2)}%, 0)`; if (come[k] > 0.5) cur = k; }
+      p.style.setProperty('--dim', k < NR - 1 ? come[k + 1].toFixed(3) : '0');
     });
+    const rested = clamp((at - cur * (rsRest + rsOver)) / rsRest).toFixed(3);
+    rsTabs.forEach((b, i) => b.style.setProperty('--f', i === cur ? rested : '0'));
     if (cur !== rsCur) {
       rsCur = cur;
       rsTabs.forEach((b, i) => { b.classList.toggle('on', i === cur); if (i === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
