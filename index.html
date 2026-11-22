@@ -57,7 +57,7 @@
   color-scheme: light;
   --ink: #111111; --ink-2: #414144; --ink-3: #636367; --rule: #d6d6d9; --soft: #f4f4f5; --red: #d9261c; --board: #48484a;
   /* the type scale: one size of note, small text, running text, one size for leads and small titles, two larger titles and one display size. Anything larger is set to fill its line. */
-  --f-micro: 13px; --f-cap: 13px; --f-small: 15px; --f-body: 17px;
+  --f-micro: 15px; --f-cap: 15px; --f-small: 15px; --f-body: 17px;
   --f-lead: clamp(18px, 1.5vw, 21px); --f-t3: clamp(18px, 1.5vw, 21px); --f-t2: clamp(23px, 2.1vw, 30px); --f-t1: clamp(32px, 3.2vw, 46px); --f-d: clamp(38px, 4.8vw, 70px);
   /* the spacing scale: seven fluid steps, each about one and a half times the last */
   --s1: clamp(10px, 1.2vw, 18px); --s2: clamp(15px, 1.8vw, 26px); --s3: clamp(20px, 2.6vw, 40px); --s4: clamp(34px, 4.2vw, 68px); --s5: clamp(48px, 5.8vw, 92px); --s6: clamp(64px, 8vw, 124px); --s7: clamp(88px, 10.6vw, 168px);
@@ -98,9 +98,9 @@ main:focus { outline: none; }
 .planned { display: inline-block; padding: 0 7px; border: var(--wall) solid currentColor; color: var(--red); font-size: var(--f-micro); font-weight: 700; line-height: 19px; vertical-align: .18em; letter-spacing: 0; white-space: nowrap; }
 .cap { font-size: var(--f-cap); line-height: 1.3; color: var(--ink-3); }
 .lead { max-width: 37em; font-size: var(--f-lead); line-height: 1.42; font-weight: 300; letter-spacing: var(--tl); color: var(--ink-2); text-wrap: pretty; }
-.sh { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: end; padding-top: var(--s2); border-top: var(--wall) solid currentColor; }
+.sh { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; padding-top: var(--s2); border-top: var(--wall) solid currentColor; }
 .sh h2 { grid-column: 1 / span 6; font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); }
-.sh p { grid-column: 8 / span 5; padding-bottom: .2em; font-size: var(--f-lead); line-height: 1.45; font-weight: 300; letter-spacing: var(--tl); color: var(--ink); text-wrap: pretty; }
+.sh p { grid-column: 8 / span 5; margin-top: var(--sh-drop, 0px); font-size: var(--f-lead); line-height: 1.45; font-weight: 300; letter-spacing: var(--tl); color: var(--ink); text-wrap: pretty; }
 .dark .sh p, .contact .sh p { color: #fff; opacity: .86; }
 .contact .sh .planned, .dark .sh .planned { color: #fff; }
 .logo { position: relative; display: block; aspect-ratio: 596.5 / 215.3; overflow: clip; overflow-clip-margin: 2px; }
@@ -385,53 +385,62 @@ html.leap *, html.leap *::before, html.leap *::after { transition: none !importa
 .kf-day > div:nth-child(n) { grid-column: span 4; }
 .kf-day dd { font-size: var(--f-t2); font-weight: 300; letter-spacing: var(--th); font-variant-numeric: tabular-nums; }
 .kf-day + .prose { margin-top: var(--s4); }
-.tz { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: var(--head); }
-.tz > p { font-size: var(--f-small); color: var(--ink-3); }
-.tz .seg { flex-wrap: wrap; row-gap: 6px; }
-/* The schedule. A city is chosen and both sessions stand side by side in that city's time. The globe beside them is colored
-   by the session that starts between 07:00 and 23:00 in each place: ink for Session A, red for Session B, stripes for both. */
-html:not(.js) .def-nav, html:not(.js) .tz, html:not(.globe) .sched-globe { display: none; }
+/* The schedule. The cities stand on one line in the order they lie on the Earth, west to east. The line and the globe
+   turn together: the city under the red mark is the city the globe faces, and both sessions are given in its time.
+   Session A stands left of the globe and Session B right, each under the color its land is drawn in. */
+html:not(.js) .def-nav, html:not(.js) .cs, html:not(.globe) .sg-globe { display: none; }
 html.globe .zt { display: none; }
-.sched { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); align-items: start; margin-top: var(--s2); padding-top: var(--s3); border-top: var(--wall) solid var(--ink); }
-.sched + .prose { margin-top: var(--s5); }
-.sched-globe { grid-column: 1 / span 5; }
-.sched-globe canvas { display: block; width: min(100%, max(260px, calc(100vh - 350px))); aspect-ratio: 1; }
-.sched-key { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 14px; font-size: var(--f-cap); line-height: 1.4; }
-.sched-key span { display: inline-flex; align-items: center; gap: 8px; }
-.sched-key i { width: 22px; height: 12px; background: var(--ink); }
-.sched-key i.k-b { background: var(--red); }
-.sched-key i.k-ab { background: repeating-linear-gradient(135deg, var(--ink) 0 3px, var(--red) 3px 6px); }
-.sched-key i.k-no { background: #dcdce0; }
-.sched-note { max-width: 36em; margin-top: 8px; font-size: var(--f-cap); line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
-.sched-panel { grid-column: 6 / span 7; }
-html:not(.globe) .sched-panel { grid-column: 1 / -1; }
-.clock-zone { font-size: var(--f-t1); font-weight: 200; letter-spacing: var(--tt); line-height: .96; }
-.clock-zone small { margin-left: .28em; font-size: .38em; font-weight: 400; letter-spacing: -0.01em; color: var(--ink-3); }
-.verdict { margin-top: 12px; font-size: var(--f-lead); line-height: 1.4; letter-spacing: var(--tl); text-wrap: pretty; }
-.blks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); margin-top: var(--s2); }
-.blk { padding-top: 12px; border-top: 6px solid var(--ink); }
-.blk.b { border-top-color: var(--red); }
-.blk-name { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; font-size: var(--f-t3); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
-.blk.b .blk-name > span { color: var(--red); }
-.blk-name small { font-size: var(--f-cap); font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
-.blk-day { margin-top: 12px; font-size: var(--f-small); line-height: 1.3; color: var(--ink-2); }
-.blk-time { margin-top: 3px; font-size: var(--f-t1); line-height: 1; font-weight: 200; letter-spacing: var(--tt); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.blk-time small { margin: 0 .3em; font-size: var(--f-body); font-weight: 400; letter-spacing: -0.01em; color: var(--ink-3); }
-.blk-time.swap { animation: rise .5s var(--ease); }
+.cs { --slot: clamp(124px, 12.4vw, 176px); display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; margin-top: var(--head); border-top: var(--wall) solid var(--ink); border-bottom: 1px solid var(--rule); }
+.cs-step { display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--ink); cursor: pointer; transition: background-color .2s; }
+.cs-step:hover { background: var(--soft); }
+.cs-step svg { width: 18px; height: 18px; }
+.cs-view { position: relative; height: 68px; overflow: hidden; cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-mask-image: linear-gradient(90deg, #0000, #000 17%, #000 83%, #0000); mask-image: linear-gradient(90deg, #0000, #000 17%, #000 83%, #0000); }
+.cs-view.drag { cursor: grabbing; }
+.cs-view::before { content: ""; position: absolute; left: 50%; top: 0; z-index: 1; margin-left: -8px; border: 8px solid transparent; border-top: 9px solid var(--red); border-bottom: 0; }
+.cs-track { position: absolute; left: 50%; top: 0; display: flex; height: 100%; }
+.cs-track.ease { transition: transform .55s var(--ease); }
+.cs-track button { flex: none; width: var(--slot); padding: 6px 0 0; border: 0; background: none; font: inherit; font-size: var(--f-body); color: var(--ink-3); white-space: nowrap; cursor: inherit; transition: color .25s; }
+.cs-track button:hover { color: var(--ink); }
+.cs-track button[aria-pressed="true"] { font-weight: 700; color: var(--ink); }
+.cs-say { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: var(--s3); font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-align: center; text-wrap: balance; }
+.sg { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s4) var(--gap); align-items: start; margin-top: var(--s4); }
+.ss { grid-column: span 3; padding-top: 14px; border-top: 6px solid var(--ink); }
+.ss.b { border-top-color: var(--red); }
+html:not(.globe) .ss { grid-column: span 6; }
+.sg-globe { grid-column: span 6; display: grid; justify-items: center; }
+.sg-globe canvas { display: block; width: min(100%, max(280px, calc(100vh - 330px))); aspect-ratio: 1; }
+.ss-name { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; font-size: var(--f-t3); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+.ss.b .ss-name > span { color: var(--red); }
+.ss-name small { font-size: var(--f-small); font-weight: 400; letter-spacing: 0; color: var(--ink-3); }
+.ss-day { margin-top: var(--s2); font-size: var(--f-small); line-height: 1.3; color: var(--ink-2); }
+.ss-time { margin-top: 3px; font-size: var(--f-t1); line-height: 1; font-weight: 200; letter-spacing: var(--tt); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ss-time small { margin: 0 .3em; font-size: var(--f-small); font-weight: 400; letter-spacing: 0; color: var(--ink-3); }
+.ss-time.swap { animation: rise .5s var(--ease); }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
-.blk-zone { min-height: 2.9em; margin-top: 10px; font-size: var(--f-cap); line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
-.blk.off .blk-time { color: #85858a; }
-.blk.off .blk-day, .blk.off .blk-name small { color: var(--ink-3); }
-.blk.off .run { opacity: .4; }
-.run { display: grid; gap: 5px; margin-top: var(--s1); }
-.run li { display: flex; align-items: center; min-height: 34px; padding: 4px 12px; border: var(--wall) solid var(--ink); font-size: var(--f-small); line-height: 1.25; letter-spacing: -0.01em; }
-.run li.f { background: var(--ink); color: #fff; }
-.blk.b .run li { border-color: var(--red); }
-.blk.b .run li.f { background: var(--red); }
-.run-key { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-top: 16px; font-size: var(--f-cap); color: var(--ink-3); }
-.run-key span { display: inline-flex; align-items: center; gap: 8px; }
-.run-key i { width: 22px; height: 12px; border: var(--wall) solid var(--ink); }
-.run-key i.f { background: var(--ink); }
+.ss-zone { min-height: 2.9em; margin-top: 10px; font-size: var(--f-small); line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
+.ss.off .ss-time { color: #85858a; }
+.ss.off .ss-run { opacity: .45; }
+.ss-run { margin-top: var(--s2); border-top: 1px solid var(--rule); list-style: none; counter-reset: r; }
+.ss-run li { display: grid; grid-template-columns: 1.7em minmax(0, 1fr); padding: 11px 0; border-bottom: 1px solid var(--rule); font-size: var(--f-body); line-height: 1.3; counter-increment: r; text-wrap: pretty; }
+.ss-run li::before { content: counter(r); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.sg-key { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 26px; margin-top: var(--s2); padding: 0; list-style: none; font-size: var(--f-small); line-height: 1.3; }
+.sg-key li { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; }
+.sg-key i, .cs-say i { flex: none; width: 30px; height: 16px; background: var(--ink); }
+.sg-key i.k-b, .cs-say i.k-b { background: var(--red); }
+.sg-key i.k-ab, .cs-say i.k-ab { background: repeating-linear-gradient(135deg, var(--ink) 0 3px, var(--red) 3px 6px); }
+.cs-say i.k-no { background: #dcdce0; }
+.sg + .prose { margin-top: var(--s7); }
+@media (max-width: 1040px) {
+  .sg-globe { grid-column: 1 / -1; order: -1; }
+  .sg-globe canvas { width: min(100%, 440px); }
+  .ss { grid-column: span 6; }
+}
+@media (max-width: 560px) {
+  .cs { --slot: 116px; grid-template-columns: 40px minmax(0, 1fr) 40px; }
+  .cs-track button { font-size: var(--f-small); }
+  .ss { grid-column: 1 / -1; }
+}
+@media print { .cs { display: none; } }
 .zt { margin-top: var(--s5); }
 .zt h3 { font-size: var(--f-t3); letter-spacing: -0.035em; line-height: 1.1; }
 .zt .scroll { overflow-x: auto; margin-top: 14px; }
@@ -729,22 +738,22 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .stop h3 .live { display: table; margin: 0 0 .22em; padding: .04em .22em .1em; background: var(--red); font-weight: 700; color: #fff; }
 .stop h3 .here { background: #fff; color: var(--ink); }
 .pin .frame img { filter: blur(var(--bl, 0px)); }
-/* for researchers: one card for each of the four roles. The picture fills the card, with its subject on the right, and
-   the words sit on the dark left. Without the pinned scene the four cards follow each other down the page. */
-.rd { margin-top: var(--head); }
-.rd-stage { display: grid; gap: 16px; }
-.rd-nav { display: none; }
-.rc { position: relative; display: flex; min-height: clamp(500px, 43vw, 660px); overflow: hidden; isolation: isolate; background: #0a0a0c; color: #fff; }
-.rc-ph { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }   /* the subject is on the right, so any crop comes off the left */
-.rc::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(8 8 10 / .95), rgb(8 8 10 / .9) 26%, rgb(8 8 10 / .5) 48%, rgb(8 8 10 / 0) 68%); }
-.rc::after { content: ""; position: absolute; inset: 0; z-index: 3; background: #000; opacity: var(--dim, 0); pointer-events: none; }
-.rc-txt { display: flex; flex-direction: column; justify-content: space-between; gap: var(--s3); width: min(50%, 640px); padding: clamp(22px, 2.6vw, 40px); }
+/* for researchers: four roles, four pictures. Without the pinned scene they follow each other down the page, each with
+   its words on the dark left of its picture. */
+.rw { margin-top: var(--head); }
+.rw-view { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+.rw-wall { display: grid; gap: 2px; }
+.rw-tabs, .rr-ov, .rw-mid { display: none; }
+.rr { position: relative; display: flex; min-height: clamp(500px, 43vw, 660px); overflow: hidden; isolation: isolate; background: #0a0a0c; color: #fff; }
+.rr-ph { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }   /* the subject is on the right, so any crop comes off the left */
+.rr::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(8 8 10 / .95), rgb(8 8 10 / .9) 26%, rgb(8 8 10 / .5) 48%, rgb(8 8 10 / 0) 68%); }
+.rr-txt { display: flex; flex-direction: column; justify-content: space-between; gap: var(--s3); width: min(50%, 640px); padding: clamp(22px, 2.6vw, 40px); }
 .rc-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: var(--f-small); line-height: 1.3; }
 .rc-n { color: #c9c9cd; font-variant-numeric: tabular-nums; }
 .rc-tag { padding: .16em .5em .22em; background: #fff; font-weight: 700; color: var(--ink); }
 .rc-tag.live { background: var(--red); color: #fff; }
-.rc h3 { font-size: var(--f-d); line-height: .95; letter-spacing: var(--th); text-wrap: balance; }
-.rc-what { max-width: 27em; margin-top: 18px; font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
+.rr h3 { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); text-wrap: balance; }
+.rc-what { max-width: 27em; margin-top: 16px; font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
 .rc-facts { margin-top: var(--s3); border-top: 1px solid rgb(255 255 255 / .5); font-size: var(--f-small); line-height: 1.45; }
 .rc-facts > div { display: grid; grid-template-columns: 6.4em minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 11px 0 12px; border-bottom: 1px solid rgb(255 255 255 / .2); }
 .rc-facts dt { color: #a9a9ae; }
@@ -753,39 +762,52 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .rc-s { margin-top: 6px; list-style: none; }
 .rc-s li { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 10px; }
 .rc-any { margin-top: 6px; color: #a9a9ae; }
-.rd-note { max-width: 46em; margin-top: var(--s2); font-size: var(--f-small); line-height: 1.45; color: var(--ink-2); text-wrap: pretty; }
-/* the pinned scene: the section stays on the screen while the scroll goes through the four cards */
-.rdp .rd { height: calc(100vh + 3.35 * 62vh); margin-top: calc(var(--head) - 84px); }
-.rdp .rd-pin { position: sticky; top: 0; height: 100vh; overflow: clip; }
-.rdp .rd-wrap { position: relative; height: 100%; }
-.rdp .rd-stage { position: absolute; inset: 84px var(--pad) 20px; display: block; max-height: calc((min(100vw, var(--max)) - 2 * var(--pad)) / 1.4); }
-.rdp .rc { position: absolute; inset: 0; min-height: 0; transform-origin: 50% 100%; will-change: transform; }
-.rdp .rc + .rc { box-shadow: 0 -28px 70px rgb(4 4 8 / calc(.42 * var(--sh, 0))); }   /* a shadow only while the card is on its way up */
-.rdp .rc-ph { transform: translate3d(0, var(--py, 0%), 0) scale(var(--z, 1)); transform-origin: 100% 50%; will-change: transform; }
-.rdp .rd-nav { position: absolute; right: calc(var(--pad) + clamp(22px, 2.6vw, 40px)); top: calc(84px + clamp(22px, 2.6vw, 40px)); z-index: 12; display: flex; gap: 6px; }
-.rd-nav button { appearance: none; width: 40px; height: 40px; padding: 0; border: 1px solid rgb(255 255 255 / .55); background: rgb(10 10 12 / .78); font: inherit; font-size: var(--f-small); font-weight: 700; font-variant-numeric: tabular-nums; color: #fff; cursor: pointer; transition: background-color .25s, border-color .25s, color .25s; }
-.rd-nav button:hover { border-color: #fff; background: #3a3a3e; }
-.rd-nav button.on { border-color: #fff; background: #fff; color: var(--ink); }
-@media (min-width: 901px) and (max-height: 800px) {
-  .rdp .rc h3 { font-size: var(--f-t1); }
-  .rdp .rc-what { margin-top: 12px; }
-  .rdp .rc-facts { margin-top: var(--s2); }
-}
+.rd-note { max-width: 46em; margin-top: var(--s3); font-size: var(--f-small); line-height: 1.45; color: #c9c9cd; text-wrap: pretty; }
+/* the pinned scene. The wall is twice the window each way and holds the four pictures two by two. At first the whole wall
+   is in the window, at half size. Then the view goes into the first picture and travels from one to the next. */
+.rwp .rw { height: calc(100vh + 228vh); margin-top: calc(var(--head) - 68px); }
+.rwp .rw-pin { position: sticky; top: 0; height: 100vh; overflow: clip; }
+.rwp .rw-view { --edge: max(var(--pad), calc((100vw - var(--max)) / 2 + var(--pad))); position: absolute; inset: 68px 0 0; max-width: none; padding: 0; overflow: hidden; background: #060608; }   /* --edge: where the page's own left margin is, so that the words in the pictures start on it */
+.rwp .rw-wall { position: absolute; left: 0; top: 0; width: 200%; height: 200%; grid-template: 1fr 1fr / 1fr 1fr; gap: 0; transform-origin: 0 0; }
+.rwp .rw-wall.all .rr { cursor: pointer; }
+.rwp .rr { min-height: 0; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); }
+.rwp .rr-txt { width: min(54%, 720px); padding: calc(52px + clamp(22px, 2.6vw, 40px)) clamp(22px, 2.6vw, 40px) clamp(22px, 2.6vw, 40px) var(--edge); opacity: var(--tx, 1); }
+.rwp .rr-ov { position: absolute; inset: 0 auto 0 0; z-index: 2; display: grid; align-content: center; justify-items: start; gap: 20px; padding: 104px 0 0 calc(2 * var(--edge)); opacity: var(--ov, 0); pointer-events: none; }   /* seen at half size, so everything in it is set at twice the size it is read at */
+.rr-ov b { display: grid; place-items: center; width: 76px; height: 76px; background: #fff; font-size: calc(2 * var(--f-lead)); font-variant-numeric: tabular-nums; color: var(--ink); }
+.rr-ov strong { max-width: 8.2em; font-size: calc(2 * var(--f-t1)); line-height: .96; letter-spacing: var(--th); }
+.rr-ov span { display: grid; justify-items: start; gap: 14px; font-size: calc(2 * var(--f-small)); line-height: 1.3; color: #d9d9dd; }
+.rr-ov .rc-tag { color: var(--ink); }
+.rr-ov .rc-tag.live { color: #fff; }
+.rwp .rw-mid { position: absolute; left: 50%; top: 50%; z-index: 3; display: block; padding: 20px 36px 24px; background: #fff; font-size: calc(2 * var(--f-lead)); font-weight: 700; letter-spacing: var(--tl); line-height: 1.2; white-space: nowrap; color: var(--ink); opacity: var(--ov, 0); transform: translate(-50%, -50%); pointer-events: none; }
+.rwp .rw-tabs { position: absolute; inset: 0 0 auto; z-index: 5; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); height: 52px; border-bottom: 1px solid rgb(255 255 255 / .2); background: rgb(6 6 8 / .78); }
+.rw-tabs button { position: relative; display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 clamp(16px, 2.6vw, 40px); border: 0; border-left: 1px solid rgb(255 255 255 / .16); background: none; font: inherit; font-size: var(--f-small); text-align: left; white-space: nowrap; color: #b5b5ba; cursor: pointer; transition: color .25s, background-color .25s; }
+.rw-tabs button:first-child { padding-left: var(--edge); border-left: 0; }
+.rw-tabs button:hover { background: rgb(255 255 255 / .08); color: #fff; }
+.rw-tabs button b { font-variant-numeric: tabular-nums; }
+.rw-tabs button.on { font-weight: 700; color: #fff; }
+.rw-tabs button::after { content: ""; position: absolute; inset: auto 0 -1px; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: 0 50%; transition: transform .45s var(--ease); }
+.rw-tabs button.on::after { transform: none; }
+#researchers .steps, #researchers .gets ul { border-top-color: #fff; }
+#researchers .steps li, #researchers .gets ul li { border-bottom-color: rgb(255 255 255 / .2); }
+#researchers .btn { border-color: #fff; background: linear-gradient(var(--red), var(--red)) 0 0 / 0% 100% no-repeat #fff; color: var(--ink); }
+#researchers .btn:hover { border-color: var(--red); background-size: 100% 100%; color: #fff; }
 @media (max-width: 900px) {
-  .rd-stage { gap: 12px; }
-  .rc { display: block; min-height: 0; }
-  .rc-ph { position: relative; z-index: 0; display: block; height: auto; aspect-ratio: 5 / 4; object-position: 100% 50%; }
-  .rc::before { inset: 0 0 auto; z-index: 1; aspect-ratio: 5 / 4; background: linear-gradient(rgb(10 10 12 / 0) 62%, #0a0a0c); }
-  .rc-txt { position: relative; z-index: 2; width: auto; margin-top: -34px; padding: 0 20px 26px; }
-  .rc h3 { margin-top: 16px; font-size: var(--f-t1); }
+  .rw-view { padding: 0; }
+  .rw-wall { gap: 12px; }
+  .rr { display: block; min-height: 0; }
+  .rr-ph { position: relative; z-index: 0; display: block; height: auto; aspect-ratio: 5 / 4; }
+  .rr::before { inset: 0 0 auto; z-index: 1; aspect-ratio: 5 / 4; background: linear-gradient(rgb(10 10 12 / 0) 62%, #0a0a0c); }
+  .rr-txt { position: relative; z-index: 2; width: auto; margin-top: -34px; padding: 0 var(--pad) 26px; }
+  .rr h3 { margin-top: 16px; }
   .rc-facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
 @media print {
-  .rdp .rd { height: auto; margin-top: var(--head); }
-  .rdp .rd-pin { position: static; height: auto; }
-  .rdp .rd-stage { position: static; display: grid; }
-  .rdp .rc { position: relative; min-height: 500px; transform: none !important; visibility: visible !important; }
-  .rd-nav { display: none !important; }
+  .rwp .rw { height: auto; margin-top: var(--head); }
+  .rwp .rw-pin { position: static; height: auto; }
+  .rwp .rw-view { position: static; overflow: visible; }
+  .rwp .rw-wall { position: static; display: grid; width: auto; height: auto; grid-template: none; gap: 2px; transform: none !important; }
+  .rwp .rr { min-height: 500px; }
+  .rw-tabs, .rr-ov, .rw-mid { display: none !important; }
 }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .steps { margin-top: 16px; border-top: var(--wall) solid var(--ink); counter-reset: n; list-style: none; }
@@ -822,20 +844,50 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .marks-row .fan-mark b { font-size: var(--f-t1); line-height: .8; }
 .marks-row .fan-mark span { margin-top: 4px; font-size: var(--f-small); }
 .hero .kf { margin-top: clamp(12px, 2.5vh, 32px); padding: 0 0 14px; border-top: 0; }
-/* the schedule: the key stands over the globe as its heading */
-.sched-h { font-size: var(--f-t3); letter-spacing: -0.03em; line-height: 1.15; }
-.sched-key { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 14px 0 18px; padding: 0; list-style: none; font-size: var(--f-small); line-height: 1.3; }
-.sched-key li { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; }
-.sched-key i, .verdict i { flex: none; width: 30px; height: 16px; background: var(--ink); }
-.sched-key i.k-b, .verdict i.k-b { background: var(--red); }
-.sched-key i.k-ab, .verdict i.k-ab { background: repeating-linear-gradient(135deg, var(--ink) 0 3px, var(--red) 3px 6px); }
-.sched-key i.k-no, .verdict i.k-no { background: #dcdce0; }
-.sched-note { margin-top: 14px; }
-.verdict { display: flex; align-items: baseline; gap: 12px; }
-.verdict i { align-self: center; }
 @media (max-width: 900px) {
   .marks-row li { grid-column: span 12; }
   .sched-key { gap: 8px 18px; }
+}
+/* ---- v23 ---- */
+/* Type by job, in five sizes: labels 15, body 17, item titles and intros 21, headings inside a section 30, section headings 46.
+   A section's heading and its intro hang from one line: the drop brings the tops of their capitals level. */
+.sh { --sh-drop: calc(var(--f-t1) * .058 - var(--f-lead) * .09); }
+.prose { margin-top: var(--s6); padding-top: var(--s3); }
+.prose h3, .zt h3, .gets h3, .r-cta h3 { font-size: var(--f-t2); letter-spacing: -0.04em; line-height: 1.1; }
+.prose-cols { gap: var(--s3) var(--gap); margin-top: var(--s4); }
+.prose-cols h4 { margin: 0 0 12px; font-size: var(--f-t3); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; color: var(--ink); }
+.prose-cols p { line-height: 1.55; }
+.sub { margin-top: var(--s7); padding-top: var(--s3); border-top: 1px solid var(--rule); line-height: 1.1; }
+.dates { margin-top: var(--s3); }
+.dates small { margin-top: 4px; }
+.dates p { margin-top: 10px; font-size: var(--f-body); line-height: 1.45; }
+.steps, .gets ul { margin-top: var(--s2); }
+.steps li, .gets ul li { font-size: var(--f-body); }
+.figs-wrap { padding-bottom: calc(var(--sec) * 1.15); }
+/* the supporter: its own logo on white, what it makes, and four pictures */
+.sup { padding-top: var(--sec); }
+.sup-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); align-items: start; padding-top: var(--s2); border-top: var(--wall) solid var(--ink); }
+.sup-head > :first-child { grid-column: 1 / span 5; }
+.sup-head > :last-child { grid-column: 7 / span 6; }
+.sup-head .cap { font-size: var(--f-small); }
+.sup-logo { width: min(100%, 420px); margin-top: var(--s2); line-height: 0; }
+.sup-logo img { width: 100%; height: auto; }
+.sup-lead { font-size: var(--f-lead); line-height: 1.42; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
+.sup .facts { border-top-color: var(--ink); }
+.sup .facts div { border-bottom-color: var(--rule); }
+.sup .facts dt { color: var(--ink-3); }
+.sup-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4) var(--gap); margin-top: var(--s5); }
+.sup-grid .pr { position: relative; aspect-ratio: 2 / 1; overflow: hidden; background: var(--soft); }
+.sup-grid img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sup-grid img.p-ins { object-position: 78% 50%; }
+.sup-grid .cut .pr { background: #fff; box-shadow: inset 0 0 0 1px var(--rule); }
+.sup-grid .cut img { object-fit: contain; padding: 3% 6%; }
+.sup-grid figcaption { margin-top: 14px; font-size: var(--f-small); line-height: 1.45; color: var(--ink-2); }
+.sup-grid figcaption b { display: block; margin-bottom: 2px; font-size: var(--f-t3); letter-spacing: -0.03em; line-height: 1.2; color: var(--ink); }
+.sup-src { margin-top: var(--s3); font-size: var(--f-small); color: var(--ink-3); }
+@media (max-width: 900px) {
+  .sup-head > :first-child, .sup-head > :last-child { grid-column: 1 / -1; }
+  .sup-grid { grid-template-columns: minmax(0, 1fr); }
 }
 </style>
 </head>
@@ -960,12 +1012,6 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
         <div><h4>Taking part</h4><p>The convention is held online, and a laptop is expected to be enough to follow the talks, ask questions and enter the challenge. A built prototype is welcome in the challenge but is not required. Schools, fab labs and clubs may also host a local session.</p></div>
       </div>
     </div>
-    <dl class="figures" data-stagger>
-      <div data-in><dt data-count="6">6</dt><dd>researchers speak live, in three talks and a panel</dd></div>
-      <div data-in><dt data-count="2">2</dt><dd>live sessions on one day, so that students in most time zones can join one of them live</dd></div>
-      <div data-in><dt data-count="4">4</dt><dd>regions in the challenge finals, the Americas, Europe, Africa and Asia</dd></div>
-      <div data-in><dt>0</dt><dd>machines needed to take part. A prototype is welcome but never required.</dd></div>
-    </dl>
   </div>
 
 
@@ -1027,38 +1073,31 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   <section class="sec" id="day" aria-labelledby="day-h">
     <div class="wrap">
       <div class="sh"><h2 id="day-h">Convention Day schedule</h2><p>Saturday 10 April 2027, Korea time, online. The day runs in two live sessions so that students in most time zones can join one of them live.</p></div>
-      <div class="tz">
-        <p id="tz-l">Show the times in</p>
-        <div class="seg" id="tz" role="group" aria-labelledby="tz-l"></div>
+      <div class="cs">
+        <button class="cs-step" type="button" id="cs-prev" aria-label="The next city to the west"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
+        <div class="cs-view"><p class="sr" id="tz-l">Show the times in</p><div class="cs-track" id="tz" role="group" aria-labelledby="tz-l"></div></div>
+        <button class="cs-step" type="button" id="cs-next" aria-label="The next city to the east"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button>
       </div>
-      <div class="sched" data-in>
-        <div class="sched-globe">
-          <h3 class="sched-h">Which session each place can join live</h3>
-          <ul class="sched-key"><li><i></i>Session A</li><li><i class="k-b"></i>Session B</li><li><i class="k-ab"></i>Both</li></ul>
+      <p class="cs-say" aria-live="polite"><i class="k-ab" id="v-key" aria-hidden="true"></i><span id="verdict">Both sessions start between 07:00 and 23:00 in Seoul.</span></p>
+      <div class="sg" data-in>
+        <article class="ss a" data-block="A">
+          <p class="ss-name"><span role="heading" aria-level="3">Session A</span><small data-out="fit">Within 07:00 to 23:00</small></p>
+          <p class="ss-day" data-out="day">Saturday 10 April</p>
+          <p class="ss-time" data-out="time">08:00 <small>to</small> 11:00</p>
+          <p class="ss-zone" data-out="zone">Morning in Seoul, KST.</p>
+          <ol class="ss-run"><li>Research talk</li><li>Research talk</li><li>Challenge finals for the Americas and Asia</li><li>Panel on Fabricating Accessible Cities</li></ol>
+        </article>
+        <div class="sg-globe">
           <canvas id="globe" role="img" aria-label="A globe. Its land is colored by which live session starts there between 07:00 and 23:00 local time. The times for the chosen city are given as text beside it."></canvas>
-          <p class="sched-note">A session counts for a place when it starts there between 07:00 and 23:00. Select a city, or drag the globe to turn it.</p>
+          <ul class="sg-key" aria-label="Which session each place can join live"><li><i></i>Session A</li><li><i class="k-b"></i>Session B</li><li><i class="k-ab"></i>Both</li></ul>
         </div>
-        <div class="sched-panel" aria-live="polite">
-          <p class="clock-zone"><span id="clk-zone">Seoul</span><small id="clk-abbr">KST</small></p>
-          <p class="verdict"><i class="k-ab" id="v-key" aria-hidden="true"></i><span id="verdict">Both sessions start between 07:00 and 23:00 in Seoul.</span></p>
-          <div class="blks">
-            <article class="blk a" data-block="A">
-              <p class="blk-name"><span role="heading" aria-level="3">Session A</span><small data-out="fit">Within 07:00 to 23:00</small></p>
-              <p class="blk-day" data-out="day">Saturday 10 April</p>
-              <p class="blk-time" data-out="time">08:00 <small>to</small> 11:00</p>
-              <p class="blk-zone" data-out="zone">Morning in Seoul, KST.</p>
-              <ol class="run"><li class="f">Research talk</li><li class="f">Research talk</li><li>Challenge finals for the Americas and Asia</li><li class="f">Panel on Fabricating Accessible Cities</li></ol>
-            </article>
-            <article class="blk b" data-block="B">
-              <p class="blk-name"><span role="heading" aria-level="3">Session B</span><small data-out="fit">Within 07:00 to 23:00</small></p>
-              <p class="blk-day" data-out="day">Saturday 10 April</p>
-              <p class="blk-time" data-out="time">21:00 <small>to</small> 23:30</p>
-              <p class="blk-zone" data-out="zone">Night in Seoul, KST.</p>
-              <ol class="run"><li class="f">Research talk</li><li>Challenge finals for Europe, Africa and Asia</li><li>Faculty discussion with the judges</li><li>Awards</li></ol>
-            </article>
-          </div>
-          <p class="run-key"><span><i class="f"></i>Talks and panel</span><span><i></i>Challenge finals, judges and awards</span></p>
-        </div>
+        <article class="ss b" data-block="B">
+          <p class="ss-name"><span role="heading" aria-level="3">Session B</span><small data-out="fit">Within 07:00 to 23:00</small></p>
+          <p class="ss-day" data-out="day">Saturday 10 April</p>
+          <p class="ss-time" data-out="time">21:00 <small>to</small> 23:30</p>
+          <p class="ss-zone" data-out="zone">Night in Seoul, KST.</p>
+          <ol class="ss-run"><li>Research talk</li><li>Challenge finals for Europe, Africa and Asia</li><li>Faculty discussion with the judges</li><li>Awards</li></ol>
+        </article>
       </div>
       <div class="prose" data-in>
         <h3>About the schedule</h3>
@@ -1098,17 +1137,18 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     </div>
   </section>
 
-  <section class="sec soft" id="researchers" aria-labelledby="researchers-h">
+  <section class="sec dark" id="researchers" aria-labelledby="researchers-h">
     <div class="wrap">
       <div class="sh"><h2 id="researchers-h">For researchers</h2><p>If you are a researcher in digital fabrication, you can take part in one of four ways. All four are online, and each takes a few hours.</p></div>
     </div>
-    <div class="rd" id="roles">
-      <div class="rd-pin">
-        <div class="wrap rd-wrap">
-          <div class="rd-stage">
-            <article class="rc">
-              <img class="rc-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
-              <div class="rc-txt">
+    <div class="rw" id="roles">
+      <div class="rw-pin">
+        <div class="rw-view">
+          <div class="rw-wall">
+            <article class="rr">
+              <img class="rr-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
+              <p class="rr-ov" aria-hidden="true"><b>1</b><strong>Research talk</strong><span><i class="rc-tag live">Live, on Convention Day</i>2 to 4 hours</span></p>
+              <div class="rr-txt">
                 <p class="rc-top"><span class="rc-n">Role 1 of 4</span><b class="rc-tag live">Live, on Convention Day</b></p>
                 <div>
                   <h3>Research talk</h3>
@@ -1120,9 +1160,10 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
                 </div>
               </div>
             </article>
-            <article class="rc">
-              <img class="rc-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
-              <div class="rc-txt">
+            <article class="rr">
+              <img class="rr-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
+              <p class="rr-ov" aria-hidden="true"><b>2</b><strong>Panel</strong><span><i class="rc-tag live">Live, on Convention Day</i>2 hours</span></p>
+              <div class="rr-txt">
                 <p class="rc-top"><span class="rc-n">Role 2 of 4</span><b class="rc-tag live">Live, on Convention Day</b></p>
                 <div>
                   <h3>Panel</h3>
@@ -1134,9 +1175,10 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
                 </div>
               </div>
             </article>
-            <article class="rc">
-              <img class="rc-ph" src="assets/img/roles/judge.jpg" alt="A desk under a lamp. A clipboard holds a rubric with a red pen across it, beside a red 3D-printed model of a curb ramp and a pile of entry booklets." width="2000" height="1333" loading="lazy" decoding="async">
-              <div class="rc-txt">
+            <article class="rr">
+              <img class="rr-ph" src="assets/img/roles/judge.jpg" alt="A desk under a lamp. A clipboard holds a rubric with a red pen across it, beside a red 3D-printed model of a curb ramp and a pile of entry booklets." width="2000" height="1333" loading="lazy" decoding="async">
+              <p class="rr-ov" aria-hidden="true"><b>3</b><strong>Judge</strong><span><i class="rc-tag">In your own time, before the day</i>5 to 7 hours</span></p>
+              <div class="rr-txt">
                 <p class="rc-top"><span class="rc-n">Role 3 of 4</span><b class="rc-tag">In your own time, before the day</b></p>
                 <div>
                   <h3>Judge</h3>
@@ -1148,9 +1190,10 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
                 </div>
               </div>
             </article>
-            <article class="rc">
-              <img class="rc-ph" src="assets/img/roles/committee.jpg" alt="Four printed documents fanned across a dark table in daylight. Their covers read Brief, Rubric, Sample entries and Judging rules." width="2000" height="1333" loading="lazy" decoding="async">
-              <div class="rc-txt">
+            <article class="rr">
+              <img class="rr-ph" src="assets/img/roles/committee.jpg" alt="Four printed documents fanned across a dark table in daylight. Their covers read Brief, Rubric, Sample entries and Judging rules." width="2000" height="1333" loading="lazy" decoding="async">
+              <p class="rr-ov" aria-hidden="true"><b>4</b><strong>Academic committee</strong><span><i class="rc-tag">In your own time, before the day</i>2 to 3 hours</span></p>
+              <div class="rr-txt">
                 <p class="rc-top"><span class="rc-n">Role 4 of 4</span><b class="rc-tag">In your own time, before the day</b></p>
                 <div>
                   <h3>Academic committee</h3>
@@ -1162,8 +1205,9 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
                 </div>
               </div>
             </article>
+            <p class="rw-mid" aria-hidden="true">You take one of these four roles</p>
           </div>
-          <div class="rd-nav"><button type="button" aria-label="Role 1, Research talk">1</button><button type="button" aria-label="Role 2, Panel">2</button><button type="button" aria-label="Role 3, Judge">3</button><button type="button" aria-label="Role 4, Academic committee">4</button></div>
+          <div class="rw-tabs" role="group" aria-label="The four roles"><button type="button"><b>1</b>Research talk</button><button type="button"><b>2</b>Panel</button><button type="button"><b>3</b>Judge</button><button type="button"><b>4</b>Academic committee</button></div>
         </div>
       </div>
     </div>
@@ -1232,24 +1276,33 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
         <div class="pw-fig"></div>
         <div class="pw-text"><p class="cap">Supported by</p><h3>Seohan ENP</h3><p>A maker of large forged steel parts, based in Gyeongju, Korea.</p></div>
       </article>
-      <p class="pw-note">Rendered image. The logos come from the partners' own files, with black lettering shown in white.</p>
     </div>
+  </section>
+
+  <section class="sec sup" id="supporter" aria-labelledby="supporter-h">
     <div class="wrap">
-      <article class="sponsor" data-in>
-        <div class="pr" data-on><img src="assets/img/photos/seohan-forge.jpg" alt="A glowing block of steel held in a forging press at Seohan ENP" width="1568" height="762" loading="lazy"></div>
-        <div class="sponsor-text">
-          <h3 class="sp-kick">Supported by</h3>
-          <p class="sp-logo"><img src="assets/img/partner-seohan-enp-rev.png" alt="Seohan ENP" width="945" height="160" loading="lazy"></p>
-          <p class="sp-lead">Seohan ENP forges large steel parts for ships, wind turbines and industrial plants, from the forging press through machining to assembly.</p>
+      <div class="sup-head">
+        <div>
+          <p class="cap">Supported by</p>
+          <h2 class="sup-logo" id="supporter-h"><img src="assets/img/partner-seohan-enp.png" alt="Seohan ENP" width="945" height="160" loading="lazy"></h2>
+        </div>
+        <div>
+          <p class="sup-lead">Seohan ENP forges large steel parts for ships, wind turbines and industrial plants, from the forging press through machining to assembly.</p>
           <dl class="facts">
             <div><dt>Founded</dt><dd>2008</dd></div>
             <div><dt>Based in</dt><dd>Gyeongju, Korea</dd></div>
             <div><dt>Group</dt><dd>Seohan Group</dd></div>
             <div><dt>Makes</dt><dd>Forged parts for shipbuilding, wind power and industrial plants</dd></div>
           </dl>
-          <p class="src">Photograph and company details from seohanenp.com.</p>
         </div>
-      </article>
+      </div>
+      <div class="sup-grid">
+        <figure><div class="pr" data-on><img src="assets/img/photos/seohan-forge.jpg" alt="A glowing block of steel held in a forging press at Seohan ENP" width="1568" height="762" loading="lazy"></div><figcaption><b>Forging</b>Steel is heated and pressed into shape.</figcaption></figure>
+        <figure><div class="pr" data-on><img class="p-ins" src="assets/img/photos/seohan-inspection.jpg" alt="A worker in a Seohan ENP jacket measures a machined steel part with digital calipers" width="2000" height="599" loading="lazy"></div><figcaption><b>Machining and inspection</b>Forged parts are then machined and measured.</figcaption></figure>
+        <figure class="cut"><div class="pr" data-on><img src="assets/img/photos/seohan-ship.png" alt="A large ship engine joined by a long shaft to a propeller" width="665" height="413" loading="lazy"></div><figcaption><b>For ships</b>Propeller shafts, connecting rods and other engine parts.</figcaption></figure>
+        <figure><div class="pr" data-on><img src="assets/img/photos/seohan-wind.jpg" alt="A wind turbine seen from below against the sky" width="1070" height="501" loading="lazy"></div><figcaption><b>For wind turbines</b>Tower flanges and rotor shafts.</figcaption></figure>
+      </div>
+      <p class="sup-src">Photographs and company details from Seohan ENP.</p>
     </div>
   </section>
 
@@ -1976,53 +2029,48 @@ void main() {
     pgs[0].style.setProperty('--dim', (q * 0.7).toFixed(3));
   };
 
-  // For researchers: four roles on four cards. The scroll holds one card on the stage, then folds it back in depth while
-  // the next one comes up over it, the way the two programs do. The numbers go to a card directly.
-  const rd = $('#roles'), rdStage = $('.rd-stage', rd), rcs = $$('.rc', rd), rdNav = $$('.rd-nav button', rd), NR = rcs.length;
-  const RD_HOLD = 0.3, RD_TAIL = 0.35;   // the share of each step in which nothing moves, and the rest the last card gets
-  let rdAt = -1, rdH = 0, rdCur = -1;
-  const rdFit = () => {
-    html.classList.toggle('rdp', pinned() && innerHeight >= 600);
-    rcs.forEach((c) => { c.style.transform = c.style.visibility = ''; ['--dim', '--z', '--py', '--sh'].forEach((v) => c.style.removeProperty(v)); });
-    if (html.classList.contains('rdp') && rcs.some((c) => c.lastElementChild.scrollHeight > c.clientHeight + 1)) html.classList.remove('rdp');   // the words must fit the card
-    rdH = rdStage.offsetHeight; rdAt = rdCur = -1;
+  // For researchers: the four roles are four pictures on one wall, two by two. The scroll moves a view over that wall. It
+  // starts far enough back to hold all four, goes into the first, and travels to the second, the third and the fourth.
+  // On the way from one picture to the next it draws back a little, so that the neighbours come into the window.
+  const rw = $('#roles'), rwView = $('.rw-view', rw), rwWall = $('.rw-wall', rw), rrs = $$('.rr', rw), rwTabs = $$('.rw-tabs button', rw);
+  const CAM = [[1, 1, 0.5], [0.5, 0.5, 1], [1.5, 0.5, 1], [0.5, 1.5, 1], [1.5, 1.5, 1]];   // what the view is centred on, in window widths and heights, and how close it is; 0 is the whole wall
+  const SEG = [[0.2, 0, 0], [0.55, 0, 1], [0.3, 1, 1], [0.6, 1, 2], [0.3, 2, 2], [0.72, 2, 3], [0.3, 3, 3], [0.6, 3, 4], [0.38, 4, 4]];   // each stretch of the scroll: its length, where it starts and where it ends
+  const SEG_ALL = SEG.reduce((a, g) => a + g[0], 0);
+  const rwAtRole = (i) => { let a = 0; for (const g of SEG) { if (g[1] === i && g[2] === i) return a + 0.03; a += g[0]; } return 0; };
+  let rwP = -1, rwW = 0, rwH = 0, rwCur = -2;
+  const rwFit = () => {
+    html.classList.toggle('rwp', pinned() && innerHeight >= 600 && innerWidth >= 1000);
+    rwWall.style.transform = ''; rwWall.style.removeProperty('--tx'); rwWall.style.removeProperty('--ov');
+    if (html.classList.contains('rwp')) {
+      rwW = rwView.clientWidth; rwH = rwView.clientHeight;
+      if (rrs.some((r) => r.lastElementChild.scrollHeight > rwH + 1)) html.classList.remove('rwp');   // the words must fit the picture
+    }
+    rwP = -1; rwCur = -2;
   };
-  const rdTop = (k) => pageTop(rd) + (k / (NR - 1 + RD_TAIL)) * (rd.offsetHeight - innerHeight) + 2;
-  const rdMove = (vh) => {
-    if (!html.classList.contains('rdp')) return;
-    const p = Math.round(clamp(-rd.getBoundingClientRect().top / Math.max(1, rd.offsetHeight - vh)) * (NR - 1 + RD_TAIL) * 400) / 400;
-    if (p === rdAt) return;
-    rdAt = p;
-    const k = Math.min(NR - 1, Math.floor(p)), st = Math.min(1, p - k), t = k < NR - 1 ? clamp((st - RD_HOLD) / (1 - RD_HOLD)) : 0, e = 1 - Math.pow(1 - t, 1.7);
-    rcs.forEach((c, i) => {
-      const y = c.style;
-      if (i < k || i > k + 1 || (i === k + 1 && !t)) { y.visibility = 'hidden'; return; }
-      y.visibility = '';
-      if (i === k) {   // the card on the stage
-        if (t) {
-          const h = rdH, P = h * 1.55, a = (1 - (1 - t) * (1 - t)) * 23 * Math.PI / 180, Z = h * 0.34 * t * t;
-          const f = P / (P + h * Math.sin(a) + Z), T = (h - 10 * t) / f - h * Math.cos(a);   // how much smaller the top edge is drawn, and the lift that keeps it in place
-          y.transform = `perspective(${P.toFixed(0)}px) translate3d(0, ${(-T).toFixed(1)}px, ${(-Z).toFixed(1)}px) rotateX(${(a * 180 / Math.PI).toFixed(2)}deg)`;
-        } else y.transform = '';
-        y.setProperty('--dim', (t * 0.74).toFixed(3));
-        y.setProperty('--z', (1.045 - 0.045 * st).toFixed(4));
-        y.setProperty('--py', '0%');
-        y.setProperty('--sh', '0');
-      } else {         // the next card, on its way up; its picture comes to rest a little after the card does
-        y.transform = `translate3d(0, ${((1 - e) * (rdH + 24)).toFixed(1)}px, 0)`;
-        y.setProperty('--dim', '0');
-        y.setProperty('--z', (1.12 - 0.075 * e).toFixed(4));
-        y.setProperty('--py', ((1 - e) * -7).toFixed(2) + '%');
-        y.setProperty('--sh', (1 - e).toFixed(3));
-      }
-    });
-    const cur = t > 0.55 ? k + 1 : k;
-    if (cur !== rdCur) {
-      rdCur = cur;
-      rdNav.forEach((b, i) => { b.classList.toggle('on', i === cur); if (i === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+  const rwTop = (i) => pageTop(rw) + (rwAtRole(i) / SEG_ALL) * (rw.offsetHeight - innerHeight) + 2;
+  const rwMove = (vh) => {
+    if (!html.classList.contains('rwp')) return;
+    const p = Math.round(clamp(-rw.getBoundingClientRect().top / Math.max(1, rw.offsetHeight - vh)) * SEG_ALL * 500) / 500;
+    if (p === rwP) return;
+    rwP = p;
+    let a = 0, g = SEG[SEG.length - 1];
+    for (const q of SEG) { if (p < a + q[0]) { g = q; break; } a += q[0]; }
+    const t = clamp((p - a) / g[0]), e = g[1] === g[2] ? 0 : t * t * (3 - 2 * t), A = CAM[g[1]], B = CAM[g[2]];
+    let k = A[2] + (B[2] - A[2]) * e;
+    if (g[1] && g[1] !== g[2]) k -= (A[1] !== B[1] ? 0.27 : 0.13) * Math.sin(Math.PI * e);
+    const cx = clamp(A[0] + (B[0] - A[0]) * e, 0.5 / k, 2 - 0.5 / k), cy = clamp(A[1] + (B[1] - A[1]) * e, 0.5 / k, 2 - 0.5 / k);   // the view never leaves the wall
+    rwWall.style.transform = `translate(${(rwW * (0.5 - cx * k)).toFixed(2)}px, ${(rwH * (0.5 - cy * k)).toFixed(2)}px) scale(${k.toFixed(4)})`;
+    rwWall.style.setProperty('--tx', clamp((k - 0.78) / 0.08).toFixed(3));   // the full text of a role, read at full size
+    rwWall.style.setProperty('--ov', clamp((0.72 - k) / 0.16).toFixed(3));   // the short labels, read when the wall is far away; never both at once
+    const cur = g[1] === g[2] ? g[1] : e > 0.5 ? g[2] : g[1];
+    if (cur !== rwCur) {
+      rwCur = cur;
+      rwWall.classList.toggle('all', !cur);
+      rwTabs.forEach((b, i) => { b.classList.toggle('on', i === cur - 1); if (i === cur - 1) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     }
   };
-  rdNav.forEach((b, i) => b.addEventListener('click', () => jump(rdTop(i))));
+  rwTabs.forEach((b, i) => b.addEventListener('click', () => jump(rwTop(i + 1))));
+  rrs.forEach((r, i) => r.addEventListener('click', () => { if (html.classList.contains('rwp') && !rwCur) jump(rwTop(i + 1)); }));
 
   // The film: frames are drawn to a canvas and the scroll position chooses the frame. The lid opens first. In the pinned scene
   // the open laptop then holds for a moment and the camera goes into its display, until the picture covers the stage and
@@ -2144,22 +2192,30 @@ void main() {
       zones.unshift({ tz: localTz, name: m ? m[0] : key.split('/').pop().replace(/_/g, ' '), lon: m ? m[1] : clamp(off * 15, -180, 180), lat: m ? m[2] : 15, dot: !!m, mine: true });
     }
   }
-  const tzBox = $('#tz');
-  tzBox.innerHTML = zones.map((z) => `<button type="button" aria-pressed="false">${z.mine ? 'My time zone, ' : ''}${z.name}</button>`).join('');
-  const tzBtns = $$('button', tzBox), blks = $$('.blk'), verdict = $('#verdict');
+  // The cities on one line, west to east, written three times over so that the line has no end. The line and the globe
+  // turn together: the globe says how far it has turned, and the city nearest its middle is the one that is chosen.
+  const tzBox = $('#tz'), csView = $('.cs-view'), blks = $$('.ss'), verdict = $('#verdict');
+  const order = zones.map((z, i) => i).sort((a, b) => zones[a].lon - zones[b].lon), NZ = order.length, LON = order.map((i) => zones[i].lon);
+  tzBox.innerHTML = [0, 1, 2].map((c) => order.map((i) => `<button type="button" data-i="${i}" aria-pressed="false"${c === 1 ? '' : ' tabindex="-1" aria-hidden="true"'}${zones[i].mine && c === 1 ? ` aria-label="${zones[i].name}, your time zone"` : ''}>${zones[i].name}</button>`).join('')).join('');
+  const tzBtns = $$('button', tzBox);
+  const east = (k) => ((LON[(k + 1) % NZ] - LON[k]) % 360 + 360) % 360 || 1e-6;   // degrees from one city to the next one east of it
+  const posOf = (lon) => { for (let k = 0; k < NZ; k++) { const d = ((lon - LON[k]) % 360 + 360) % 360; if (d < east(k)) return k + d / east(k); } return 0; };
+  const lonOf = (pos) => { const p = ((pos % NZ) + NZ) % NZ, k = Math.floor(p); return LON[k] + (p - k) * east(k); };
+  let bandPos = 0, slot = tzBtns[0].offsetWidth;
+  const bandSet = (pos) => { bandPos = ((pos % NZ) + NZ) % NZ; tzBox.style.transform = `translateX(${(-(NZ + bandPos + 0.5) * slot).toFixed(1)}px)`; };
+  addEventListener('resize', () => { slot = tzBtns[0].offsetWidth; bandSet(bandPos); });
   const dayPart = (h) => (h < 5 || h >= 21 ? 'Night' : h < 7 ? 'Early morning' : h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening');
   const okAt = (k, tz) => { const h = wall(BLOCKS[k][0], tz).h; return h >= 7 && h < 23; };
   let globe = null, city = zones[first];
+  const face = () => ({ lon: city.lon, lat: clamp(city.lat * 0.55, -26, 30) });
   // what the globe is told: each city, the start of each session there, and whether that start is between 07:00 and 23:00
   const feed = () => {
     if (globe) globe.places(zones.filter((z) => z.dot !== false).map((z) => ({ id: z.tz, name: z.name, lon: z.lon, lat: z.lat, a: hm(BLOCKS.A[0], z.tz), b: hm(BLOCKS.B[0], z.tz), aok: okAt('A', z.tz), bok: okAt('B', z.tz) })), city.tz);
   };
-  const setZone = (i, user) => {
+  const setZone = (i, user, turned) => {   // turned: the globe is already there, because turning it is what chose the city
     city = zones[i];
-    tzBtns.forEach((b, n) => b.setAttribute('aria-pressed', String(n === i)));
-    $('#clk-zone').textContent = city.name;
-    $('#clk-abbr').textContent = abbr(BLOCKS.A[0], city.tz);
-    const ok = {};
+    tzBtns.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
+    const ok = {}, mine = city.mine ? ', your time zone' : '';
     for (const el of blks) {
       const k = el.dataset.block, [s0, e0] = BLOCKS[k], t = $('[data-out=time]', el);
       ok[k] = okAt(k, city.tz);
@@ -2173,19 +2229,49 @@ void main() {
     }
     const ta = hm(BLOCKS.A[0], city.tz), tb = hm(BLOCKS.B[0], city.tz);
     $('#v-key').className = ok.A && ok.B ? 'k-ab' : ok.A ? 'k-a' : ok.B ? 'k-b' : 'k-no';
-    verdict.textContent = ok.A && ok.B ? `Both sessions start between 07:00 and 23:00 in ${city.name}.`
-      : ok.A ? `In ${city.name}, Session A starts between 07:00 and 23:00. Session B starts at ${tb}.`
-      : ok.B ? `In ${city.name}, Session B starts between 07:00 and 23:00. Session A starts at ${ta}.`
-      : `In ${city.name}, neither session starts between 07:00 and 23:00. Recorded talks are posted with captions two weeks later.`;
-    if (globe) { globe.go({ lon: city.lon, lat: clamp(city.lat * 0.55, -26, 30), still: !user || reduce }); feed(); }
+    verdict.textContent = ok.A && ok.B ? `Both sessions start between 07:00 and 23:00 in ${city.name}${mine}.`
+      : ok.A ? `In ${city.name}${mine}, Session A starts between 07:00 and 23:00. Session B starts at ${tb}.`
+      : ok.B ? `In ${city.name}${mine}, Session B starts between 07:00 and 23:00. Session A starts at ${ta}.`
+      : `In ${city.name}${mine}, neither session starts between 07:00 and 23:00. Recorded talks are posted with captions two weeks later.`;
+    if (globe) { if (!turned) globe.go({ ...face(), still: !user || reduce }); feed(); }
+    else { tzBox.classList.toggle('ease', !!user && !reduce); bandSet(posOf(city.lon)); }
   };
-  tzBtns.forEach((b, i) => b.addEventListener('click', () => setZone(i, true)));
+  const step = (d) => setZone(order[(order.indexOf(zones.indexOf(city)) + d + NZ) % NZ], true);
+  $('#cs-prev').addEventListener('click', () => step(-1));
+  $('#cs-next').addEventListener('click', () => step(1));
+  // the line can be clicked, or dragged like the globe
+  let drag = null, dragged = false;
+  tzBox.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && !dragged) setZone(+b.dataset.i, true); });
+  csView.addEventListener('pointerdown', (e) => { if (globe && !e.button) { drag = { x: e.clientX, pos: bandPos, id: e.pointerId }; dragged = false; } });
+  csView.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (!dragged && Math.abs(dx) < 5) return;
+    if (!dragged) { dragged = true; csView.setPointerCapture(drag.id); csView.classList.add('drag'); }
+    globe.turn(lonOf(drag.pos - dx / slot), true);
+  });
+  const drop = () => {
+    if (!drag) return;
+    const was = dragged;
+    drag = null; csView.classList.remove('drag');
+    if (was) { globe.go({ ...face(), still: reduce }); setTimeout(() => { dragged = false; }, 0); }
+  };
+  csView.addEventListener('pointerup', drop);
+  csView.addEventListener('pointercancel', drop);
   setZone(first);
   D.addEventListener('DOMContentLoaded', () => {
     if (!window.InfillGlobe) return;
     try {
-      globe = InfillGlobe.mount($('#globe'), { font: getComputedStyle(D.body).fontFamily, onpick: (id) => { const i = zones.findIndex((z) => z.tz === id); if (i >= 0) setZone(i, true); } });
+      globe = InfillGlobe.mount($('#globe'), { font: getComputedStyle(D.body).fontFamily,
+        onpick: (id) => { const i = zones.findIndex((z) => z.tz === id); if (i >= 0) setZone(i, true); },
+        onturn: (lon, by) => {
+          const pos = posOf(lon);
+          bandSet(pos);
+          if (by === 'drag') { const i = order[Math.round(pos) % NZ]; if (zones[i] !== city) setZone(i, true, true); }
+        },
+        onrest: () => globe.go({ ...face(), still: reduce }) });
       html.classList.add('globe');
+      tzBox.classList.remove('ease');
       setZone(zones.indexOf(city));
     } catch (e) { console.warn('globe:', e); globe = null; }
   });
@@ -2219,7 +2305,7 @@ void main() {
       $$('[data-count]', el).forEach(count);
       return false;
     });
-    spy(vh); whatRise(vh); whatStep(vh); walkMove(vh); glassWake(); fabPrint(vh); stackMove(vh); rdMove(vh); filmDraw(vh);
+    spy(vh); whatRise(vh); whatStep(vh); walkMove(vh); glassWake(); fabPrint(vh); stackMove(vh); rwMove(vh); filmDraw(vh);
     bar.style.setProperty('--sp', clamp(scrollY / Math.max(1, html.scrollHeight - vh)).toFixed(4));
     const tr = theme.getBoundingClientRect();
     theme.style.setProperty('--g', reduce ? 1 : clamp((vh - tr.top) / (vh * 0.7)).toFixed(3));
@@ -2244,7 +2330,7 @@ void main() {
     html.classList.toggle('pin', innerWidth > 900 && !reduce);
     fitSay();
     stackFit();
-    rdFit();
+    rwFit();
     fabMetrics();
     filmSize();
     fitMail();
