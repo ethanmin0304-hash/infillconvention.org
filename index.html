@@ -510,35 +510,30 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .rec-ph img { width: 100%; height: 100%; object-fit: cover; }
 .rec-ph figcaption { margin-top: 8px; font-size: var(--f-cap); color: var(--ink-3); }
 
-/* partners */
-.pwall { --pw: calc(min(100vw, 2000px) / 3 * .7788); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 2000px; margin: var(--head) auto 0; }
-.pw-all { grid-column: 1 / -1; grid-row: 1; display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); }
+/* partners: one rendered picture across the page, three blocks of clear acrylic on a dark table with a partner's mark in
+   each; the words for each partner stand under its block */
+.pwall { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 2000px; margin: var(--s2) auto 0; }
+.pw-all { grid-column: 1 / -1; grid-row: 1; display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(#0000, #000 14%, #000 78%, #0000); mask-image: linear-gradient(#0000, #000 14%, #000 78%, #0000); }
 .pw { grid-column: calc(var(--i) + 1); grid-row: 1 / span 2; display: grid; grid-template-rows: subgrid; min-width: 0; }
 .pw-fig { position: relative; grid-row: 1; }
-.pw-logo { position: absolute; left: 11.06%; top: 22.22%; width: 77.88%; height: 50%; display: grid; grid-template: 100% / 100%; place-items: center; mix-blend-mode: multiply; color: var(--ink); }
-.pw-logo img.sq { width: 38.6%; height: auto; }
-.pw-logo img.wd { width: 74%; height: auto; }
-.pw-logo .fan-mark { text-align: left; }
-.pw-logo .fan-mark b { font-size: calc(var(--pw) * .25); }
-.pw-logo .fan-mark span { margin-top: calc(var(--pw) * .02); font-size: calc(var(--pw) * .064); }
-.pw-text { grid-row: 2; padding: 20px var(--s3) 0 11.06%; }
+.pw-text { grid-row: 2; padding: 0 var(--s3) 0 14.7%; }
 .pw-text .cap { font-size: var(--f-small); color: #a9a9ae; }
 .pw-text h3 { margin-top: 4px; font-size: var(--f-t3); line-height: 1.15; letter-spacing: -0.03em; }
 .pw-text h3 + p { max-width: 24em; margin-top: 7px; font-size: var(--f-small); line-height: 1.45; color: #c9c9cd; text-wrap: pretty; }
-.pw-note { grid-column: 1 / -1; grid-row: 3; padding: var(--s3) 3.69% 0; font-size: var(--f-cap); color: #8d8d93; }
-.js .pwall::before, .js .pw-fig::after { content: ""; z-index: 2; background: var(--ink); pointer-events: none; transition: opacity 1.8s var(--ease) .15s; }   /* the hall is dark until it is on the screen, then its lights come up */
+.pw-note { grid-column: 1 / -1; grid-row: 3; padding: var(--s3) 4.9% 0; font-size: var(--f-cap); color: #8d8d93; }
+.js .pwall::before, .js .pw-fig::after { content: ""; z-index: 2; background: var(--ink); pointer-events: none; transition: opacity 1.8s var(--ease) .15s; }   /* the table is dark until it is on the screen, then the blocks light */
 .js .pwall::before { grid-column: 1 / -1; grid-row: 1; }
 .js .pw-fig::after { display: none; position: absolute; inset: 0; }
 .js .pwall.on::before, .js .pwall.on .pw-fig::after { opacity: 0; }
 @media (max-width: 760px) {
-  .pwall { --pw: calc(100vw * .7788); grid-template-columns: minmax(0, 1fr); }
+  .pwall { grid-template-columns: minmax(0, 1fr); }
   .pw-all { display: none; }
   .pw { grid-column: 1; grid-row: auto; display: block; }
-  .pw-fig { aspect-ratio: 800 / 831; }
-  .pw-fig::before { content: ""; position: absolute; inset: 0; background: url(assets/img/partner-wall.jpg) calc(var(--i) * 50%) 0 / 300% 100% no-repeat; -webkit-mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); mask-image: linear-gradient(#0000, #000 15%, #000 86%, #0000); }
+  .pw-fig { aspect-ratio: 800 / 864; }
+  .pw-fig::before { content: ""; position: absolute; inset: 0; background: url(assets/img/partner-plaques.jpg) calc(var(--i) * 50%) 0 / 300% 100% no-repeat; -webkit-mask-image: linear-gradient(#0000, #000 14%, #000 78%, #0000); mask-image: linear-gradient(#0000, #000 14%, #000 78%, #0000); }
   .js .pwall::before { display: none; }
   .js .pw-fig::after { display: block; }
-  .pw-text { padding: 14px var(--pad) 36px; }
+  .pw-text { padding: 0 var(--pad) 36px; }
   .pw-note { grid-row: auto; padding: 0 var(--pad); }
 }
 .sponsor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s6); background: var(--ink); color: #fff; }
@@ -734,48 +729,71 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
 .stop h3 .live { display: table; margin: 0 0 .22em; padding: .04em .22em .1em; background: var(--red); font-weight: 700; color: #fff; }
 .stop h3 .here { background: #fff; color: var(--ink); }
 .pin .frame img { filter: blur(var(--bl, 0px)); }
-/* for researchers: four roles side by side, each with its hours, what it asks, when and where */
-.roles { margin-top: var(--head); padding: 0 var(--s3) var(--s2); background: #fff; border-top: 6px solid var(--ink); }
-.rt { width: 100%; border-collapse: collapse; table-layout: fixed; text-align: left; }
-.rt caption { caption-side: top; padding: 14px 0 12px; font-size: var(--f-small); line-height: 1.4; text-align: left; color: var(--ink-2); }
-.rt .c-role { width: 17%; } .rt .c-what { width: 33%; } .rt .c-time { width: 13%; } .rt .c-when { width: 26%; } .rt .c-mail { width: 11%; }
-.rt thead th { padding: 9px 0; border-top: 1px solid var(--rule); font-size: var(--f-small); font-weight: 400; line-height: 1.3; color: var(--ink-3); }
-.rt-g th { padding: 26px 0 9px; border-bottom: var(--wall) solid var(--ink); font-size: var(--f-small); font-weight: 700; line-height: 1.3; }
-.rt thead + tbody .rt-g:first-child th { padding-top: 14px; }
-.rt tbody tr:not(.rt-g) > * { padding: 20px 28px 22px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
-.rt tbody tr:not(.rt-g):last-child > * { border-bottom: 0; }
-.rt tbody th[scope="row"] { font-size: var(--f-t3); line-height: 1.15; letter-spacing: -0.03em; }
-.rt td { font-size: var(--f-small); line-height: 1.45; text-wrap: pretty; }
-.rt-h { color: var(--ink-2); }
-.rt-h b { display: block; margin: -4px 0 3px; font-size: var(--f-t2); font-weight: 300; line-height: 1; letter-spacing: var(--th); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.rt-s { margin-top: 8px; list-style: none; }
-.rt-s li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 9px; align-items: start; }
-.rt-s li + li { margin-top: 8px; }
-.rt-s i { height: 12px; margin-top: 5px; background: var(--ink); }
-.rt-s i.k-b { background: var(--red); }
-.rt-s b { display: block; }
-.rt-any { margin-top: 6px; color: var(--ink-2); }
-.rt .rt-m { padding-right: 0; text-align: right; }
-.rt-note { padding-top: 14px; border-top: 1px solid var(--rule); font-size: var(--f-small); line-height: 1.45; color: var(--ink-2); }
+/* for researchers: one card for each of the four roles. The picture fills the card, with its subject on the right, and
+   the words sit on the dark left. Without the pinned scene the four cards follow each other down the page. */
+.rd { margin-top: var(--head); }
+.rd-stage { display: grid; gap: 16px; }
+.rd-nav { display: none; }
+.rc { position: relative; display: flex; min-height: clamp(500px, 43vw, 660px); overflow: hidden; isolation: isolate; background: #0a0a0c; color: #fff; }
+.rc-ph { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }   /* the subject is on the right, so any crop comes off the left */
+.rc::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(8 8 10 / .95), rgb(8 8 10 / .9) 26%, rgb(8 8 10 / .5) 48%, rgb(8 8 10 / 0) 68%); }
+.rc::after { content: ""; position: absolute; inset: 0; z-index: 3; background: #000; opacity: var(--dim, 0); pointer-events: none; }
+.rc-txt { display: flex; flex-direction: column; justify-content: space-between; gap: var(--s3); width: min(50%, 640px); padding: clamp(22px, 2.6vw, 40px); }
+.rc-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: var(--f-small); line-height: 1.3; }
+.rc-n { color: #c9c9cd; font-variant-numeric: tabular-nums; }
+.rc-tag { padding: .16em .5em .22em; background: #fff; font-weight: 700; color: var(--ink); }
+.rc-tag.live { background: var(--red); color: #fff; }
+.rc h3 { font-size: var(--f-d); line-height: .95; letter-spacing: var(--th); text-wrap: balance; }
+.rc-what { max-width: 27em; margin-top: 18px; font-size: var(--f-lead); line-height: 1.4; font-weight: 300; letter-spacing: var(--tl); text-wrap: pretty; }
+.rc-facts { margin-top: var(--s3); border-top: 1px solid rgb(255 255 255 / .5); font-size: var(--f-small); line-height: 1.45; }
+.rc-facts > div { display: grid; grid-template-columns: 6.4em minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 11px 0 12px; border-bottom: 1px solid rgb(255 255 255 / .2); }
+.rc-facts dt { color: #a9a9ae; }
+.rc-facts dd { text-wrap: pretty; }
+.rc-h b { margin-right: .2em; font-size: var(--f-t2); font-weight: 300; line-height: 1; letter-spacing: var(--th); font-variant-numeric: tabular-nums; }
+.rc-s { margin-top: 6px; list-style: none; }
+.rc-s li { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 10px; }
+.rc-any { margin-top: 6px; color: #a9a9ae; }
+.rd-note { max-width: 46em; margin-top: var(--s2); font-size: var(--f-small); line-height: 1.45; color: var(--ink-2); text-wrap: pretty; }
+/* the pinned scene: the section stays on the screen while the scroll goes through the four cards */
+.rdp .rd { height: calc(100vh + 3.35 * 62vh); margin-top: calc(var(--head) - 84px); }
+.rdp .rd-pin { position: sticky; top: 0; height: 100vh; overflow: clip; }
+.rdp .rd-wrap { position: relative; height: 100%; }
+.rdp .rd-stage { position: absolute; inset: 84px var(--pad) 20px; display: block; max-height: calc((min(100vw, var(--max)) - 2 * var(--pad)) / 1.4); }
+.rdp .rc { position: absolute; inset: 0; min-height: 0; transform-origin: 50% 100%; will-change: transform; }
+.rdp .rc + .rc { box-shadow: 0 -28px 70px rgb(4 4 8 / calc(.42 * var(--sh, 0))); }   /* a shadow only while the card is on its way up */
+.rdp .rc-ph { transform: translate3d(0, var(--py, 0%), 0) scale(var(--z, 1)); transform-origin: 100% 50%; will-change: transform; }
+.rdp .rd-nav { position: absolute; right: calc(var(--pad) + clamp(22px, 2.6vw, 40px)); top: calc(84px + clamp(22px, 2.6vw, 40px)); z-index: 12; display: flex; gap: 6px; }
+.rd-nav button { appearance: none; width: 40px; height: 40px; padding: 0; border: 1px solid rgb(255 255 255 / .55); background: rgb(10 10 12 / .78); font: inherit; font-size: var(--f-small); font-weight: 700; font-variant-numeric: tabular-nums; color: #fff; cursor: pointer; transition: background-color .25s, border-color .25s, color .25s; }
+.rd-nav button:hover { border-color: #fff; background: #3a3a3e; }
+.rd-nav button.on { border-color: #fff; background: #fff; color: var(--ink); }
+@media (min-width: 901px) and (max-height: 800px) {
+  .rdp .rc h3 { font-size: var(--f-t1); }
+  .rdp .rc-what { margin-top: 12px; }
+  .rdp .rc-facts { margin-top: var(--s2); }
+}
+@media (max-width: 900px) {
+  .rd-stage { gap: 12px; }
+  .rc { display: block; min-height: 0; }
+  .rc-ph { position: relative; z-index: 0; display: block; height: auto; aspect-ratio: 5 / 4; object-position: 100% 50%; }
+  .rc::before { inset: 0 0 auto; z-index: 1; aspect-ratio: 5 / 4; background: linear-gradient(rgb(10 10 12 / 0) 62%, #0a0a0c); }
+  .rc-txt { position: relative; z-index: 2; width: auto; margin-top: -34px; padding: 0 20px 26px; }
+  .rc h3 { margin-top: 16px; font-size: var(--f-t1); }
+  .rc-facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+@media print {
+  .rdp .rd { height: auto; margin-top: var(--head); }
+  .rdp .rd-pin { position: static; height: auto; }
+  .rdp .rd-stage { position: static; display: grid; }
+  .rdp .rc { position: relative; min-height: 500px; transform: none !important; visibility: visible !important; }
+  .rd-nav { display: none !important; }
+}
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .steps { margin-top: 16px; border-top: var(--wall) solid var(--ink); counter-reset: n; list-style: none; }
 .steps li { position: relative; padding: 13px 0 13px 36px; border-bottom: 1px solid var(--rule); counter-increment: n; overflow-wrap: anywhere; text-wrap: pretty; }
 .steps li::before { content: counter(n); position: absolute; left: 0; top: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .gets ul { margin-top: 16px; border-top: var(--wall) solid var(--ink); list-style: none; }
 .gets ul li { padding: 13px 0; border-bottom: 1px solid var(--rule); text-wrap: pretty; }
-@media (max-width: 1000px) {
-  .roles { padding: 0 18px 16px; }
-  .rt, .rt tbody, .rt tr, .rt th, .rt td, .rt caption { display: block; width: auto; }
-  .rt colgroup, .rt thead { display: none; }
-  .rt tbody tr:not(.rt-g) { padding: 18px 0 20px; border-bottom: 1px solid var(--rule); }
-  .rt tbody tr:not(.rt-g):last-child { border-bottom: 0; }
-  .rt tbody tr:not(.rt-g) > * { padding: 0; border: 0; }
-  .rt tbody tr:not(.rt-g) > td { margin-top: 12px; }
-  .rt td[data-l]::before { content: attr(data-l); display: block; margin-bottom: 2px; font-size: var(--f-cap); color: var(--ink-3); }
-  .rt-h b { display: inline; margin: 0; font-size: inherit; font-weight: 700; letter-spacing: 0; }
-  .rt .rt-m { text-align: left; }
-}
-.r-foot { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); margin-top: var(--s5); }
+.r-foot { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s3) var(--gap); margin-top: var(--s4); }
 .r-cta { grid-column: 1 / span 4; }
 .r-cta h3 { font-size: var(--f-t3); }
 .r-cta .side-note { max-width: 26em; margin-top: 16px; font-size: var(--f-small); color: var(--ink-2); }
@@ -998,7 +1016,7 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
         <div class="walk-track" id="track">
           <article class="stop"><div class="frame"><img src="assets/img/walk/entrance.jpg" alt="The entrance of a convention hall after sunset. A lit Infill 2027 sign hangs over glass doors, people walk in, and a red ramp with handrails leads up from the wet pavement." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Registration</h3><p>Students register online and take part from a laptop. They can watch every talk, ask questions and enter the challenge without owning a machine.</p></div></article>
           <article class="stop"><div class="frame"><img src="assets/img/walk/talk.jpg" alt="A lecture hall seen from behind the back row. The audience is dark against a large screen that shows the Infill 2027 logo and the words Research talks, and a speaker stands at a lectern in a spotlight." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Research talks</h3><p>Three researchers each give a 20-minute talk on one project, including what did not work, followed by 20 minutes of students' questions.</p></div></article>
-          <article class="stop"><div class="frame"><img src="assets/img/walk/gallery.jpg" alt="A red 3D-printed model of a kerb ramp on a white stand under a spotlight, with a small card that names it. Posters and other stands are out of focus behind it." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Challenge finals</h3><p>Researchers judge the entries, and the finalists present on Convention Day.</p></div></article>
+          <article class="stop"><div class="frame"><img src="assets/img/walk/gallery.jpg" alt="A red 3D-printed model of a curb ramp on a white stand under a spotlight, with a small card that names it. Posters and other stands are out of focus behind it." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Challenge finals</h3><p>Researchers judge the entries, and the finalists present on Convention Day.</p></div></article>
           <article class="stop"><div class="frame"><img src="assets/img/walk/panel.jpg" alt="A stage with three red armchairs under the lit words Fabricating Accessible Cities, seen from the audience. Someone in the audience has a hand up." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live">Online</b>Panel</h3><p>Three more researchers sit on a 35-minute panel on the 2027 theme, Fabricating Accessible Cities.</p></div></article>
           <article class="stop"><div class="frame"><img src="assets/img/walk/lab.jpg" alt="Close view of a 3D printer laying red plastic. The top of the part is still open and shows the crossed walls of its infill. Small lamps glow out of focus behind it." width="1600" height="900" loading="lazy" draggable="false"></div><div class="stop-text"><h3><b class="live here">In person</b>Local sessions</h3><p>Schools, fab labs and clubs can also host a local session.</p></div></article>
         </div>
@@ -1083,46 +1101,74 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
   <section class="sec soft" id="researchers" aria-labelledby="researchers-h">
     <div class="wrap">
       <div class="sh"><h2 id="researchers-h">For researchers</h2><p>If you are a researcher in digital fabrication, you can take part in one of four ways. All four are online, and each takes a few hours.</p></div>
-      <div class="roles" data-in>
-        <table class="rt">
-          <caption id="r-tz">Live times are shown in Korea time.</caption>
-          <colgroup><col class="c-role"><col class="c-what"><col class="c-time"><col class="c-when"><col class="c-mail"></colgroup>
-          <thead><tr><th scope="col">Role</th><th scope="col">What you do</th><th scope="col">Total time</th><th scope="col">When</th><th scope="col"><span class="sr">Contact</span></th></tr></thead>
-          <tbody>
-            <tr class="rt-g"><th colspan="5" scope="rowgroup">Live, on Convention Day</th></tr>
-            <tr>
-              <th scope="row">Research talk</th>
-              <td data-l="What you do">You give a 20-minute talk on one project, then take students' questions for 20 minutes. Before the day there is a technical check and a backup recording.</td>
-              <td data-l="Total time" class="rt-h"><b>2 to 4</b> hours</td>
-              <td data-l="When"><p>A 40-minute slot in Session A or Session B.</p><ul class="rt-s"><li><i></i><span><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></span></li><li><i class="k-b"></i><span><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></span></li></ul></td>
-              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20research%20talk" aria-label="Email Ethan about a research talk">Email Ethan</a></td>
-            </tr>
-            <tr>
-              <th scope="row">Panel</th>
-              <td data-l="What you do">You join a 35-minute panel on accessible cities with two other researchers. Before the day there is a technical check.</td>
-              <td data-l="Total time" class="rt-h"><b>2</b> hours</td>
-              <td data-l="When"><p>The panel is in Session A.</p><ul class="rt-s"><li><i></i><span><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></span></li></ul></td>
-              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20panel" aria-label="Email Ethan about the panel">Email Ethan</a></td>
-            </tr>
-            <tr class="rt-g"><th colspan="5" scope="rowgroup">In your own time, before the day</th></tr>
-            <tr>
-              <th scope="row">Judge</th>
-              <td data-l="What you do">You read about eight shortlisted entries, then every finalist's entry and recording.</td>
-              <td data-l="Total time" class="rt-h"><b>5 to 7</b> hours</td>
-              <td data-l="When"><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rt-any">At any hour, from where you are.</p></td>
-              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20judge" aria-label="Email Ethan about judging">Email Ethan</a></td>
-            </tr>
-            <tr>
-              <th scope="row">Academic committee</th>
-              <td data-l="What you do">You review the brief, the rubric, the sample entries and the judging rules before they open to students.</td>
-              <td data-l="Total time" class="rt-h"><b>2 to 3</b> hours</td>
-              <td data-l="When"><p>January 2027.</p><p class="rt-any">At any hour, from where you are.</p></td>
-              <td class="rt-m"><a class="btn btn-wall btn-sm" href="mailto:ethan@infillconvention.org?subject=Infill%202027%2C%20academic%20committee" aria-label="Email Ethan about the academic committee">Email Ethan</a></td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="rt-note">The hours are estimates of everything a role takes. Dates are confirmed in the first email and do not change after that.</p>
+    </div>
+    <div class="rd" id="roles">
+      <div class="rd-pin">
+        <div class="wrap rd-wrap">
+          <div class="rd-stage">
+            <article class="rc">
+              <img class="rc-ph" src="assets/img/roles/talk.jpg" alt="A speaker's timer shows 20:00 in red digits on a dark desk, with cue cards in front of it. Stage lights are out of focus behind." width="2000" height="1333" loading="lazy" decoding="async">
+              <div class="rc-txt">
+                <p class="rc-top"><span class="rc-n">Role 1 of 4</span><b class="rc-tag live">Live, on Convention Day</b></p>
+                <div>
+                  <h3>Research talk</h3>
+                  <p class="rc-what">You give a 20-minute talk on one project, then take students' questions for 20 minutes. Before the day there is a technical check and a backup recording.</p>
+                  <dl class="rc-facts">
+                    <div><dt>Total time</dt><dd class="rc-h"><b>2 to 4</b>hours</dd></div>
+                    <div><dt>When</dt><dd><p>A 40-minute slot in Session A or Session B.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li><li><b>Session B</b><span data-sess="B">Saturday 10 April 2027, 21:00 to 23:30</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+            <article class="rc">
+              <img class="rc-ph" src="assets/img/roles/panel.jpg" alt="A long table set for a panel, with table microphones and folded cards. The nearest card reads Panel, Fabricating Accessible Cities." width="2000" height="1333" loading="lazy" decoding="async">
+              <div class="rc-txt">
+                <p class="rc-top"><span class="rc-n">Role 2 of 4</span><b class="rc-tag live">Live, on Convention Day</b></p>
+                <div>
+                  <h3>Panel</h3>
+                  <p class="rc-what">You join a 35-minute panel on accessible cities with two other researchers. Before the day there is a technical check.</p>
+                  <dl class="rc-facts">
+                    <div><dt>Total time</dt><dd class="rc-h"><b>2</b>hours</dd></div>
+                    <div><dt>When</dt><dd><p>The panel is in Session A.</p><ul class="rc-s"><li><b>Session A</b><span data-sess="A">Saturday 10 April 2027, 08:00 to 11:00</span></li></ul><p class="rc-any" data-tz>Times are in Korea time.</p></dd></div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+            <article class="rc">
+              <img class="rc-ph" src="assets/img/roles/judge.jpg" alt="A desk under a lamp. A clipboard holds a rubric with a red pen across it, beside a red 3D-printed model of a curb ramp and a pile of entry booklets." width="2000" height="1333" loading="lazy" decoding="async">
+              <div class="rc-txt">
+                <p class="rc-top"><span class="rc-n">Role 3 of 4</span><b class="rc-tag">In your own time, before the day</b></p>
+                <div>
+                  <h3>Judge</h3>
+                  <p class="rc-what">You read about eight shortlisted entries, then every finalist's entry and recording.</p>
+                  <dl class="rc-facts">
+                    <div><dt>Total time</dt><dd class="rc-h"><b>5 to 7</b>hours</dd></div>
+                    <div><dt>When</dt><dd><p>Monday 22 to Sunday 28 March 2027, then Monday 5 to Thursday 8 April 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+            <article class="rc">
+              <img class="rc-ph" src="assets/img/roles/committee.jpg" alt="Four printed documents fanned across a dark table in daylight. Their covers read Brief, Rubric, Sample entries and Judging rules." width="2000" height="1333" loading="lazy" decoding="async">
+              <div class="rc-txt">
+                <p class="rc-top"><span class="rc-n">Role 4 of 4</span><b class="rc-tag">In your own time, before the day</b></p>
+                <div>
+                  <h3>Academic committee</h3>
+                  <p class="rc-what">You review the brief, the rubric, the sample entries and the judging rules before they open to students.</p>
+                  <dl class="rc-facts">
+                    <div><dt>Total time</dt><dd class="rc-h"><b>2 to 3</b>hours</dd></div>
+                    <div><dt>When</dt><dd><p>January 2027.</p><p class="rc-any">At any hour, from where you are.</p></dd></div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="rd-nav"><button type="button" aria-label="Role 1, Research talk">1</button><button type="button" aria-label="Role 2, Panel">2</button><button type="button" aria-label="Role 3, Judge">3</button><button type="button" aria-label="Role 4, Academic committee">4</button></div>
+        </div>
       </div>
+    </div>
+    <div class="wrap">
+      <p class="rd-note">The hours are estimates of everything a role takes. Dates are confirmed in the first email and do not change after that.</p>
       <div class="r-foot">
         <div class="r-cta">
           <h3>How to take part</h3>
@@ -1172,21 +1218,21 @@ h2.big { font-size: var(--f-t1); line-height: .96; letter-spacing: var(--th); te
     <div class="wrap">
       <div class="sh"><h2 id="partners-h">Partners</h2><p>Two partners and one supporter stand behind Infill 2027.</p></div>
     </div>
-    <div class="pwall" data-on data-at="0.62">
-      <img class="pw-all" src="assets/img/partner-wall.jpg" alt="" width="2400" height="831" loading="lazy">
+    <div class="pwall" data-on data-at="0.7">
+      <img class="pw-all" src="assets/img/partner-plaques.jpg" alt="Three blocks of clear acrylic stand in a row on a dark table, each lit from its base, with a red line of light behind them. They carry the logos of Fab City Seoul, the Fab Asian Network and Seohan ENP." width="2400" height="864" loading="lazy">
       <article class="pw" style="--i:0">
-        <div class="pw-fig"><div class="pw-logo"><img class="sq" src="assets/img/partner-fab-city-seoul.png" alt="Fab City Seoul" width="281" height="320" loading="lazy"></div></div>
+        <div class="pw-fig"></div>
         <div class="pw-text"><p class="cap">Partner</p><h3>Fab City Seoul Cooperative</h3><p>The Seoul member of the Fab City network of cities.</p></div>
       </article>
       <article class="pw" style="--i:1">
-        <div class="pw-fig"><div class="pw-logo"><p class="fan-mark"><b>FAN</b><span>Fab Asian Network</span></p></div></div>
+        <div class="pw-fig"></div>
         <div class="pw-text"><p class="cap">Partner</p><h3>Fab Asian Network (FAN)</h3><p>The network of fab labs across Asia.</p></div>
       </article>
       <article class="pw" style="--i:2">
-        <div class="pw-fig"><div class="pw-logo"><img class="wd" src="assets/img/partner-seohan-enp.png" alt="Seohan ENP" width="945" height="160" loading="lazy"></div></div>
+        <div class="pw-fig"></div>
         <div class="pw-text"><p class="cap">Supported by</p><h3>Seohan ENP</h3><p>A maker of large forged steel parts, based in Gyeongju, Korea.</p></div>
       </article>
-      <p class="pw-note">Rendered image. The logos are the partners' own files.</p>
+      <p class="pw-note">Rendered image. The logos come from the partners' own files, with black lettering shown in white.</p>
     </div>
     <div class="wrap">
       <article class="sponsor" data-in>
@@ -1930,6 +1976,54 @@ void main() {
     pgs[0].style.setProperty('--dim', (q * 0.7).toFixed(3));
   };
 
+  // For researchers: four roles on four cards. The scroll holds one card on the stage, then folds it back in depth while
+  // the next one comes up over it, the way the two programs do. The numbers go to a card directly.
+  const rd = $('#roles'), rdStage = $('.rd-stage', rd), rcs = $$('.rc', rd), rdNav = $$('.rd-nav button', rd), NR = rcs.length;
+  const RD_HOLD = 0.3, RD_TAIL = 0.35;   // the share of each step in which nothing moves, and the rest the last card gets
+  let rdAt = -1, rdH = 0, rdCur = -1;
+  const rdFit = () => {
+    html.classList.toggle('rdp', pinned() && innerHeight >= 600);
+    rcs.forEach((c) => { c.style.transform = c.style.visibility = ''; ['--dim', '--z', '--py', '--sh'].forEach((v) => c.style.removeProperty(v)); });
+    if (html.classList.contains('rdp') && rcs.some((c) => c.lastElementChild.scrollHeight > c.clientHeight + 1)) html.classList.remove('rdp');   // the words must fit the card
+    rdH = rdStage.offsetHeight; rdAt = rdCur = -1;
+  };
+  const rdTop = (k) => pageTop(rd) + (k / (NR - 1 + RD_TAIL)) * (rd.offsetHeight - innerHeight) + 2;
+  const rdMove = (vh) => {
+    if (!html.classList.contains('rdp')) return;
+    const p = Math.round(clamp(-rd.getBoundingClientRect().top / Math.max(1, rd.offsetHeight - vh)) * (NR - 1 + RD_TAIL) * 400) / 400;
+    if (p === rdAt) return;
+    rdAt = p;
+    const k = Math.min(NR - 1, Math.floor(p)), st = Math.min(1, p - k), t = k < NR - 1 ? clamp((st - RD_HOLD) / (1 - RD_HOLD)) : 0, e = 1 - Math.pow(1 - t, 1.7);
+    rcs.forEach((c, i) => {
+      const y = c.style;
+      if (i < k || i > k + 1 || (i === k + 1 && !t)) { y.visibility = 'hidden'; return; }
+      y.visibility = '';
+      if (i === k) {   // the card on the stage
+        if (t) {
+          const h = rdH, P = h * 1.55, a = (1 - (1 - t) * (1 - t)) * 23 * Math.PI / 180, Z = h * 0.34 * t * t;
+          const f = P / (P + h * Math.sin(a) + Z), T = (h - 10 * t) / f - h * Math.cos(a);   // how much smaller the top edge is drawn, and the lift that keeps it in place
+          y.transform = `perspective(${P.toFixed(0)}px) translate3d(0, ${(-T).toFixed(1)}px, ${(-Z).toFixed(1)}px) rotateX(${(a * 180 / Math.PI).toFixed(2)}deg)`;
+        } else y.transform = '';
+        y.setProperty('--dim', (t * 0.74).toFixed(3));
+        y.setProperty('--z', (1.045 - 0.045 * st).toFixed(4));
+        y.setProperty('--py', '0%');
+        y.setProperty('--sh', '0');
+      } else {         // the next card, on its way up; its picture comes to rest a little after the card does
+        y.transform = `translate3d(0, ${((1 - e) * (rdH + 24)).toFixed(1)}px, 0)`;
+        y.setProperty('--dim', '0');
+        y.setProperty('--z', (1.12 - 0.075 * e).toFixed(4));
+        y.setProperty('--py', ((1 - e) * -7).toFixed(2) + '%');
+        y.setProperty('--sh', (1 - e).toFixed(3));
+      }
+    });
+    const cur = t > 0.55 ? k + 1 : k;
+    if (cur !== rdCur) {
+      rdCur = cur;
+      rdNav.forEach((b, i) => { b.classList.toggle('on', i === cur); if (i === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    }
+  };
+  rdNav.forEach((b, i) => b.addEventListener('click', () => jump(rdTop(i))));
+
   // The film: frames are drawn to a canvas and the scroll position chooses the frame. The lid opens first. In the pinned scene
   // the open laptop then holds for a moment and the camera goes into its display, until the picture covers the stage and
   // washes out to white, which is the ground of the section that follows.
@@ -2125,7 +2219,7 @@ void main() {
       $$('[data-count]', el).forEach(count);
       return false;
     });
-    spy(vh); whatRise(vh); whatStep(vh); walkMove(vh); glassWake(); fabPrint(vh); stackMove(vh); filmDraw(vh);
+    spy(vh); whatRise(vh); whatStep(vh); walkMove(vh); glassWake(); fabPrint(vh); stackMove(vh); rdMove(vh); filmDraw(vh);
     bar.style.setProperty('--sp', clamp(scrollY / Math.max(1, html.scrollHeight - vh)).toFixed(4));
     const tr = theme.getBoundingClientRect();
     theme.style.setProperty('--g', reduce ? 1 : clamp((vh - tr.top) / (vh * 0.7)).toFixed(3));
@@ -2150,6 +2244,7 @@ void main() {
     html.classList.toggle('pin', innerWidth > 900 && !reduce);
     fitSay();
     stackFit();
+    rdFit();
     fabMetrics();
     filmSize();
     fitMail();
@@ -2175,7 +2270,7 @@ void main() {
     }).then(measure);
   }
   (() => {   // For researchers: a researcher reads the live times in the zone they are in, not in Korea's
-    const outs = $$('[data-sess]'), cap = $('#r-tz');
+    const outs = $$('[data-sess]'), notes = $$('[data-tz]');
     let zone = '';
     try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
     if (!outs.length || !zone) return;
@@ -2189,7 +2284,7 @@ void main() {
         el.textContent = day(a) === day(b) ? `${day(a)}, ${hm(a)} to ${hm(b)}` : `${day(a)}, ${hm(a)} to ${day(b)}, ${hm(b)}`;
       });
       const city = zone.split('/').pop().replace(/_/g, ' ');
-      cap.textContent = zone === 'Asia/Seoul' ? 'Live times are shown in Korea time.' : `Live times are shown in your time zone, ${city}. In Korea the day is Saturday 10 April 2027.`;
+      if (zone !== 'Asia/Seoul') notes.forEach((n) => { n.textContent = `Times are in your time zone, ${city}. In Korea the day is Saturday 10 April 2027.`; });
     } catch (e) {}
   })();
   addEventListener('beforeprint', () => $$('[data-in], [data-lines], [data-on], .frame').forEach((el) => el.classList.add('on', 'in')));
